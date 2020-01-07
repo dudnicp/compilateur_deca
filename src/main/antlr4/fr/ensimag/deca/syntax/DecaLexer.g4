@@ -12,5 +12,57 @@ options {
 }
 
 // Deca lexer rules.
-DUMMY_TOKEN: .; // A FAIRE : Règle bidon qui reconnait tous les caractères.
-                // A FAIRE : Il faut la supprimer et la remplacer par les vraies règles.
+
+// A FAIRE : Mots réservés
+ASM: 'asm';
+CLASS: 'class';
+EXTENDS: 'extends';
+ELSE: 'else';
+FALSE: 'false';
+IF: 'if';
+INSTANCE_OF: 'instanceof';
+NEW: 'new';
+NULL: 'null';
+READ_INT: 'readInt';
+READ_FLOAT: 'readFloat';
+PRINT: 'print';
+PRINTLN: 'println';
+PRINTLNX: 'printlnx';
+PROTECTED: 'protected';
+RETURN: 'return';
+THIS: 'this';
+TRUE: 'true';
+WHILE: 'while';
+
+// Identifiers
+LETTER: ’a’ + ... + ’z’ + ’A’ + ... + ’Z’;
+DIGIT: ’0’ + ... + ’9’;
+IDENT: (LETTER + ’$’ + ’_’)(LETTER + DIGIT + ’$’ + ’_’)*;
+
+// A FAIRE: Symboles spéciaux
+ASSIGN: '=';
+SEMI: ';';
+OPARENT: '(';
+CPARENT: ')';
+OBRACE: '{';
+CBRACE: '}';
+
+
+// Integers
+POSITIVE_DIGIT: '1’ + ... + ’9’;
+INT: ’0’ + POSITIVE_DIGIT DIGIT*;
+
+// A FAIRE : Flottants
+
+// Strings
+STRING_CAR: ~('\\' | '\'' | '\n');  
+STRING: ’"’ (STRING_CAR + ’\\"’ + ’\\\\’)* ’"’;
+MULTI_LINE_STRING: ’"’ (STRING_CAR + EOL + ’\\"’ + ’\\\\’)* ’"’;
+
+// A FAIRE : Commentaires /* */
+
+// A FAIRE : Séparateurs
+
+// A FAIRE : Inclusion de fichiers
+
+
