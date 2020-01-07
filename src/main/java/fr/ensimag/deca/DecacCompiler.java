@@ -224,6 +224,7 @@ public class DecacCompiler {
             throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
         }
         lex.setDecacCompiler(this);
+        lex.debugTokenStream();
         CommonTokenStream tokens = new CommonTokenStream(lex);
         DecaParser parser = new DecaParser(tokens);
         parser.setDecacCompiler(this);
