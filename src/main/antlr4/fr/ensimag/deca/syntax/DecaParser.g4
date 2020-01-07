@@ -37,8 +37,10 @@ options {
 
 prog returns[AbstractProgram tree]
     : list_classes main EOF {
+    		System.out.println("prog");
             assert($list_classes.tree != null);
             assert($main.tree != null);
+            System.out.println("prog après assert");
             $tree = new Program($list_classes.tree, $main.tree);
             setLocation($tree, $list_classes.start);
         }
@@ -46,9 +48,11 @@ prog returns[AbstractProgram tree]
 
 main returns[AbstractMain tree]
     : /* epsilon */ {
+    		System.out.println("main epsilon");
             $tree = new EmptyMain();
         }
     | block {
+    		System.out.println("main block");
             assert($block.decls != null);
             assert($block.insts != null);
             $tree = new Main($block.decls, $block.insts);
