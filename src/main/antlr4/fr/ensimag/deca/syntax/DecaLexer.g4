@@ -35,9 +35,9 @@ TRUE: 'true';
 WHILE: 'while';
 
 // Identifiers
-LETTER: ’a’ + ... + ’z’ + ’A’ + ... + ’Z’;
-DIGIT: ’0’ + ... + ’9’;
-IDENT: (LETTER + ’$’ + ’_’)(LETTER + DIGIT + ’$’ + ’_’)*;
+LETTER: ’a’ .. ’z’ | ’A’ .. ’Z’;
+DIGIT: ’0’ ..’9’;
+IDENT: (LETTER | ’$’ | ’_’)(LETTER | DIGIT | ’$’ | ’_’)*;
 
 // A FAIRE: Symboles spéciaux
 ASSIGN: '=';
@@ -49,20 +49,31 @@ CBRACE: '}';
 
 
 // Integers
-POSITIVE_DIGIT: '1’ + ... + ’9’;
-INT: ’0’ + POSITIVE_DIGIT DIGIT*;
+POSITIVE_DIGIT: '1’ .. ’9’;
+INT: ’0’ | POSITIVE_DIGIT DIGIT*;
 
 // A FAIRE : Flottants
 
 // Strings
-STRING_CAR: ~('\\' | '\'' | '\n');  
-STRING: ’"’ (STRING_CAR + ’\\"’ + ’\\\\’)* ’"’;
-MULTI_LINE_STRING: ’"’ (STRING_CAR + EOL + ’\\"’ + ’\\\\’)* ’"’;
+STRING_CAR: ~('\\' | '\'' | EOL);  
+STRING: ’"’ (STRING_CAR | ’\"’ | ’\\’)* ’"’;
+MULTI_LINE_STRING: ’"’ (STRING_CAR | EOL | ’\\"’ | ’\\\\’)* ’"’;
 
 // A FAIRE : Commentaires /* */
 
 // A FAIRE : Séparateurs
 
 // A FAIRE : Inclusion de fichiers
+
+// Ignore spaces, tabs, newlines and whitespaces
+WS  :   ( ' '
+        | '\t'
+        | '\r'
+        | '\n'
+        ) {
+              skip(); // avoid producing a token
+          }
+    ;
+
 
 
