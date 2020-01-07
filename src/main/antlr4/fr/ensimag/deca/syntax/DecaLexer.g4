@@ -56,7 +56,7 @@ INT: ’0’ | POSITIVE_DIGIT DIGIT*;
 
 // Strings
 STRING_CAR: ~('\\' | '\'' | EOL);  
-STRING: ’"’ (STRING_CAR | ’\"’ | ’\\’)* ’"’;
+STRING: ’"’ (STRING_CAR | ’\\"’ | ’\\\\’)* ’"’;
 MULTI_LINE_STRING: ’"’ (STRING_CAR | EOL | ’\\"’ | ’\\\\’)* ’"’;
 
 // A FAIRE : Commentaires /* */
