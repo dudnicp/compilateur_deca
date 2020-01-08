@@ -12,5 +12,27 @@ options {
 }
 
 // Deca lexer rules.
-DUMMY_TOKEN: .; // A FAIRE : Règle bidon qui reconnait tous les caractères.
-                // A FAIRE : Il faut la supprimer et la remplacer par les vraies règles.
+OBRACE: '{';
+CBRACE: '}';
+PRINTLN: 'println';
+OPARENT: '(';
+CPARENT: ')';
+SEMI: ';';
+fragment STRING_CAR: ~('"' | '\\');
+STRING: '"' (STRING_CAR | '\\' | '\\\\')* '"';
+
+COMMENT:
+    '//' ~('\n'|'\r')* { skip(); }
+	| '/*' .*? '*/' { skip();};
+
+WS  :   ( ' '
+        | '\t'
+        | '\r'
+        | '\n'
+        ) {skip();}
+    ;
+	  
+DUMMY_TOKEN: .  { 
+	System.out.println("Unrecognised character" + getText()); 
+	skip(); 
+				};
