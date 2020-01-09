@@ -14,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
@@ -125,9 +127,7 @@ public class DecacCompiler {
      */
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
-        String destFile = null;
-        // A FAIRE: calculer le nom du fichier .ass à partir du nom du
-        // A FAIRE: fichier .deca.
+        String destFile = sourceFile.replaceAll("\\.deca", "\\.ass");
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
@@ -170,6 +170,7 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName,
             PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
+    	// ETAPE A
         AbstractProgram prog = doLexingAndParsing(sourceName, err);
 
         if (prog == null) {
@@ -178,8 +179,8 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
-
-        prog.verifyProgram(this);
+        // ETAPE B
+        // prog.verifyProgram(this);
         assert(prog.checkAllDecorations());
 
         addComment("start main program");
