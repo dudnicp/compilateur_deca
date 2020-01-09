@@ -25,7 +25,12 @@ public class SymbolTable {
      * this Symbol. Otherwise, create a new Symbol and add it to the table.
      */
     public Symbol create(String name) {
-        throw new UnsupportedOperationException("Symbol creation");
+        // throw new UnsupportedOperationException("Symbol creation");
+        // A FAIRE pour implementer EnvironmentExp
+        if (!map.containsKey(name)) {
+        	map.put(name, new Symbol(name));
+        }
+        return map.get(name);
     }
 
     public static class Symbol {
