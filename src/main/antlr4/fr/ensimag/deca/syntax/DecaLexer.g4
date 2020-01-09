@@ -86,8 +86,8 @@ FLOAT: FLOATDEC | FLOATHEX;
 
 // Strings
 fragment STRING_CAR: ~('"' | '\\');
-STRING: '"' (STRING_CAR | '\\' | '\\\\')* '"';
-MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\' | '\\\\')* '"';
+STRING: '"' (STRING_CAR | '\\"' | '\\\\')* '"';
+MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"';
 
 // Comments
 COMMENT:
