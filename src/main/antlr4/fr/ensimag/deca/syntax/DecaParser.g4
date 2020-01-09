@@ -114,10 +114,13 @@ inst returns[AbstractInst tree]
         }
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+            // A FAIRE: Print : mettre l'option false ou true, pas d'idée sur le cas ou il faut mettre l'une ou l'autre
+            $tree = new Print(false, $list_expr.tree);
         }
     | PRINTLN OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
-	    $tree = new Println(false, $list_expr.tree);
+			// A FAIRE: Println : mettre l'option false ou true, pas d'idée sur le cas ou il faut mettre l'une ou l'autre
+			$tree = new Println(false, $list_expr.tree);
         }
     | PRINTX OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
