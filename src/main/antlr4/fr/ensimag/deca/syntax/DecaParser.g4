@@ -26,6 +26,7 @@ options {
 @header {
     import fr.ensimag.deca.tree.*;
     import java.io.PrintStream;
+	import fr.ensimag.deca.tools.SymbolTable;
 }
 
 @members {
@@ -33,6 +34,7 @@ options {
     protected AbstractProgram parseProgram() {
         return prog().tree;
     }
+    SymbolTable tableSymbol = new SymbolTable();
 }
 
 prog returns[AbstractProgram tree]
@@ -78,6 +80,7 @@ decl_var_set[ListDeclVar l]
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
+    	assert($dv1.tree != null);
         $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
         }
@@ -86,10 +89,18 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
 
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
+		// A FAIRE: Pas d'idée du pourquoi ce bloc existe ici (présent de base), il faut surement y ajouter quelque chose...
         }
     : i=ident {
+    		assert($t != null);
+    		assert($i.tree != null);
+    		$tree = new DeclVar($t, $i.tree, new NoInitialization());
         }
       (EQUALS e=expr {
+      		assert($t != null);
+      		assert($i.tree != null);
+      		assert($e.tree != null);
+			$tree = new DeclVar($t, $i.tree, new Initialization($e.tree));
         }
       )? {
         }
@@ -357,11 +368,19 @@ primary_expr returns[AbstractExpr tree]
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     ;
 
 literal returns[AbstractExpr tree]
-    : INT {
+    : in=INT {
+            try {
+                $tree = new IntLiteral(Integer.parseInt($in.text));
+            } catch (NumberFormatException e) {
+				// A FAIRE: Méthode de gestion des erreurs plus fine (cf CalcParser.g4 l 58-59, il est mentionné la nécessité d'utiliser une meilleur gestion des erreurs que ca)
+                // A FAIRE: Insérer peut être un message d'erreur, car c'est une erreur (???), la compilation peut pas passer dans ce cas ???
+                $tree = null;
+            }
         }
     | fd=FLOAT {
         }
@@ -379,7 +398,8 @@ literal returns[AbstractExpr tree]
     ;
 
 ident returns[AbstractIdentifier tree]
-    : IDENT {
+    : e=IDENT {
+    		$tree = new Identifier(tableSymbol.create($e.getText()));
         }
     ;
 
