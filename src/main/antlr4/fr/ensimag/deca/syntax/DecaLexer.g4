@@ -67,7 +67,7 @@ IDENT: (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 // Litterals
 // A FAIRE: entiers hexa ??
 fragment POSITIVE_DIGIT: '1'..'9';
-INT: '0' | POSITIVE_DIGIT DIGIT+;
+INT: '0' | POSITIVE_DIGIT DIGIT*;
 
 // Floats
 // A FAIRE: Comprendre quel token doit etre
