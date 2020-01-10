@@ -66,7 +66,7 @@ OR: '||';
 
 // Litterals
 fragment POSITIVE_DIGIT: '1'..'9';
-INT: '0' | POSITIVE_DIGIT DIGIT+;
+INT: '0' | POSITIVE_DIGIT DIGIT*;
 
 // Floats
 fragment NUM: DIGIT+;
