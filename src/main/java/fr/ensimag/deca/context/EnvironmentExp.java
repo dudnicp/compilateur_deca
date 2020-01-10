@@ -22,9 +22,6 @@ import java.util.Map;
  * @date 01/01/2020
  */
 public class EnvironmentExp {
-    // A FAIRE : implémenter la structure de donnée représentant un
-    // environnement (association nom -> définition, avec possibilité
-    // d'empilement).
 	public Map<Symbol, ExpDefinition> map;
     EnvironmentExp parentEnvironment;
     
@@ -62,17 +59,14 @@ public class EnvironmentExp {
      *
      */
     public void declare(Symbol name, ExpDefinition def) throws DoubleDefException {
-    	
-        //throw new UnsupportedOperationException("not yet implemented");
-    	if (map.containsKey(name)) {
+    	assert(parentEnvironment != null); // programmation defensive
+    	if (map.get(name) != null) {
     		throw new DoubleDefException(); // exists in current dictionary
     	} else if (parentEnvironment.map.get(name) != null) {
     		map.put(name, def); // hides previous declaration 
     	} else {
     		map.put(name, def); // adds new definition - symbol association
     	}
-    	
-    	
     }
 
 }
