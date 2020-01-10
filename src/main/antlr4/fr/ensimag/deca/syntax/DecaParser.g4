@@ -80,29 +80,33 @@ decl_var_set[ListDeclVar l]
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
-    	assert($dv1.tree != null);
-        $l.add($dv1.tree);
+    	    assert($dv1.tree != null);
+            $l.add($dv1.tree);
+            setLocation($dv1.tree, $dv1.start);
         } (COMMA dv2=decl_var[$t] {
             assert($dv2.tree != null);
             $l.add($dv2.tree);
+            setLocation($dv2.tree, $dv2.start);
         }
       )*
     ;
 
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
-		// A FAIRE: Pas d'idée du pourquoi ce bloc existe ici (présent de base), il faut surement y ajouter quelque chose...
+		// A FAIRE: Pas d'idée du pourquoi ce bloc existe ici (présent de base), il faut surement y ajouter quelque chose... (retirer les 2 DeclVar en dessous, déclarer l'arbre ici et faire add ???)
         }
     : i=ident {
     		assert($t != null);
     		assert($i.tree != null);
     		$tree = new DeclVar($t, $i.tree, new NoInitialization());
+            setLocation($i.tree, $i.start);
         }
       (EQUALS e=expr {
       		assert($t != null);
       		assert($i.tree != null);
       		assert($e.tree != null);
 			$tree = new DeclVar($t, $i.tree, new Initialization($e.tree));
+            setLocation($e.tree, $e.start);
         }
       )? {
         }
@@ -374,6 +378,7 @@ type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
             $tree = $ident.tree;
+            setLocation($tree, $ident.start);
         }
     ;
 
