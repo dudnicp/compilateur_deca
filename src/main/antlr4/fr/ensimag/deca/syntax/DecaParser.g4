@@ -42,7 +42,7 @@ prog returns[AbstractProgram tree]
             assert($list_classes.tree != null);
             assert($main.tree != null);
             $tree = new Program($list_classes.tree, $main.tree);
-            setLocation($tree, $list_classes.start);
+            setLocation($tree, $main.start);
         }
     ;
 
@@ -111,8 +111,10 @@ list_inst returns[ListInst tree]
 $tree = new ListInst();
 }
     : (e1 = inst { 
-		assert($e1.tree != null);
-		$tree.add($e1.tree);
+    	    assert($e1.tree != null);
+    	    $tree.add($e1.tree);
+            // La localisation de l'instruction matchée est celle du premier jeton qu'elle comporte
+            setLocation($e1.tree, $e1.start);
         }
       )*
     ;
@@ -130,7 +132,7 @@ inst returns[AbstractInst tree]
         }
     | PRINTLN OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
-			// A FAIRE: Println : mettre l'option false ou true, pas d'idée sur le cas ou il faut mettre l'une ou l'autre
+	        // A FAIRE: Println : mettre l'option false ou true, pas d'idée sur le cas ou il faut mettre l'une ou l'autre
 			$tree = new Println(false, $list_expr.tree);
         }
     | PRINTX OPARENT list_expr CPARENT SEMI {
@@ -181,7 +183,7 @@ list_expr returns[ListExpr tree]
 
 expr returns[AbstractExpr tree]
     : assign_expr {
-            assert($assign_expr.tree != null);
+        assert($assign_expr.tree != null);
 	    $tree = $assign_expr.tree;
         }
     ;
@@ -362,6 +364,7 @@ primary_expr returns[AbstractExpr tree]
     | literal {
             assert($literal.tree != null);
             $tree = $literal.tree;
+            setLocation($tree, $literal.start);
         }
     ;
 
