@@ -1,0 +1,10 @@
+/*
+    Description : test de la possibilité d'afficher avec println une liste d'expressions de 3 éléments
+
+    Résultat : OK
+
+*/
+{
+    println("Bon","jour"," !");
+}
+

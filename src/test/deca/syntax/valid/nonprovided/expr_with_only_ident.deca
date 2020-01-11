@@ -1,0 +1,10 @@
+/*
+    Description : instruction avec un simple identifiant
+
+    Resultat : OK
+
+*/
+
+{
+    x;
+}
