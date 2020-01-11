@@ -128,6 +128,7 @@ $tree = new ListInst();
 inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
+            $tree = $e1.tree;
         }
     | SEMI {
         }
@@ -348,13 +349,17 @@ select_expr returns[AbstractExpr tree]
 primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
+            $tree = new MethodCall(null, $m.tree, $args.tree);
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
+            // cette règle peut servir à multiplier récursivement les parenthèses ((()))
+            // POINT DE RETOUR
         }
     | READINT OPARENT CPARENT {
         }
