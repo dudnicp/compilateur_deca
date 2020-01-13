@@ -39,7 +39,6 @@ public class EnvironmentExp {
      * symbol is undefined.
      */
     public ExpDefinition get(Symbol key) {
-        //throw new UnsupportedOperationException("not yet implemented");
     	return map.get(key);
     }
 
