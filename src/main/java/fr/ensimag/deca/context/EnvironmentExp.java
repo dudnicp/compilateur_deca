@@ -22,18 +22,22 @@ import java.util.Map;
  * @date 01/01/2020
  */
 public class EnvironmentExp {
-	public Map<Symbol, ExpDefinition> map;
+	private Map<Symbol, ExpDefinition> map;
     EnvironmentExp parentEnvironment;
     
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
+        // new environment inherits all of the parent's associations
         this.map = new HashMap<Symbol, ExpDefinition>(parentEnvironment.map);
     }
-
     public static class DoubleDefException extends Exception {
         private static final long serialVersionUID = -2733379901827316441L;
     }
 
+    public Map<Symbol, ExpDefinition> getMap() {
+    	return this.map;
+    }
+    
     /**
      * Return the definition of the symbol in the environment, or null if the
      * symbol is undefined.
@@ -61,7 +65,7 @@ public class EnvironmentExp {
     	assert(parentEnvironment != null); // programmation defensive
     	if (map.get(name) != null) {
     		throw new DoubleDefException(); // exists in current dictionary
-    	} else if (parentEnvironment.map.get(name) != null) {
+    	} else if (parentEnvironment.getMap().get(name) != null) {
     		map.put(name, def); // hides previous declaration 
     	} else {
     		map.put(name, def); // adds new definition - symbol association
