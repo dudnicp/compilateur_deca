@@ -156,9 +156,12 @@ inst returns[AbstractInst tree]
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
+            $tree = new While($condition.tree, $body.tree);
         }
     | RETURN expr SEMI {
             assert($expr.tree != null);
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     ;
 
@@ -171,6 +174,8 @@ if_then_else returns[IfThenElse tree]
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
+            // A FAIRE: faire if_then_else...
+            //$tree = new IfThenElse($condition.tree, $li_if.tree, $li_else.tree);
         }
       )?
     ;
