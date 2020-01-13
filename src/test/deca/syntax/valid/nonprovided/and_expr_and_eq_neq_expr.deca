@@ -1,0 +1,9 @@
+/*
+    Description : test sur "and_expr : e1=and_expr AND e2=eq_neq_expr"
+
+    Résultat : OK
+
+*/
+{
+    5 && true;
+}
