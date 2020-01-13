@@ -1,0 +1,9 @@
+/*
+    Description : test sur "mult_expr : e1=mult_expr TIMES e2=unary_expr"
+
+    Résultat : OK
+
+*/
+{
+    10 * 98;
+}
