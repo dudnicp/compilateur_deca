@@ -1,0 +1,9 @@
+/*
+    Description : test sur literal : in=INT
+
+    Résultat : OK
+
+*/
+{
+    println(5);
+}

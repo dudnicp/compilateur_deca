@@ -1,0 +1,9 @@
+/*
+    Description : test sur literal : THIS
+
+    Résultat : non supporté, car au dela du langage non objet
+
+*/
+{
+    println(this);
+}

@@ -1,0 +1,9 @@
+/*
+    Description : test sur literal : false
+
+    Résultat : OK
+
+*/
+{
+    println(false);
+}
