@@ -42,9 +42,25 @@ public class CompilerOptions {
 
 
     public void parseArgs(String[] args) throws CLIException {
-    	// A FAIRE version très provisoire
+    	// A FAIRE version provisoire
         for (String arg : args) {
-        	sourceFiles.add(new File(arg));
+        	if (arg == "-b") {
+        		printBanner = true;
+        		continue;
+        	}
+        	if (arg == "-P") {
+        		parallel = true;
+        		continue;
+        	}
+        	if (arg == "-d") {
+        		debug++;
+        		continue;
+        	}
+        	if (arg.substring(arg.length() - 5) != ".deca") {
+        		sourceFiles.add(new File(arg));
+        		continue;
+        	}
+        	throw new CLIException("invalid argument");
         }
         Logger logger = Logger.getRootLogger();
         // map command-line debug option to log4j's level.

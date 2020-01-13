@@ -38,6 +38,10 @@ public class EnvironmentType {
         symbol = typeTable.create("float");
         map.put(symbol,  new TypeDefinition(new FloatType(symbol), defaultLocation));
 
+        symbol = typeTable.create("String");
+        map.put(symbol,  new TypeDefinition(new StringType(symbol), defaultLocation));
+
+
         symbol = typeTable.create("int");
         map.put(symbol,  new TypeDefinition(new IntType(symbol), defaultLocation));
 
