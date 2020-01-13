@@ -1,0 +1,9 @@
+/*
+    Description : test sur "or_expr : e1=or_expr OR e2=and_expr"
+
+    Résultat : OK
+
+*/
+{
+    -1 || 42;
+}
