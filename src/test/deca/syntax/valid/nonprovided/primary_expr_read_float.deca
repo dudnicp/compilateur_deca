@@ -1,0 +1,9 @@
+/*
+    Description : test sur "READFLOAT OPARENT CPARENT "
+
+    Résultat : OK
+
+*/
+{
+    readfloat();
+}

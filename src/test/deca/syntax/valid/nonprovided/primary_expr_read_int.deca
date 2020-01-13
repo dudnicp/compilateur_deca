@@ -1,0 +1,9 @@
+/*
+    Description : test sur "READINT OPARENT CPARENT "
+
+    Résultat : OK
+
+*/
+{
+    readint();
+}
