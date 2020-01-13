@@ -131,22 +131,24 @@ inst returns[AbstractInst tree]
             $tree = $e1.tree;
         }
     | SEMI {
+            // A FAIRE: est-ce-bien NoOperation à utiliser ici ??
+            $tree = new NoOperation();
         }
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
-            // A FAIRE: Print : mettre l'option false ou true, pas d'idée sur le cas ou il faut mettre l'une ou l'autre
             $tree = new Print(false, $list_expr.tree);
         }
     | PRINTLN OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
-	        // A FAIRE: Println : mettre l'option false ou true, pas d'idée sur le cas ou il faut mettre l'une ou l'autre
 			$tree = new Println(false, $list_expr.tree);
         }
     | PRINTX OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+			$tree = new Print(true, $list_expr.tree);
         }
     | PRINTLNX OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+			$tree = new Println(true, $list_expr.tree);
         }
     | if_then_else {
             assert($if_then_else.tree != null);
@@ -205,8 +207,8 @@ assign_expr returns[AbstractExpr tree]
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
-	        $tree = $e.tree;
-	        $tree = $e2.tree;
+            $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
+             // A FAIRE: Gérer le set location ici
         }
       | /* epsilon */ {
             assert($e.tree != null);
@@ -223,6 +225,8 @@ or_expr returns[AbstractExpr tree]
     | e1=or_expr OR e2=and_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Or($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
        }
     ;
 
@@ -234,6 +238,8 @@ and_expr returns[AbstractExpr tree]
     |  e1=and_expr AND e2=eq_neq_expr {
             assert($e1.tree != null);                         
             assert($e2.tree != null);
+            $tree = new And($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     ;
 
@@ -241,14 +247,19 @@ eq_neq_expr returns[AbstractExpr tree]
     : e=inequality_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($e.tree, $e.start);
         }
     | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Equals($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=eq_neq_expr NEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new NotEquals($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     ;
 
@@ -260,22 +271,32 @@ inequality_expr returns[AbstractExpr tree]
     | e1=inequality_expr LEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new LowerOrEqual($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=inequality_expr GEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new GreaterOrEqual($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=inequality_expr GT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Greater($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=inequality_expr LT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Lower($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=inequality_expr INSTANCEOF type {
             assert($e1.tree != null);
             assert($type.tree != null);
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     ;
 
@@ -288,10 +309,14 @@ sum_expr returns[AbstractExpr tree]
     | e1=sum_expr PLUS e2=mult_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Plus($e1.tree,  $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=sum_expr MINUS e2=mult_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Minus($e1.tree,  $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     ;
 
@@ -303,23 +328,32 @@ mult_expr returns[AbstractExpr tree]
     | e1=mult_expr TIMES e2=unary_expr {
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
+            $tree = new Multiply($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=mult_expr SLASH e2=unary_expr {
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
+            $tree = new Divide($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     | e1=mult_expr PERCENT e2=unary_expr {
             assert($e1.tree != null);                                                                          
             assert($e2.tree != null);
+            $tree = new Modulo($e1.tree, $e2.tree);
+            // A FAIRE: Gérer le set location ici
         }
     ;
 
 unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
+            $tree = new UnaryMinus($e.tree);
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
+            if (true)
+                throw new UnsupportedOperationException("Devrait être géré dans le sans objet, mais nécessite peut être des choses contextuelles...");
         }
     | select_expr {
             assert($select_expr.tree != null);
@@ -335,13 +369,19 @@ select_expr returns[AbstractExpr tree]
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
         | /* epsilon */ {
             // we matched "e.i"
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
         )
     ;
@@ -354,23 +394,36 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
-            $tree = new MethodCall(null, $m.tree, $args.tree);
+            // A FAIRE: enrichissement pour permettre le passage du test "method_call_with_parameters.deca"
+            // pas urgent car porte pas sur la partie sans objet
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            //$tree = new MethodCall(null, $m.tree, $args.tree);
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
             // cette règle peut servir à multiplier récursivement les parenthèses ((()))
-            // POINT DE RETOUR
+            // A FAIRE : cette règle est non gérée dans le cadre du langage sans objet
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     | READINT OPARENT CPARENT {
+            $tree = new ReadInt();
         }
     | READFLOAT OPARENT CPARENT {
+            $tree = new ReadFloat();
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
+            // A FAIRE : cette règle est non gérée dans le cadre du langage sans objet
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     | literal {
             assert($literal.tree != null);
@@ -398,17 +451,30 @@ literal returns[AbstractExpr tree]
             }
         }
     | fd=FLOAT {
+            try {
+                $tree = new FloatLiteral(Float.parseFloat($fd.text));
+            } catch (NumberFormatException e) {
+				// A FAIRE: Méthode de gestion des erreurs plus fine (cf CalcParser.g4 l 58-59, il est mentionné la nécessité d'utiliser une meilleur gestion des erreurs que ca)
+                // A FAIRE: Insérer peut être un message d'erreur, car c'est une erreur (???), la compilation peut pas passer dans ce cas ???
+                $tree = null;
+            }
         }
     | st=STRING {
     	$tree = new StringLiteral($st.text);
         }
     | TRUE {
+        $tree = new BooleanLiteral(true);
         }
     | FALSE {
+        $tree = new BooleanLiteral(false);
         }
     | THIS {
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     | NULL {
+            if (true)
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
     ;
 
