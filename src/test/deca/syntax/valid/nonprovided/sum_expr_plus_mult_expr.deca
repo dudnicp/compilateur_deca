@@ -1,0 +1,9 @@
+/*
+    Description : test sur "sum_expr : e1=sum_expr PLUS e2=mult_expr"
+
+    Résultat : OK
+
+*/
+{
+    10             +        98;
+}
