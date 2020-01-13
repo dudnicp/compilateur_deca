@@ -1,0 +1,11 @@
+/*
+    Description : test sur if_then_else : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE
+
+    Résultat : OK
+
+*/
+{
+    if (true){
+        println("Bonjour", "!");
+    }
+}

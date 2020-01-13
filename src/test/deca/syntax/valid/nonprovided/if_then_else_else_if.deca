@@ -1,0 +1,18 @@
+/*
+    Description : if_then_else : ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE
+
+    Résultat : OK
+
+*/
+{
+    if ( false){
+        println("Erreur ! ");
+    }else if (false){
+        println("Seconde erreur ! ");
+    }else if (false){
+        println("Troisieme erreur ! ");
+    }else{
+        println("Comportement normal");
+    }
+}
+
