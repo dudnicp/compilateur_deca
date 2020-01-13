@@ -1,0 +1,9 @@
+/*
+    Description : test sur "unary_expr : select_expr"
+
+    Résultat : OK
+
+*/
+{
+    1;
+}
