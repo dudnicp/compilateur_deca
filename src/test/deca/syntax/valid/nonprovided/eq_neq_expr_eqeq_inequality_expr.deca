@@ -1,0 +1,9 @@
+/*
+    Description : test sur "e1=eq_neq_expr EQEQ e2=inequality_expr"
+
+    Résultat : OK
+
+*/
+{
+    1 == 2;
+}
