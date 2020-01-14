@@ -1,0 +1,9 @@
+/*
+    Description : test sur "inst : PRINTLNX OPARENT list_expr CPARENT SEMI"
+
+    Résultat : OK
+
+*/
+{
+    printlnx();
+}
