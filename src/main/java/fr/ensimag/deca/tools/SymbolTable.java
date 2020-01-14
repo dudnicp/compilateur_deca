@@ -31,6 +31,10 @@ public class SymbolTable {
         return map.get(name);
 
     }
+    
+    public Symbol contains(String name) {
+    	return map.get(name);
+    }
 
     public static class Symbol {
         // Constructor is private, so that Symbol instances can only be created
@@ -50,6 +54,7 @@ public class SymbolTable {
             return name;
         }
 
-        private String name;
+
+		private String name;
     }
 }

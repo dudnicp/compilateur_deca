@@ -30,7 +30,9 @@ public class Main extends AbstractMain {
         LOG.debug("verify Main: start");
         // A FAIRE: define localEnv et currentClass + returnType pour les instructions
         
-        EnvironmentExp localEnv = new EnvironmentExp(null);
+        EnvironmentExp envExpObject = new EnvironmentExp(null);
+        EnvironmentExp localEnv = new EnvironmentExp(envExpObject);
+        
 		declVariables.verifyListDeclVariable(compiler, localEnv , null);
         //insts.verifyListInst(compiler, localEnv, null, returnType);
         LOG.debug("verify Main: end");

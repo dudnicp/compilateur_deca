@@ -39,16 +39,18 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	// sur le modele de : int x = 1;
     	LOG.debug("DEBUG: verifyDeclVar start");
     
     	// decoration {name |-> (var,type)}
     	Type typeVerified = type.verifyType(compiler);
+    	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
     	try {
     		// assert varName.getExpDefinition.getNature() == "variable";
 			localEnv.declare(varName.getName(), varName.getExpDefinition());
 		} catch (DoubleDefException e1) {
-			e1.printStackTrace();
+			throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
+					localEnv.get(varName.getName()).getLocation(),
+					varName.getLocation());
 		}
     	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
     	

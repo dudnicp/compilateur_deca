@@ -1,22 +1,24 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.ClassType;
+import java.io.PrintStream;
+
+import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
-import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
 
 /**
  * Deca Identifier
@@ -25,7 +27,8 @@ import org.apache.log4j.Logger;
  * @date 01/01/2020
  */
 public class Identifier extends AbstractIdentifier {
-    
+    private static final Logger LOG = Logger.getLogger(Identifier.class);
+
     @Override
     protected void checkDecoration() {
         if (getDefinition() == null) {
@@ -184,10 +187,14 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
     	// Rule (3.17)
-    	System.out.println("Type: " + this.getName());
-    	System.out.println("Type v2 " + compiler.getEnvTypes().get(this.getName()));
-    	this.setType(compiler.getEnvTypes().get(this.getName()).getType());
-
+    	EnvironmentType evnTypes = compiler.getEnvTypes();
+    	
+    	if (!evnTypes.typeDefined(name.toString())) {
+    		throw new ContextualError("Type " + this.getName() + " is not defined",
+    				this.getLocation());
+    	} else {
+    		this.setType(evnTypes.get(evnTypes.getSymbol(name.toString())).getType());
+    	}
     	if (this.getType().isVoid()) {
     		throw new ContextualError("Variable cannot be of type void", this.getLocation());
     	} else {
