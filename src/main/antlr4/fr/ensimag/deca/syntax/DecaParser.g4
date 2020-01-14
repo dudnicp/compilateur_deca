@@ -129,6 +129,7 @@ inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
             $tree = $e1.tree;
+            //setLocation($tree, $e1.start);
         }
     | SEMI {
             // A FAIRE: est-ce-bien NoOperation à utiliser ici ??
@@ -168,16 +169,18 @@ inst returns[AbstractInst tree]
 
 if_then_else returns[IfThenElse tree]
 @init {
-
+    // A FAIRE : peut être utile pour la gestion du else if
+    //ListInst listOfInst = new ListInst();
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
            $tree = new IfThenElse($condition.tree, $li_if.tree, new ListInst());
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
+            // A FAIRE : peut être utile pour la gestion du else if
+           $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst()); 
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
-            // A FAIRE: faire if_then_else...
             $tree = new IfThenElse($condition.tree, $li_if.tree, $li_else.tree);
         }
       )?
@@ -202,6 +205,7 @@ expr returns[AbstractExpr tree]
     : assign_expr {
         assert($assign_expr.tree != null);
 	    $tree = $assign_expr.tree;
+        //setLocation($tree, $assign_expr.start);
         }
     ;
 
@@ -211,12 +215,15 @@ assign_expr returns[AbstractExpr tree]
             if (! ($e.tree instanceof AbstractLValue)) {
                 throw new InvalidLValue(this, $ctx);
             }
+            //$tree = $e.tree;
+            //setLocation($tree, $e.start);
         }
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
             $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
-             // A FAIRE: Gérer le set location ici
+            // A FAIRE: Gérer le set location ici
+            //setLocation($tree, $EQUALS);
         }
       | /* epsilon */ {
             assert($e.tree != null);
@@ -229,11 +236,13 @@ or_expr returns[AbstractExpr tree]
     : e=and_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            //setLocation($tree, $e.start);
         }
     | e1=or_expr OR e2=and_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Or($e1.tree, $e2.tree);
+            //setLocation($tree, $OR);
             // A FAIRE: Gérer le set location ici
        }
     ;
@@ -242,11 +251,13 @@ and_expr returns[AbstractExpr tree]
     : e=eq_neq_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            //setLocation($tree, $e.start);
         }
     |  e1=and_expr AND e2=eq_neq_expr {
             assert($e1.tree != null);                         
             assert($e2.tree != null);
             $tree = new And($e1.tree, $e2.tree);
+            //setLocation($tree, $AND);
             // A FAIRE: Gérer le set location ici
         }
     ;
@@ -255,13 +266,14 @@ eq_neq_expr returns[AbstractExpr tree]
     : e=inequality_expr {
             assert($e.tree != null);
             $tree = $e.tree;
-            setLocation($e.tree, $e.start);
+            setLocation($tree, $e.start);
         }
     | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Equals($e1.tree, $e2.tree);
             // A FAIRE: Gérer le set location ici
+            setLocation($tree, $EQEQ);
         }
     | e1=eq_neq_expr NEQ e2=inequality_expr {
             assert($e1.tree != null);
@@ -275,12 +287,14 @@ inequality_expr returns[AbstractExpr tree]
     : e=sum_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
     | e1=inequality_expr LEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new LowerOrEqual($e1.tree, $e2.tree);
             // A FAIRE: Gérer le set location ici
+            setLocation($tree, $LEQ);
         }
     | e1=inequality_expr GEQ e2=sum_expr {
             assert($e1.tree != null);
@@ -313,11 +327,13 @@ sum_expr returns[AbstractExpr tree]
     : e=mult_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
     | e1=sum_expr PLUS e2=mult_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Plus($e1.tree,  $e2.tree);
+            setLocation($tree, $PLUS);
             // A FAIRE: Gérer le set location ici
         }
     | e1=sum_expr MINUS e2=mult_expr {
@@ -332,12 +348,14 @@ mult_expr returns[AbstractExpr tree]
     : e=unary_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
     | e1=mult_expr TIMES e2=unary_expr {
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
             $tree = new Multiply($e1.tree, $e2.tree);
             // A FAIRE: Gérer le set location ici
+            setLocation($tree, $TIMES);
         }
     | e1=mult_expr SLASH e2=unary_expr {
             assert($e1.tree != null);                                         
