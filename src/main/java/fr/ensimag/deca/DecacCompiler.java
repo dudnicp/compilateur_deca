@@ -188,11 +188,11 @@ public class DecacCompiler {
         assert(prog.checkAllLocations());
 
         // ETAPE B
-        // prog.verifyProgram(this);
+        prog.verifyProgram(this);
         assert(prog.checkAllDecorations());
 
         addComment("start main program");
-        prog.codeGenProgram(this);
+        //prog.codeGenProgram(this);
         addComment("end main program");
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);

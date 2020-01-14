@@ -28,7 +28,11 @@ public class EnvironmentExp {
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
         // new environment inherits all of the parent's associations
+        if (parentEnvironment == null) {
+        	this.map = new HashMap<Symbol, ExpDefinition>();
+        } else {
         this.map = new HashMap<Symbol, ExpDefinition>(parentEnvironment.map);
+        }
     }
     public static class DoubleDefException extends Exception {
         private static final long serialVersionUID = -2733379901827316441L;
