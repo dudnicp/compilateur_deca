@@ -30,8 +30,7 @@ public class DecacMain {
             System.out.println("GL28");
         }
         if (options.getParse()) {
-        	// -p
-        	throw new UnsupportedOperationException("decac -p not yet implemented");
+        	
         }
         if (options.getVerification()) {
         	// -v
