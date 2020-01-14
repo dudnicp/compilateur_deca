@@ -1,0 +1,10 @@
+/*
+    Description : test de l'impossibilité de faire une déclaration de variable avant de préciser son type
+
+    Résultat : arbre non construit
+
+*/
+
+{
+    a int;
+}

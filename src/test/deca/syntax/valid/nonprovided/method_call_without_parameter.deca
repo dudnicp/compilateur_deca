@@ -1,0 +1,9 @@
+/*
+    Description : test sur "ident '(' list_expr ')'", avec list_expr vide
+
+    Résultat : OK
+
+*/
+{
+    x ( );
+}
