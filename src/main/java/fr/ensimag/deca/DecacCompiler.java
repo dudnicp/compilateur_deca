@@ -179,7 +179,6 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName,
             PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
-    	// ETAPE A
     	
     	if (this.getCompilerOptions().getParse()) {
     		System.out.println("-p reached, begining step A");
@@ -202,8 +201,8 @@ public class DecacCompiler {
 		    assert(prog.checkAllLocations());
 		
 		
-		    prog.verifyProgram(this);
-		    assert(prog.checkAllDecorations());
+		    //prog.verifyProgram(this);
+		    //assert(prog.checkAllDecorations());
 		
 		    addComment("start main program");
 		    prog.codeGenProgram(this);
