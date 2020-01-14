@@ -16,7 +16,9 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        for (AbstractDeclVar dv : this.getList()) {
+        	s.println(dv.decompile());
+        }
     }
 
     /**

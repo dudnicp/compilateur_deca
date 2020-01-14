@@ -33,12 +33,18 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+    	if (type.getType().isVoid()) throw new ContextualError("Impossible to declare"
+    			+ "variable of type void", this.getLocation());
     }
 
     
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+        s.print(type.decompile());
+        s.print(" ");
+        s.print(varName.decompile());
+        s.print(initialization.decompile());
+        s.print(";");
     }
 
     @Override

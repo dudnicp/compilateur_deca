@@ -228,6 +228,7 @@ assign_expr returns[AbstractExpr tree]
       | /* epsilon */ {
             assert($e.tree != null);
 	        $tree = $e.tree;
+
         }
       )
     ;
@@ -455,6 +456,7 @@ primary_expr returns[AbstractExpr tree]
             assert($literal.tree != null);
             $tree = $literal.tree;
             setLocation($tree, $literal.start);
+
         }
     ;
 
