@@ -1,6 +1,0 @@
-{
-// should throw DoubleException
-// since x is already defined at line 4
-int x;
-int x;
-}
