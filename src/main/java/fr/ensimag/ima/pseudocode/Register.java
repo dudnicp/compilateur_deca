@@ -7,6 +7,20 @@ package fr.ensimag.ima.pseudocode;
  * @date 01/01/2020
  */
 public class Register extends DVal {
+	
+	public static final int baseRegisterIndex = 2;
+	private static int currentRegisterIndex = baseRegisterIndex;
+	
+	public static GPRegister getAviableRegister() {
+		int temp = currentRegisterIndex;
+		currentRegisterIndex++;
+		return R[temp];
+	}
+	
+	public static void resetRegisterIndex() {
+		currentRegisterIndex = baseRegisterIndex;
+	}
+	
     private String name;
     protected Register(String name) {
         this.name = name;
@@ -48,6 +62,9 @@ public class Register extends DVal {
      * Convenience shortcut for R[1]
      */
     public static final GPRegister R1 = R[1];
+    
+    public static final GPRegister R2 = R[2];
+    
     static private GPRegister[] initRegisters() {
         GPRegister [] res = new GPRegister[16];
         for (int i = 0; i <= 15; i++) {

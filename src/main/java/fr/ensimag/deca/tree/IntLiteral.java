@@ -40,9 +40,15 @@ public class IntLiteral extends AbstractExpr {
     
     @Override
     protected void codeGenPrint(DecacCompiler compiler) {
+    	compiler.addInstruction(new LOAD(Register.R2, Register.R1));
     	compiler.addInstruction(new LOAD(new ImmediateInteger(value), Register.R1));
         compiler.addInstruction(new WINT());
     }
+    
+    @Override
+    	protected void codeGenInst(DecacCompiler compiler) {
+    		compiler.addInstruction(new LOAD(new ImmediateInteger(value), Register.getAviableRegister()));
+    	}
 
     @Override
     String prettyPrintNode() {
