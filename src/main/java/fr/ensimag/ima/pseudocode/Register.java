@@ -17,7 +17,7 @@ public class Register extends DVal {
 		return R[temp];
 	}
 	
-	public static void resetRegisterIndex() {
+	public static void resetAviableRegisterIndex() {
 		currentRegisterIndex = baseRegisterIndex;
 	}
 	
