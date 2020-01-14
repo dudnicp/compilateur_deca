@@ -23,4 +23,10 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
             ClassDefinition currentClass) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
+    
+    @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+    	// TODO
+        throw new UnsupportedOperationException("not yet implemented");
+    }
 }

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -58,6 +59,12 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     protected void iterChildren(TreeFunction f) {
         leftOperand.iter(f);
         rightOperand.iter(f);
+    }
+    
+    @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+    	// TODO
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
