@@ -40,6 +40,7 @@ fragment LETTER: 'a'..'z' | 'A'..'Z';
 fragment DIGIT: '0'..'9';
 IDENT: (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
+
 // Symboles
 LT: '<';
 GT: '>';
@@ -64,25 +65,36 @@ LEQ: '<=';
 AND: '&&';
 OR: '||';
 
+
+// Identifiers
+fragment LETTER: 'a'..'z' | 'A'..'Z';
+fragment DIGIT: '0'..'9';
+IDENT: (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
+
 // Litterals
+// A FAIRE: entiers hexa ??
 fragment POSITIVE_DIGIT: '1'..'9';
 INT: '0' | POSITIVE_DIGIT DIGIT*;
 
 // Floats
+// A FAIRE: Comprendre quel token doit etre
+// A FAIRE: utilise pour renvoyer un flottant:
+// A FAIRE: FLOATDEC/FLOATHEX ou FLOAT
 fragment NUM: DIGIT+;
 fragment SIGN: '+' | '-' ;
-EXP: ('E' | 'e') SIGN? NUM;
-DEC: NUM '.' NUM;
+fragment DIGITHEX: DIGIT | 'a'..'f' | 'A'..'F';
+fragment EXP: ('E' | 'e') SIGN? NUM;
+fragment NUMHEX:  DIGITHEX+;
+fragment DEC: NUM '.' NUM;
 FLOATDEC: (DEC | DEC EXP) ('F' | 'f')?;
-fragment DIGITHEX: '0'..'9' | 'a'..'f' | 'A'..'F';
-NUMHEX: DIGITHEX+;
-FLOATHEX: ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
+FLOATHEX: '0' ('x' | 'X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
 FLOAT: FLOATDEC | FLOATHEX;
+
 
 // Strings
 fragment STRING_CAR: ~('"' | '\\');
-STRING: '"' (STRING_CAR | '\\' | '\\\\')* '"';
-MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\' | '\\\\')* '"';
+STRING: '"' (STRING_CAR | '\\"' | '\\\\')* '"';
+MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"';
 
 // Comments
 COMMENT:

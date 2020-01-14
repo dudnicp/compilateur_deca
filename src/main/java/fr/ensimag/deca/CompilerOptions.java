@@ -31,7 +31,6 @@ public class CompilerOptions {
     public boolean getPrintBanner() {
         return printBanner;
     }
-    
     public List<File> getSourceFiles() {
         return Collections.unmodifiableList(sourceFiles);
     }
@@ -62,7 +61,7 @@ public class CompilerOptions {
     
     private List<File> sourceFiles = new ArrayList<File>();
 
-    
+
     public void parseArgs(String[] args) throws CLIException {
     	int argCounter = 0;
         for (String arg : args) {
@@ -97,6 +96,7 @@ public class CompilerOptions {
         	argCounter++;
         	}
         	
+ new CLIException("invalid argument");
         }
         Logger logger = Logger.getRootLogger();
         // map command-line debug option to log4j's level.
@@ -122,6 +122,7 @@ public class CompilerOptions {
         }
         // A FAIRE
       //  throw new UnsupportedOperationException("not yet implemented");
+
     }
 
     protected void displayUsage() {

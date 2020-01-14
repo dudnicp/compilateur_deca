@@ -72,6 +72,7 @@ def exeScript(path, X):
         print(fichierD, "passed" if resultat else "failed")
     print("{} out of {} passed, {} weren't commited yet".format(passed, total, didntexist))
 
+
 def main():
     if "lex" in argv:
         exeScript(lexValidPath, "lex")
@@ -79,6 +80,7 @@ def main():
         exeScript(lexValidPath, "synt")
     if "cont" in argv:
         exeScript(lexValidPath, "cont")
+
 
 if __name__ == "__main__":
     main()

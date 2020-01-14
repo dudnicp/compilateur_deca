@@ -33,6 +33,8 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+    	if (type.getType().isVoid()) throw new ContextualError("Impossible to declare"
+    			+ "variable of type void", this.getLocation());
     }
 
     
@@ -43,7 +45,6 @@ public class DeclVar extends AbstractDeclVar {
         s.print(varName.decompile());
         s.print(initialization.decompile());
         s.print(";");
-        
     }
 
     @Override
