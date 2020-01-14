@@ -1,5 +1,8 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 /**
  * Operator "x >= y"
@@ -18,5 +21,13 @@ public class GreaterOrEqual extends AbstractOpIneq {
     protected String getOperatorName() {
         return ">=";
     }
+
+
+	@Override
+	protected void codeGenInst(DecacCompiler compiler, DVal op1,
+			GPRegister op2) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

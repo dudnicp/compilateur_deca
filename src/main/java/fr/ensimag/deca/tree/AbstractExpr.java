@@ -8,6 +8,9 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -117,7 +120,8 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+    	codeGenInst(compiler);
+    	compiler.addInstruction(new LOAD(Register.getLastExprRegister(), Register.R1));
     }
 
     @Override

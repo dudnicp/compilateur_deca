@@ -1,5 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.DIV;
 
 /**
  *
@@ -17,4 +21,10 @@ public class Divide extends AbstractOpArith {
         return "/";
     }
 
+    @Override
+	protected void codeGenInst(DecacCompiler compiler, DVal op1,
+			GPRegister op2) {
+    	compiler.addInstruction(new DIV(op1, op2));
+    }
+    
 }

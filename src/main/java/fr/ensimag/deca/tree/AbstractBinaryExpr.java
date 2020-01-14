@@ -2,6 +2,10 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -63,9 +67,16 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-    	// TODO
-        throw new UnsupportedOperationException("not yet implemented");
+    	getLeftOperand().codeGenInst(compiler);
+    	GPRegister op2 = Register.getLastExprRegister();
+    	getRightOperand().codeGenInst(compiler);
+    	GPRegister op1 = Register.getLastExprRegister();
+    	Register.setLastExprRegister(op2);
+    	codeGenInst(compiler, op1, op2);
     }
+    
+    protected abstract void codeGenInst(DecacCompiler compiler, DVal op1, 
+    		GPRegister op2);
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
