@@ -1,19 +1,25 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * @author gl28
  * @date 01/01/2020
  */
 public class DeclVar extends AbstractDeclVar {
+    private static final Logger LOG = Logger.getLogger(DeclVar.class);
 
     
     final private AbstractIdentifier type;
@@ -33,8 +39,21 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	if (type.getType().isVoid()) throw new ContextualError("Impossible to declare"
-    			+ "variable of type void", this.getLocation());
+    	// sur le modele de : int x = 1;
+    	LOG.debug("DEBUG: verifyDeclVar start");
+    
+    	// decoration {name |-> (var,type)}
+    	Type typeVerified = type.verifyType(compiler);
+    	try {
+    		// assert varName.getExpDefinition.getNature() == "variable";
+			localEnv.declare(varName.getName(), varName.getExpDefinition());
+		} catch (DoubleDefException e1) {
+			e1.printStackTrace();
+		}
+    	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
+    	
+    	LOG.debug("DEBUG: verifyDeclVar end");
+
     }
 
     

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class EnvironmentExp {
 	private Map<Symbol, ExpDefinition> map;
     EnvironmentExp parentEnvironment;
+    private SymbolTable symbolMap;
     
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
@@ -33,7 +35,18 @@ public class EnvironmentExp {
         } else {
         this.map = new HashMap<Symbol, ExpDefinition>(parentEnvironment.map);
         }
+        symbolMap = new SymbolTable();
     }
+    
+    /**
+     * Create symbols to build the env_exp
+     * @param name
+     * @return
+     */
+    public Symbol createSymbol(String name) {
+    	return this.symbolMap.create(name);
+    }
+    
     public static class DoubleDefException extends Exception {
         private static final long serialVersionUID = -2733379901827316441L;
     }

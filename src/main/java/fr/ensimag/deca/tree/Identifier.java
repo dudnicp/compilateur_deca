@@ -167,6 +167,8 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+    	System.out.println("DEBUG: verifyExprIdentifier");
+
     	try {
     		return localEnv.get(name).getType();
     	} catch (NullPointerException e){
@@ -181,7 +183,16 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	// Rule (3.17)
+    	System.out.println("Type: " + this.getName());
+    	System.out.println("Type v2 " + compiler.getEnvTypes().get(this.getName()));
+    	this.setType(compiler.getEnvTypes().get(this.getName()).getType());
+
+    	if (this.getType().isVoid()) {
+    		throw new ContextualError("Variable cannot be of type void", this.getLocation());
+    	} else {
+    		return this.getType();
+    	}
     }
     
     
