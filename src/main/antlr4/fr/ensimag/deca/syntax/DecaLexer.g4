@@ -35,11 +35,6 @@ THIS: 'this';
 TRUE: 'true';
 WHILE: 'while';
 
-// Identifiers
-fragment LETTER: 'a'..'z' | 'A'..'Z';
-fragment DIGIT: '0'..'9';
-IDENT: (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
-
 
 // Symboles
 LT: '<';
