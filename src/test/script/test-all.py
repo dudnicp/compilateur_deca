@@ -5,10 +5,10 @@ from filecmp import cmp
 from sys import argv
 
 rPath = "../../test/deca"
-lexValidPath = rPath + "/syntax/valid/"
-lexInvalidPath = rPath + "/syntax/invalid/"
-syntValidPath = rPath + "/syntax/valid/"
-syntInvalidPath = rPath + "/syntax/invalid/"
+lexValidPath = rPath + "/syntax/valid/lex/"
+lexInvalidPath = rPath + "/syntax/invalid/lex/"
+syntValidPath = rPath + "/syntax/valid/synt/"
+syntInvalidPath = rPath + "/syntax/invalid/synt/"
 contValidPath = rPath + "/syntax/valid/"
 contInvalidPath = rPath + "/syntax/invalid/"
 
@@ -77,9 +77,15 @@ def main():
     if "lex" in argv:
         exeScript(lexValidPath, "lex")
     if "synt" in argv:
-        exeScript(lexValidPath, "synt")
-    if "cont" in argv:
-        exeScript(lexValidPath, "cont")
+        exeScript(syntValidPath, "synt")
+    if "context" in argv:
+        exeScript(contValidPath, "context")
+    if "lexv" in argv:
+        exeScript(lexInvalidPath, "lex")
+    if "syntv" in argv:
+        exeScript(syntInvalidPath, "synt")
+    if "contextv" in argv:
+        exeScript(contInvalidPath, "context")
 
 
 if __name__ == "__main__":

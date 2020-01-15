@@ -1,9 +1,0 @@
-/*
-    Description : test sur "assign_expr : EQUALS e2=assign_expr"
-
-    Résultat : OK
-
-*/
-{
-    x = 9;
-}

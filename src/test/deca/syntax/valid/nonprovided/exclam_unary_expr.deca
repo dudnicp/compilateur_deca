@@ -1,9 +1,0 @@
-/*
-    Description : test sur "unary_expr : op=EXCLAM e=unary_expr"
-
-    Résultat : OK
-
-*/
-{
-    !1;
-}

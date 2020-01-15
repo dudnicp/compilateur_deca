@@ -1,9 +1,0 @@
-/*
-    Description : test sur literal : st=STRING
-
-    Résultat : OK
-
-*/
-{
-    println("Message");
-}

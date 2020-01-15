@@ -1,0 +1,9 @@
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:38) - verify program: start
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:42) - int
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:42) - Object
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:42) - boolean
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:42) - float
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:42) - String
+DEBUG fr.ensimag.deca.tree.Program.verifyProgram(Program.java:42) - void
+DEBUG fr.ensimag.deca.tree.Main.verifyMain(Main.java:30) - verify Main: start
+DEBUG fr.ensimag.deca.tree.DeclVar.verifyDeclVar(DeclVar.java:42) - DEBUG: verifyDeclVar start

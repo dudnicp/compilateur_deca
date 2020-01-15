@@ -1,9 +1,0 @@
-/*
-    Description : test sur "inst : PRINTX OPARENT list_expr CPARENT SEMI"
-
-    Résultat : OK
-
-*/
-{
-    printx();
-}
