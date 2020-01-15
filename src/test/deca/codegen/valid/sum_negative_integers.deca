@@ -1,0 +1,11 @@
+/*
+    Description : somme de 2 entiers négatifs
+
+    Résultat : à définir
+
+*/
+{
+    int x = -1 + -9;
+    println(x);
+    println("Si il est affiché ci dessus -10, test réussi !");
+}

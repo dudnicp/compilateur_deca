@@ -1,0 +1,11 @@
+/*
+    Description : Test sur le fonctionnement de readInt()
+
+    Résultat: Dépends de la valeur entrée
+*/
+
+{
+    readFloat();
+    println("Si non int entré et que ce message s'affiche, erreur, sinon test réussi !");
+    println("cf p 99 paragraphe 11.2 si erreur");
+}
