@@ -53,11 +53,9 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("(");
         getLeftOperand().decompile(s);
         s.print(" " + getOperatorName() + " ");
         getRightOperand().decompile(s);
-        s.print(")");
     }
 
     abstract protected String getOperatorName();
@@ -75,8 +73,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     @Override
 	protected void codeExpr(DecacCompiler compiler, int n) {
     	leftOperand.codeExpr(compiler, n);
-    	if (rightOperand.getType().isInt() || rightOperand.getType().isFloat()) {
-    		System.out.println("hey!");
+    	DVal rightDVal = rightOperand.dval();
+    	if (rightDVal != null) {
     		codeGenInst(compiler, rightOperand.dval(), Register.getR(n));
 		}
     	else {

@@ -11,7 +11,7 @@ public class Register extends DVal {
 	
 	private static final GPRegister[] R = initRegisters();
 	
-	private static int RMAX = 15;
+	private static int RMAX = 2;
 	
 	public static int getRMAX() {
 		return RMAX;

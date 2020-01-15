@@ -66,7 +66,7 @@ public abstract class AbstractPrint extends AbstractInst {
     	s.print(this.getSuffix());
     	s.print("(");
     	arguments.decompile(s);
-    	s.print(")\n");
+    	s.print(");");
     }
 
     @Override
