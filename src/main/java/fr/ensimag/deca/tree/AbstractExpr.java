@@ -85,14 +85,14 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-    	LOG.debug("verifyRValue " + this.getClass());
     	this.verifyExpr(compiler, localEnv, currentClass); // decorate this with its type
     	if (this.getType() == null || expectedType == null) { // programmation defensive
     		throw new ContextualError("A type is null, decoration required here", this.getLocation());
     	}
-    	else if (!this.getType().sameType(expectedType)) throw new ContextualError("Rvalue" +
-    			" is of type " + this.getType() + " and leftOperand is of type " + expectedType,
-    			this.getLocation());
+    	else if (!this.getType().sameType(expectedType)) {
+    		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
+    		+ expectedType, this.getLocation());
+    	}
     	return this;
     }
     

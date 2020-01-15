@@ -31,7 +31,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     	if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
     		throw new ContextualError("Invalid comparaison operation between type "
     				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
-    				this.getLocation());
+    				this.getLocation());	
     	}
     	this.setType(new BooleanType(compiler.getEnvTypes().getSymbolTable().contains("boolean")));
     	LOG.debug("verify OpCmp end");
