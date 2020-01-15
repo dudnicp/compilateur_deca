@@ -6,7 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -43,10 +43,13 @@ public class IntLiteral extends AbstractExpr {
     }
     
     @Override
-	protected void codeGenInst(DecacCompiler compiler) {
-		GPRegister register = Register.getAviableRegister();
-		Register.setLastExprRegister(register);
-		compiler.addInstruction(new LOAD(new ImmediateInteger(value), register));
+	protected void codeExpr(DecacCompiler compiler, int registerIndex) {
+    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(registerIndex)));
+	}
+    
+    @Override
+	protected DVal dval() {
+    	return new ImmediateInteger(value);
 	}
 
     @Override

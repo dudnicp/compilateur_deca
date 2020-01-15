@@ -1,6 +1,5 @@
 package fr.ensimag.ima.pseudocode;
 
-import java.util.Stack;
 
 /**
  * Register operand (including special registers like SP).
@@ -12,26 +11,14 @@ public class Register extends DVal {
 	
 	private static final GPRegister[] R = initRegisters();
 	
-	public static final int baseRegisterIndex = 2;
-	private static int currentRegisterIndex = baseRegisterIndex;
-	private static GPRegister lastExprRegister = null;
+	private static int nRegisters;
 	
-	public static GPRegister getAviableRegister() {
-		int temp = currentRegisterIndex;
-		currentRegisterIndex++;
-		return R[temp];
+	public static int getNRegisters() {
+		return nRegisters;
 	}
 	
-	public static void resetAviableRegisterIndex() {
-		currentRegisterIndex = baseRegisterIndex;
-	}
-	
-	public static GPRegister getLastExprRegister() {
-		return lastExprRegister;
-	}
-	
-	public static void setLastExprRegister(GPRegister register) {
-		lastExprRegister = register;
+	public void setNRegisters(int n) {
+		nRegisters = n;
 	}
 	
     private String name;

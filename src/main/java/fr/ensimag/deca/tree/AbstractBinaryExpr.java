@@ -6,6 +6,8 @@ import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -65,20 +67,31 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.iter(f);
         rightOperand.iter(f);
     }
-    
-    @Override
-    protected void codeGenInst(DecacCompiler compiler) {
-    	getLeftOperand().codeGenInst(compiler);
-    	GPRegister op2 = Register.getLastExprRegister();
-    	getRightOperand().codeGenInst(compiler);
-    	GPRegister op1 = Register.getLastExprRegister();
-    	Register.setLastExprRegister(op2);
-    	codeGenInst(compiler, op1, op2);
-    }
+
     
     protected abstract void codeGenInst(DecacCompiler compiler, DVal op1, 
     		GPRegister op2);
     
+    @Override
+	protected void codeExpr(DecacCompiler compiler, int n) {
+    	leftOperand.codeExpr(compiler, n);
+    	if (rightOperand.getType().isInt() || rightOperand.getType().isFloat()) {
+    		codeGenInst(compiler, rightOperand.dval(), Register.getR(n));
+		}
+    	else {
+			if (n < Register.getNRegisters()) {
+				rightOperand.codeExpr(compiler, n + 1);
+				codeGenInst(compiler, Register.getR(n + 1), Register.getR(n));
+			}
+			else {
+				compiler.addInstruction(new PUSH(Register.getR(n)));
+				rightOperand.codeExpr(compiler, n);
+				compiler.addInstruction(new LOAD(Register.getR(n), Register.R0));
+				compiler.addInstruction(new POP(Register.getR(n)));;
+				codeGenInst(compiler, Register.R0, Register.getR(n));
+			}
+		}
+	}
     	
     @Override
 	protected void codeGenPrintInstruction(DecacCompiler compiler) {

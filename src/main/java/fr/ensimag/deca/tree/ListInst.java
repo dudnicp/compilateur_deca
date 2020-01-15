@@ -6,8 +6,6 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 
 /**
  * 
@@ -35,7 +33,6 @@ public class ListInst extends TreeList<AbstractInst> {
 
     public void codeGenListInst(DecacCompiler compiler) {
         for (AbstractInst i : getList()) {
-        	Register.resetAviableRegisterIndex();
             i.codeGenInst(compiler);
         }
     }
