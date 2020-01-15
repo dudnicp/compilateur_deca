@@ -38,17 +38,16 @@ public class IntLiteral extends AbstractExpr {
     }
     
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
-    	super.codeGenPrint(compiler);
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
         compiler.addInstruction(new WINT());
     }
     
     @Override
-    	protected void codeGenInst(DecacCompiler compiler) {
-    		GPRegister register = Register.getAviableRegister();
-    		Register.setLastExprRegister(register);
-    		compiler.addInstruction(new LOAD(new ImmediateInteger(value), register));
-    	}
+	protected void codeGenInst(DecacCompiler compiler) {
+		GPRegister register = Register.getAviableRegister();
+		Register.setLastExprRegister(register);
+		compiler.addInstruction(new LOAD(new ImmediateInteger(value), register));
+	}
 
     @Override
     String prettyPrintNode() {

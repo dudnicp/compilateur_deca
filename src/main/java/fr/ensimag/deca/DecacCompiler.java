@@ -1,7 +1,7 @@
 package fr.ensimag.deca;
 
 import fr.ensimag.deca.syntax.DecaLexer;
-import fr.ensimag.deca.context.EnvironmentType;
+// import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -45,11 +45,11 @@ public class DecacCompiler {
      * Portable newline character.
      */
     private static final String nl = System.getProperty("line.separator", "\n");
-    private EnvironmentType envTypes = new EnvironmentType();
+//    private EnvironmentType envTypes = new EnvironmentType();
     
-    public EnvironmentType getEnvTypes() {
-    	return envTypes;
-    }
+//    public EnvironmentType getEnvTypes() {
+//    	return envTypes;
+//    }
     
     
     public DecacCompiler(CompilerOptions compilerOptions, File source) {

@@ -56,7 +56,7 @@ public abstract class AbstractExpr extends AbstractInst {
      *    of [SyntaxeContextuelle] in pass 3
      *
      * @param compiler  (contains the "env_types" attribute)
-     * @param localEnv
+     * @param localEnvcodeGenPrint
      *            Environment in which the expression should be checked
      *            (corresponds to the "env_exp" attribute)
      * @param currentClass
@@ -122,11 +122,16 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void codeGenPrint(DecacCompiler compiler) {
     	codeGenInst(compiler);
     	compiler.addInstruction(new LOAD(Register.getLastExprRegister(), Register.R1));
+    	codeGenPrintInstruction(compiler);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
         throw new UnsupportedOperationException("not yet implemented");
+    }
+    
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
+    	throw new UnsupportedOperationException("not yet implemented");
     }
     
 

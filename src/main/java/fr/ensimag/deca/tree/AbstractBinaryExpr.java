@@ -5,6 +5,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -80,9 +81,10 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     
     	
     @Override
-	protected void codeGenPrint(DecacCompiler compiler) {
-		leftOperand.codeGenPrint(compiler);
+	protected void codeGenPrintInstruction(DecacCompiler compiler) {
+		leftOperand.codeGenPrintInstruction(compiler);
 	}
+    
     
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
