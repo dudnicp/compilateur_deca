@@ -5,15 +5,18 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * @author gl28
  * @date 01/01/2020
  */
 public class Initialization extends AbstractInitialization {
+    private static final Logger LOG = Logger.getLogger(Initialization.class);
 
     public AbstractExpr getExpression() {
         return expression;
@@ -35,7 +38,15 @@ public class Initialization extends AbstractInitialization {
     protected void verifyInitialization(DecacCompiler compiler, Type t,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	// verify that variable and initialization types match
+    	LOG.debug("verifyInitialization start");
+    	expression.verifyExpr(compiler, localEnv, currentClass);
+    	if (!expression.getType().sameType(t)) {
+    		throw new ContextualError("Initialization of type " + expression.getType()
+    			+ " to variable of type " + t, expression.getLocation());
+    	}
+    	LOG.debug("verifyInitialization end");
+
     }
 
 

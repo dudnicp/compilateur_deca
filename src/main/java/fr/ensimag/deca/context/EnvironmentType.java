@@ -14,6 +14,7 @@ import org.apache.commons.lang.Validate;
  */
 public class EnvironmentType {
 	private Map<Symbol, TypeDefinition> map;
+	SymbolTable typeTable;
     EnvironmentType parentEnvironment;
     
     public EnvironmentType(EnvironmentType parentEnvironment) {
@@ -25,29 +26,36 @@ public class EnvironmentType {
     public EnvironmentType() {
     	// build the predefined type environment
         this.map = new HashMap<Symbol, TypeDefinition>();
-        SymbolTable typeTable = new SymbolTable();
+        typeTable = new SymbolTable();
         Symbol symbol;
-        Location defaultLocation = new Location(0, 0, "Predefined type");
         
         symbol = typeTable.create("void");
-        map.put(symbol,  new TypeDefinition(new VoidType(symbol), defaultLocation));
+        map.put(symbol,  new TypeDefinition(new VoidType(symbol), Location.BUILTIN));
         
         symbol = typeTable.create("boolean");
-        map.put(symbol,  new TypeDefinition(new BooleanType(symbol), defaultLocation));
+        map.put(symbol,  new TypeDefinition(new BooleanType(symbol), Location.BUILTIN));
 
         symbol = typeTable.create("float");
-        map.put(symbol,  new TypeDefinition(new FloatType(symbol), defaultLocation));
+        map.put(symbol,  new TypeDefinition(new FloatType(symbol), Location.BUILTIN));
+
+        symbol = typeTable.create("String");
+        map.put(symbol,  new TypeDefinition(new StringType(symbol), Location.BUILTIN));
+
 
         symbol = typeTable.create("int");
-        map.put(symbol,  new TypeDefinition(new IntType(symbol), defaultLocation));
+        map.put(symbol,  new TypeDefinition(new IntType(symbol), Location.BUILTIN));
 
         symbol = typeTable.create("Object");
-        map.put(symbol,  new ClassDefinition(new ClassType(symbol), defaultLocation, null));
+        map.put(symbol,  new ClassDefinition(new ClassType(symbol), Location.BUILTIN, null));
 
     }
     
     public Map<Symbol, TypeDefinition> getMap() {
     	return this.map;
+    }
+    
+    public SymbolTable getSymbolTable() {
+    	return typeTable;
     }
 
     public static class DoubleDefException extends Exception {
@@ -61,7 +69,14 @@ public class EnvironmentType {
     public TypeDefinition get(Symbol key) {
     	return map.get(key);
     }
+    
+    public boolean typeDefined(String name) {
+    	return map.containsKey(typeTable.contains(name));
+    }
 
+    public Symbol getSymbol(String name) {
+    	return typeTable.contains(name);
+    }
    
     public void declare(Symbol name, TypeDefinition def) throws DoubleDefException {
     	if (map.get(name) == null) {

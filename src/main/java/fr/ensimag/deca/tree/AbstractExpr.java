@@ -13,6 +13,7 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * Expression, i.e. anything that has a value.
@@ -21,6 +22,8 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2020
  */
 public abstract class AbstractExpr extends AbstractInst {
+    private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
+
     /**
      * @return true if the expression does not correspond to any concrete token
      * in the source code (and should be decompiled to the empty string).
@@ -85,7 +88,15 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	this.verifyExpr(compiler, localEnv, currentClass); // decorate this with its type
+    	if (this.getType() == null || expectedType == null) { // programmation defensive
+    		throw new ContextualError("A type is null, decoration required here", this.getLocation());
+    	}
+    	else if (!this.getType().sameType(expectedType)) {
+    		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
+    		+ expectedType, this.getLocation());
+    	}
+    	return this;
     }
     
     
@@ -93,8 +104,16 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    	LOG.debug("verifyInst start");
+    	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
+    	LOG.debug("verifiedType " + verifiedType);
+    	// Comprendre si le type *return* doit etre décoré par le type synthetisé par **expr** ou autre
+    	if (verifiedType == null || returnType == null) {} // programmation defensive
+    	else if (!verifiedType.sameType(returnType)) throw new ContextualError("type error in instruction",
+    			this.getLocation());
+    	LOG.debug("verifyInst end");
+
+    	}
 
     /**
      * Verify the expression as a condition, i.e. check that the type is

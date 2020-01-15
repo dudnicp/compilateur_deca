@@ -9,8 +9,8 @@ lexValidPath = rPath + "/syntax/valid/"
 lexInvalidPath = rPath + "/syntax/invalid/"
 syntValidPath = rPath + "/syntax/valid/"
 syntInvalidPath = rPath + "/syntax/invalid/"
-contValidPath = rPath + "/syntax/valid/"
-contInvalidPath = rPath + "/syntax/invalid/"
+contextValidPath = rPath + "/context/valid/"
+contextInvalidPath = rPath + "/context/invalid/"
 
 
 def listdirectory(path):
@@ -78,8 +78,8 @@ def main():
         exeScript(lexValidPath, "lex")
     if "synt" in argv:
         exeScript(lexValidPath, "synt")
-    if "cont" in argv:
-        exeScript(lexValidPath, "cont")
+    if "context" in argv:
+        exeScript(contextInvalidPath, "context")
 
 
 if __name__ == "__main__":

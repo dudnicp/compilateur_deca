@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -35,8 +36,15 @@ public class Program extends AbstractProgram {
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
-        throw new UnsupportedOperationException("not yet implemented");
-        // LOG.debug("verify program: end");
+        /*
+         * print the predefined types in the compiler type environment 
+        for (Symbol key: compiler.getEnvTypes().getMap().keySet()) {
+        	LOG.debug(compiler.getEnvTypes().get(key).getType());
+        }
+		*/
+        //classes.verifyListClass(compiler);
+        main.verifyMain(compiler);
+        LOG.debug("verify program: end");
     }
 
     @Override

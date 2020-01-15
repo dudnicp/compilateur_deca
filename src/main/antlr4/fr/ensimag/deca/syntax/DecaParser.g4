@@ -116,11 +116,13 @@ list_inst returns[ListInst tree]
 @init {
 $tree = new ListInst();
 }
-    : (e1 = inst { 
+    : (e1 = inst {
+
     	    assert($e1.tree != null);
     	    $tree.add($e1.tree);
             // La localisation de l'instruction matchée est celle du premier jeton qu'elle comporte
             setLocation($e1.tree, $e1.start);
+
         }
       )*
     ;
@@ -141,6 +143,7 @@ inst returns[AbstractInst tree]
         }
     | PRINTLN OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+
 			$tree = new Println(false, $list_expr.tree);
         }
     | PRINTX OPARENT list_expr CPARENT SEMI {
@@ -203,6 +206,7 @@ list_expr returns[ListExpr tree]
 
 expr returns[AbstractExpr tree]
     : assign_expr {
+
         assert($assign_expr.tree != null);
 	    $tree = $assign_expr.tree;
         //setLocation($tree, $assign_expr.start);
@@ -221,6 +225,7 @@ assign_expr returns[AbstractExpr tree]
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
+
             $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
             // A FAIRE: Gérer le set location ici
             //setLocation($tree, $EQUALS);
@@ -255,7 +260,7 @@ and_expr returns[AbstractExpr tree]
             //setLocation($tree, $e.start);
         }
     |  e1=and_expr AND e2=eq_neq_expr {
-            assert($e1.tree != null);                         
+            assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new And($e1.tree, $e2.tree);
             //setLocation($tree, $AND);
@@ -267,7 +272,9 @@ eq_neq_expr returns[AbstractExpr tree]
     : e=inequality_expr {
             assert($e.tree != null);
             $tree = $e.tree;
-            setLocation($tree, $e.start);
+
+            setLocation($e.tree, $e.start);
+
         }
     | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
@@ -351,20 +358,20 @@ mult_expr returns[AbstractExpr tree]
             setLocation($tree, $e.start);
         }
     | e1=mult_expr TIMES e2=unary_expr {
-            assert($e1.tree != null);                                         
+            assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Multiply($e1.tree, $e2.tree);
             // A FAIRE: Gérer le set location ici
             setLocation($tree, $TIMES);
         }
     | e1=mult_expr SLASH e2=unary_expr {
-            assert($e1.tree != null);                                         
+            assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Divide($e1.tree, $e2.tree);
             setLocation($tree, $SLASH);            
         }
     | e1=mult_expr PERCENT e2=unary_expr {
-            assert($e1.tree != null);                                                                          
+            assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Modulo($e1.tree, $e2.tree);
             setLocation($tree, $PERCENT);
@@ -378,8 +385,7 @@ unary_expr returns[AbstractExpr tree]
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Devrait être géré dans le sans objet, mais nécessite peut être des choses contextuelles...");
+ 			$tree = new Not($e.tree);
         }
     | select_expr {
             assert($select_expr.tree != null);
@@ -454,8 +460,8 @@ primary_expr returns[AbstractExpr tree]
     | literal {
             assert($literal.tree != null);
             $tree = $literal.tree;
-            setLocation($tree, $literal.start);
 
+            setLocation($tree, $literal.start);
         }
     ;
 
@@ -586,7 +592,7 @@ list_params
         }
       )*)?
     ;
-    
+
 multi_line_string returns[String text, Location location]
     : s=STRING {
             $text = $s.text;
