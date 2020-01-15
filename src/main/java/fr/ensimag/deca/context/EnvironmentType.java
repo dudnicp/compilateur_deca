@@ -77,6 +77,10 @@ public class EnvironmentType {
     public Symbol getSymbol(String name) {
     	return typeTable.contains(name);
     }
+    
+    public Type getType(String name) {
+    	return map.get(this.getSymbol(name)).getType();
+    }
    
     public void declare(Symbol name, TypeDefinition def) throws DoubleDefException {
     	if (map.get(name) == null) {

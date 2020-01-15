@@ -1,0 +1,5 @@
+{
+float i = 4.3f;
+int j = 3;
+i = j;
+}
