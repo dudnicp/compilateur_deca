@@ -77,7 +77,13 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     
     protected abstract void codeGenInst(DecacCompiler compiler, DVal op1, 
     		GPRegister op2);
-
+    
+    	
+    @Override
+	protected void codeGenPrint(DecacCompiler compiler) {
+		leftOperand.codeGenPrint(compiler);
+	}
+    
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         leftOperand.prettyPrint(s, prefix, false);
