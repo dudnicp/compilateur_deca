@@ -43,8 +43,9 @@ public class DeclVar extends AbstractDeclVar {
     
     	// decoration {name |-> (var,type)}
     	Type typeVerified = type.verifyType(compiler);
+       	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
-    	varName.setType(varName.getDefinition().getType());
+ 
     	try {
     		// ajout de la variable dans l'environnement;
 			localEnv.declare(varName.getName(), varName.getExpDefinition());

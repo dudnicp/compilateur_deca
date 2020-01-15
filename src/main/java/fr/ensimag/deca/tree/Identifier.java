@@ -170,14 +170,12 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	System.out.println("DEBUG: verifyExprIdentifier");
-
-    	try {
-    		LOG.debug("identifer verifyExpr " + this.getType());
-    		return localEnv.get(name).getType();
-    	} catch (NullPointerException e){
-    		throw new ContextualError("Undefined identifier " + name,
-    				definition.getLocation());
+    	LOG.debug("verifyExprIdentifier start");
+    	if (localEnv.get(this.getName()) == null) {
+    		throw new ContextualError("Undefined identifier " + this.getName(),
+    				this.getLocation());
+    	} else {
+    		return localEnv.get(this.getName()).getType();
     	}
     }
 

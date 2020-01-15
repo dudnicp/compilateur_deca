@@ -34,7 +34,7 @@ public class Assign extends AbstractBinaryExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     	Identifier lValue = (Identifier)this.getLeftOperand();
-    	Type lValueType = localEnv.get(lValue.getName()).getType();
+    	Type lValueType = lValue.verifyExpr(compiler, localEnv, currentClass);
     	this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lValueType);
     	LOG.debug(this.getRightOperand());
     	return this.getLeftOperand().getType();
