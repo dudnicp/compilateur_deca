@@ -1,8 +1,0 @@
-; start main program
-; Main program
-; Beginning of main instructions:
-	LOAD #0x1.d9999ap1, R1
-	WFLOAT
-	WNL
-	HALT
-; end main program

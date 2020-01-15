@@ -378,8 +378,7 @@ unary_expr returns[AbstractExpr tree]
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Devrait être géré dans le sans objet, mais nécessite peut être des choses contextuelles...");
+			$tree = new Not($e.tree);
         }
     | select_expr {
             assert($select_expr.tree != null);

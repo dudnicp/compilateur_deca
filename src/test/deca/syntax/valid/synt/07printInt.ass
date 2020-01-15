@@ -1,8 +1,0 @@
-; start main program
-; Main program
-; Beginning of main instructions:
-	LOAD #5, R1
-	WINT
-	WNL
-	HALT
-; end main program
