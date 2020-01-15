@@ -1,13 +1,14 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 
 /**
@@ -47,8 +48,8 @@ public class Assign extends AbstractBinaryExpr {
     }
 
 	@Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op1,
-			GPRegister op2) {
+	protected void codeGenInst(DecacCompiler compiler, DVal op,
+			GPRegister register) {
 		// TODO Auto-generated method stub
 		
 	}

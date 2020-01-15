@@ -24,8 +24,8 @@ public class GreaterOrEqual extends AbstractOpIneq {
 
 
 	@Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op1,
-			GPRegister op2) {
+	protected void codeGenInst(DecacCompiler compiler, DVal op,
+			GPRegister register) {
 		// TODO Auto-generated method stub
 		
 	}

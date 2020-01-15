@@ -11,14 +11,14 @@ public class Register extends DVal {
 	
 	private static final GPRegister[] R = initRegisters();
 	
-	private static int nRegisters;
+	private static int RMAX = 15;
 	
-	public static int getNRegisters() {
-		return nRegisters;
+	public static int getRMAX() {
+		return RMAX;
 	}
 	
-	public void setNRegisters(int n) {
-		nRegisters = n;
+	public void setRMAX(int n) {
+		RMAX = n;
 	}
 	
     private String name;

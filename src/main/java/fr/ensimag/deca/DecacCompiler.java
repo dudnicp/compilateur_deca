@@ -1,5 +1,6 @@
 package fr.ensimag.deca;
 
+import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 // import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.SymbolTable;
@@ -40,6 +41,12 @@ import org.apache.log4j.Logger;
  */
 public class DecacCompiler {
     private static final Logger LOG = Logger.getLogger(DecacCompiler.class);
+    
+	private EnvironmentType envTypes = new EnvironmentType();
+	    
+    public EnvironmentType getEnvTypes() {
+        return envTypes;
+    }
     
     /**
      * Portable newline character.
@@ -179,38 +186,52 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName,
             PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
-    	// ETAPE A
-        AbstractProgram prog = doLexingAndParsing(sourceName, err);
-
-        if (prog == null) {
-            LOG.info("Parsing failed");
-            return true;
-        }
-        assert(prog.checkAllLocations());
-
-        // ETAPE B
-        prog.verifyProgram(this);
-        assert(prog.checkAllDecorations());
-
-        addComment("start main program");
-        //prog.codeGenProgram(this);
-        addComment("end main program");
-        LOG.debug("Generated assembly code:" + nl + program.display());
-        LOG.info("Output file assembly file is: " + destName);
-
-        FileOutputStream fstream = null;
-        try {
-            fstream = new FileOutputStream(destName);
-        } catch (FileNotFoundException e) {
-            throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
-        }
-
-        LOG.info("Writing assembler file ...");
-
-        program.display(new PrintStream(fstream));
-        LOG.info("Compilation of " + sourceName + " successful.");
-        return false;
+    	
+    	if (this.getCompilerOptions().getParse()) {
+    		System.out.println("-p reached, begining step A");
+    		AbstractProgram prog = doLexingAndParsing(sourceName, err);
+    		System.out.println("step A complete, output :");
+    		System.out.println(prog.prettyPrint());
+    		System.out.println("starting decompiling");
+    		String output = prog.decompile();
+    		System.out.println("decompiler output BEGIN");
+    		System.out.println(output);
+    		System.out.println("END");
+    	} else {
+    	
+		    AbstractProgram prog = doLexingAndParsing(sourceName, err);
+		
+		    if (prog == null) {
+		        LOG.info("Parsing failed");
+		        return true;
+		    }
+		    assert(prog.checkAllLocations());
+		
+		
+		    prog.verifyProgram(this);
+		    assert(prog.checkAllDecorations());
+		
+		    addComment("start main program");
+		    prog.codeGenProgram(this);
+		    addComment("end main program");
+		    LOG.debug("Generated assembly code:" + nl + program.display());
+		    LOG.info("Output file assembly file is: " + destName);
+		
+		    FileOutputStream fstream = null;
+		    try {
+		        fstream = new FileOutputStream(destName);
+		    } catch (FileNotFoundException e) {
+		        throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
+		    }
+		
+		    LOG.info("Writing assembler file ...");
+		
+		    program.display(new PrintStream(fstream));
+		    LOG.info("Compilation of " + sourceName + " successful.");
+    	}
+	    return false;
     }
+
 
     /**
      * Build and call the lexer and parser to build the primitive abstract

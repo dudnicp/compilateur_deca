@@ -69,17 +69,18 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     
-    protected abstract void codeGenInst(DecacCompiler compiler, DVal op1, 
-    		GPRegister op2);
+    protected abstract void codeGenInst(DecacCompiler compiler, DVal op, 
+    		GPRegister register);
     
     @Override
 	protected void codeExpr(DecacCompiler compiler, int n) {
     	leftOperand.codeExpr(compiler, n);
     	if (rightOperand.getType().isInt() || rightOperand.getType().isFloat()) {
+    		System.out.println("hey!");
     		codeGenInst(compiler, rightOperand.dval(), Register.getR(n));
 		}
     	else {
-			if (n < Register.getNRegisters()) {
+			if (n < Register.getRMAX()) {
 				rightOperand.codeExpr(compiler, n + 1);
 				codeGenInst(compiler, Register.getR(n + 1), Register.getR(n));
 			}

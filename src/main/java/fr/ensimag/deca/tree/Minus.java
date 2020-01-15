@@ -21,9 +21,9 @@ public class Minus extends AbstractOpArith {
     }
     
     @Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op1,
-			GPRegister op2) {
-    	compiler.addInstruction(new SUB(op1, op2));
+	protected void codeGenInst(DecacCompiler compiler, DVal op,
+			GPRegister register) {
+    	compiler.addInstruction(new SUB(op, register));
     }
 
     
