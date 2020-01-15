@@ -40,34 +40,13 @@ public class Initialization extends AbstractInitialization {
             throws ContextualError {
     	// verify that variable and initialization types match
     	LOG.debug("verifyInitialization start");
-    	EnvironmentType evnTypes = compiler.getEnvTypes();
-    	expression.setType(t);
-    	// assign expression to type t
-    	// A FAIRE : handle compatible types conversion
-    	try {
-    		IntLiteral expr = (IntLiteral)this.expression;
-    		LOG.debug(expr.getType());
-        	LOG.debug(expr.getValue());
+    	expression.verifyExpr(compiler, localEnv, currentClass);
+    	if (!expression.getType().sameType(t)) {
+    		throw new ContextualError("Initialization of type " + expression.getType()
+    			+ " to variable of type " + t, expression.getLocation());
+    	}
+    	LOG.debug("verifyInitialization end");
 
-    	} catch (ClassCastException e) {}
-    	try {
-    		StringLiteral expr = (StringLiteral)this.expression;
-    		LOG.debug(expr.getType());
-        	LOG.debug(expr.getValue());
-        	LOG.debug(expr.getClass());
-    		//expression.setType(evnTypes.get(evnTypes.getSymbol(expr.name.toString())).getType());
-
-    	} catch (ClassCastException e) {}
-    	try {
-    		FloatLiteral expr = (FloatLiteral)this.expression;
-        	LOG.debug(expr.getValue());
-
-    	} catch (ClassCastException e) {}
-    	try {
-    		BooleanLiteral expr = (BooleanLiteral)this.expression;
-        	LOG.debug(expr.getValue());
-
-    	} catch (ClassCastException e) {}
     }
 
 

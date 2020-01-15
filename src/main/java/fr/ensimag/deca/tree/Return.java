@@ -27,6 +27,7 @@ public class Return extends AbstractInst {
 	@Override
 	protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
+		// rule (3.24)
 		if (returnType.isVoid()) {
 			throw new ContextualError("Return value cannot be of type void",
 					this.getLocation());

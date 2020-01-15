@@ -20,6 +20,7 @@ public class NoOperation extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
+    	// rule (3.23) - nothing to verify
     }
 
     @Override

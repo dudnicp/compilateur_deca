@@ -3,6 +3,9 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.NullType;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VoidType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -34,7 +37,10 @@ public class Main extends AbstractMain {
         EnvironmentExp localEnv = new EnvironmentExp(envExpObject);
         
 		declVariables.verifyListDeclVariable(compiler, localEnv , null);
-        //insts.verifyListInst(compiler, localEnv, null, returnType);
+		
+		// we need to assign a returnType to the list of instructions
+		Type defaultType = new NullType(compiler.getEnvTypes().getSymbolTable().contains("null"));
+        insts.verifyListInst(compiler, localEnv, null, defaultType);
         LOG.debug("verify Main: end");
     }
 

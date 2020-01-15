@@ -173,6 +173,7 @@ public class Identifier extends AbstractIdentifier {
     	System.out.println("DEBUG: verifyExprIdentifier");
 
     	try {
+    		LOG.debug("identifer verifyExpr " + this.getType());
     		return localEnv.get(name).getType();
     	} catch (NullPointerException e){
     		throw new ContextualError("Undefined identifier " + name,

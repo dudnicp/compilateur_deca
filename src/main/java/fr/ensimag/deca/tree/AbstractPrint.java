@@ -39,6 +39,7 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
+    	// rule (3.31)
     	for (AbstractExpr a : getArguments().getList()) {
     		if (!(a.getType().isFloat() || a.getType().isString() || a.getType().isInt())) {
     			throw new ContextualError("Arguments type must be String, int or float", a.getLocation());
@@ -59,7 +60,11 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+    	s.print("print");
+    	s.print(this.getSuffix());
+    	s.print("(");
+    	arguments.decompile(s);
+    	s.print(")\n");
     }
 
     @Override
