@@ -46,5 +46,4 @@ public class NoInitialization extends AbstractInitialization {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
     }
-
 }

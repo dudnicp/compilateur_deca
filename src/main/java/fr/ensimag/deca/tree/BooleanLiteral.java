@@ -8,6 +8,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+
 import java.io.PrintStream;
 
 /**
@@ -54,6 +57,11 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     String prettyPrintNode() {
         return "BooleanLiteral (" + value + ")";
+    }
+    
+    @Override
+    protected DVal dval() {
+    	return new ImmediateInteger(value ? 1 : 0);
     }
 
 }

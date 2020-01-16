@@ -112,11 +112,19 @@ public abstract class AbstractExpr extends AbstractInst {
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
     	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
-    	if (verifiedType == null || returnType == null) {} // programmation defensive
-    	else if (!verifiedType.sameType(returnType) && !verifiedType.isFloat() && !verifiedType.isInt()) throw new ContextualError("type error in instruction",
+    	if (returnType == null) { // programmation defensive
+        	this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
+    	} else {
+        	this.setType(returnType);
+		}
+    	if (verifiedType == null) { // programmation defensive
+    	} else if (!verifiedType.sameType(returnType) &&
+    			!verifiedType.isFloat() && 
+    			!verifiedType.isInt()) {
+    		throw new ContextualError("type error in instruction",
     			this.getLocation());
-
     	}
+    }
 
     /**
      * Verify the expression as a condition, i.e. check that the type is
@@ -143,13 +151,12 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected void codeGenPrint(DecacCompiler compiler) {
     	codeGenInst(compiler);
-    	compiler.addInstruction(new LOAD(Register.R2, Register.R1));
     	codeGenPrintInstruction(compiler);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        codeExpr(compiler, 2);
+        codeExpr(compiler, 1);
     }
     
     protected void codeGenPrintInstruction(DecacCompiler compiler) {
