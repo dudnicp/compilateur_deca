@@ -128,7 +128,7 @@ class Math {
 
 
       //On utilise la méthode de Horner
-      return ((((a*z*z+b)*z*z+c)*z*z+d)*z*z+e)*z;
+      return ((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f;
         // println("asin(f) not yet implemented");
     }
 
@@ -142,7 +142,7 @@ class Math {
 
       //On utilise la méthode de Horner
       //Pareil avec asin mais just les coeff differents
-      return ((((a*z*z+b)*z*z+c)*z*z+d)*z*z+e)*z;
+      return ((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f;
 
 
         // println("atan(f) not yet implemented");
