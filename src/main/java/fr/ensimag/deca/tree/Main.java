@@ -7,6 +7,8 @@ import fr.ensimag.deca.context.NullType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VoidType;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -39,7 +41,7 @@ public class Main extends AbstractMain {
 		declVariables.verifyListDeclVariable(compiler, localEnv , null);
 		
 		// we need to assign a returnType to the list of instructions
-		Type defaultType = new NullType(compiler.getEnvTypes().getSymbolTable().contains("null"));
+		Type defaultType = compiler.getEnvTypes().getDefinitionFromName("null").getType();
         insts.verifyListInst(compiler, localEnv, null, defaultType);
         LOG.debug("verify Main: end");
     }

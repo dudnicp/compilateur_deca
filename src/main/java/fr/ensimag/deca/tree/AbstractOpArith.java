@@ -29,10 +29,18 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     	//Type lValueType = localEnv.get(lValue.getName()).getType();
     	//this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lValueType);
     	LOG.debug("verify OpArith start");
-    	this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-    	this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-    	if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
-    		throw new ContextualError("Invalid arithmetic operation between type "
+    	Type lType = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+    	Type rType = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+    	
+    	// handle conversion to float
+    	if (this.getLeftOperand().getType().isFloat() && this.getRightOperand().getType().isInt()) {
+        	this.setRightOperand(this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lType));
+    	} else if (this.getLeftOperand().getType().isInt() && this.getRightOperand().getType().isFloat()) {
+        	this.setLeftOperand(this.getLeftOperand().verifyRValue(compiler, localEnv, currentClass, rType));
+        
+        // else if types are not compatible
+    	} else if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
+    		throw new ContextualError("Arithmetic operation \"" + this.getOperatorName() +  "\" is invalid between type "
     				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
     				this.getLocation());
     	}

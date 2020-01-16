@@ -19,8 +19,13 @@ public class ConvFloat extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    	// set type := float decoration on **operand**
+    	System.out.println("convfloat start");
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("float").getType());
+    	System.out.println("convfloat end");
+    	return this.getOperand().getType();
+
+    	}
 
 
     @Override
