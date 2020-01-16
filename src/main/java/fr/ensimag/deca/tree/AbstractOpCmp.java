@@ -33,7 +33,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
     				this.getLocation());	
     	}
-    	this.setType(new BooleanType(compiler.getEnvTypes().getSymbolTable().contains("boolean")));
+    	this.setType(new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")));
     	LOG.debug("verify OpCmp end");
     	return this.getType();
     }

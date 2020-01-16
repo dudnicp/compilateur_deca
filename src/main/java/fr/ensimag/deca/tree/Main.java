@@ -41,11 +41,8 @@ public class Main extends AbstractMain {
 		declVariables.verifyListDeclVariable(compiler, localEnv , null);
 		
 		// we need to assign a returnType to the list of instructions
-		Type defaultType = new NullType(compiler.getEnvTypes().getSymbolTable().contains("null"));
+		Type defaultType = compiler.getEnvTypes().getDefinitionFromName("null").getType();
         insts.verifyListInst(compiler, localEnv, null, defaultType);
-        for (Symbol s: localEnv.getMap().keySet()) {
-        	LOG.debug(s.toString() + localEnv.get(s).toString());
-        }
         LOG.debug("verify Main: end");
     }
 

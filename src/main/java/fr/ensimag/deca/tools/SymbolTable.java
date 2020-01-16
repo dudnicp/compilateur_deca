@@ -3,6 +3,12 @@ package fr.ensimag.deca.tools;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import com.sun.tools.javac.util.List;
+
+import fr.ensimag.deca.tree.Main;
+
 /**
  * Manage unique symbols.
  *
@@ -35,7 +41,7 @@ public class SymbolTable {
     public Symbol get(String name) {
     	return map.get(name);
     }
-
+    
     public static class Symbol {
         // Constructor is private, so that Symbol instances can only be created
         // through SymbolTable.create factory (which thus ensures uniqueness

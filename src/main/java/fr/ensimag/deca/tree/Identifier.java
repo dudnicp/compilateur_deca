@@ -188,13 +188,13 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
     	// Rule (3.17)
-    	EnvironmentType evnTypes = compiler.getEnvTypes();
-    	
-    	if (!evnTypes.typeDefined(name.toString())) {
+    	EnvironmentType envTypes = compiler.getEnvTypes();
+    	Type type = envTypes.getDefinitionFromName(this.getName().toString()).getType();
+    	if (type == null) {
     		throw new ContextualError("Type " + this.getName() + " is not defined",
     				this.getLocation());
     	} else {
-    		this.setType(evnTypes.get(evnTypes.getSymbol(name.toString())).getType());
+    		this.setType(type);
     	}
     	if (this.getType().isVoid()) {
     		throw new ContextualError("Variable cannot be of type void", this.getLocation());

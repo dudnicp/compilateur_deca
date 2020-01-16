@@ -40,7 +40,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         
         // else if types are not compatible
     	} else if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
-    		throw new ContextualError("Invalid arithmetic operation between type "
+    		throw new ContextualError("Arithmetic operation \"" + this.getOperatorName() +  "\" is invalid between type "
     				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
     				this.getLocation());
     	}

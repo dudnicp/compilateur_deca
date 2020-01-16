@@ -44,7 +44,7 @@ public class DecacCompiler {
      * Portable newline character.
      */
     private static final String nl = System.getProperty("line.separator", "\n");
-    private EnvironmentType envTypes = new EnvironmentType();
+    private EnvironmentType envTypes = new EnvironmentType(null);
     
     public EnvironmentType getEnvTypes() {
     	return envTypes;

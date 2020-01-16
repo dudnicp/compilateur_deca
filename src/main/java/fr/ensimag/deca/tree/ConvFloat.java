@@ -21,7 +21,7 @@ public class ConvFloat extends AbstractUnaryExpr {
             ClassDefinition currentClass) {
     	// set type := float decoration on **operand**
     	System.out.println("convfloat start");
-    	this.setType(compiler.getEnvTypes().getType("float"));
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("float").getType());
     	System.out.println("convfloat end");
     	return this.getOperand().getType();
 

@@ -4,6 +4,8 @@ import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
+
 
 public abstract class Environment {
 	private SymbolTable symbolMap;

@@ -8,7 +8,6 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -49,7 +48,7 @@ public class DeclVar extends AbstractDeclVar {
     	try {
     		// ajout de la variable dans l'environnement;
 			localEnv.declare(varName.getName(), varName.getExpDefinition());
-		} catch (DoubleDefException e1) {
+		} catch (fr.ensimag.deca.context.Environment.DoubleDefException e1) {
 			throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
 					localEnv.get(varName.getName()).getLocation(),
 					varName.getLocation());
