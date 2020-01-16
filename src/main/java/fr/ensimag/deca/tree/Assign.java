@@ -1,6 +1,18 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+<<<<<<< Updated upstream
+=======
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+
+import org.apache.log4j.Logger;
+
+>>>>>>> Stashed changes
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -37,5 +49,9 @@ public class Assign extends AbstractBinaryExpr {
     protected String getOperatorName() {
         return "=";
     }
+<<<<<<< Updated upstream
 
+=======
+    
+>>>>>>> Stashed changes
 }

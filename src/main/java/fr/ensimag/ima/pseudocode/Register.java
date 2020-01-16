@@ -7,6 +7,31 @@ package fr.ensimag.ima.pseudocode;
  * @date 01/01/2020
  */
 public class Register extends DVal {
+<<<<<<< Updated upstream
+=======
+	
+	private static final GPRegister[] R = initRegisters();
+	
+	private static int RMAX = 15;
+	private static int nextAddr = 3;
+	
+	public static int getRMAX() {
+		return RMAX;
+	}
+	
+	public void setRMAX(int n) {
+		RMAX = n;
+	}
+	
+	
+	public static int getNextAddr() {
+		int temp = nextAddr;
+		nextAddr ++;
+		return temp;
+	}
+	
+	
+>>>>>>> Stashed changes
     private String name;
     protected Register(String name) {
         this.name = name;
