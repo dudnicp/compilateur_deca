@@ -94,6 +94,7 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
 		// A FAIRE: Pas d'idée du pourquoi ce bloc existe ici (présent de base), il faut surement y ajouter quelque chose... (retirer les 2 DeclVar en dessous, déclarer l'arbre ici et faire add ???)
+        Initialization init_var;
         }
     : i=ident {
     		assert($t != null);
@@ -105,7 +106,9 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
       		assert($t != null);
       		assert($i.tree != null);
       		assert($e.tree != null);
-			$tree = new DeclVar($t, $i.tree, new Initialization($e.tree));
+            init_var = new Initialization($e.tree);
+			$tree = new DeclVar($t, $i.tree, init_var);
+            setLocation(init_var, $EQUALS);
             setLocation($e.tree, $e.start);
         }
       )? {
