@@ -21,11 +21,14 @@ public class Register extends DVal {
 	private static int RMAX = 15;
 	private static int nextAddr = 3;
 	
+	public static final int defaultRegisterIndex = 2;
+	
 	public static int getRMAX() {
 		return RMAX;
 	}
 	
-	public void setRMAX(int n) {
+	public static void setRMAX(int n) {
+		assert(n > 1 && n < 16);
 		RMAX = n;
 	}
 	

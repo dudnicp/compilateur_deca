@@ -151,12 +151,13 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected void codeGenPrint(DecacCompiler compiler) {
     	codeGenInst(compiler);
+    	compiler.addInstruction(new LOAD(Register.getR(Register.defaultRegisterIndex), Register.R1));
     	codeGenPrintInstruction(compiler);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        codeExpr(compiler, 1);
+        codeExpr(compiler, Register.defaultRegisterIndex);
     }
     
     protected void codeGenPrintInstruction(DecacCompiler compiler) {

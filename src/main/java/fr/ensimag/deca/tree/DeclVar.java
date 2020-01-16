@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -92,7 +93,7 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void codeGenDecl(DecacCompiler compiler) {
     	DAddr addr = varName.daddr();
-    	initialization.codeExpr(compiler, 1, addr);
+    	initialization.codeExpr(compiler, Register.defaultRegisterIndex, addr);
     }
     
 }
