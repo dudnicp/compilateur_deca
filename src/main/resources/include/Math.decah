@@ -16,114 +16,114 @@ class Math {
   }
 
 
-    float _tan(float f) {
-      int k = 0; //definit le plus grand angle courant de rotation possible
-      float X = 1.0f; //Abscisse du point Mj courant
-      float Y = 0.0f; //Ordonnée du point Mj courant
-      float epsilone = _Puiss(1/2,45); //Precision voulue sur l'angle teta
-      //Precision absolue voulue = 2^-45 d'après poly
-      // println("sin(f) not yet implemented");
+  float _tan(float f) {
+    int k = 0; //definit le plus grand angle courant de rotation possible
+    float X = 1.0f; //Abscisse du point Mj courant
+    float Y = 0.0f; //Ordonnée du point Mj courant
+    float epsilone = _Puiss(1/2,45); //Precision voulue sur l'angle teta
+    //Precision absolue voulue = 2^-45 d'après poly
+    // println("sin(f) not yet implemented");
 
 
-        int temp;
-        //initialiser les 6 premiers teta
-        float teta_0 = 0,78539816339744830962f;
-        float teta_1 = 0,099668652491162027378f;
-        float teta_2 = 0,0099996666866652382063f;
-        float teta_3 = 0,00099999966666686666652f;
-        float teta_4 = 0,000099999999666666668667f ;
-        float teta_5 = 0,0000099999999996666666667f;
-        float teta_6 = 0,00000099999999999966666667f;
+      float temp;
+      //initialiser les 6 premiers teta
+      float teta_0 = 0.78539816339744830962f;
+      float teta_1 = 0.099668652491162027378f;
+      float teta_2 = 0.0099996666866652382063f;
+      float teta_3 = 0.00099999966666686666652f;
+      float teta_4 = 0.000099999999666666668667f ;
+      float teta_5 = 0.0000099999999996666666667f;
+      float teta_6 = 0.00000099999999999966666667f;
 
-        while (teta >= teta_0) && (teta >= epsilone) {
-          teta = teta - teta_0;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-        while (teta >= teta_1) && (teta >= epsilone) {
-          teta = teta - teta_1;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-
-        while (teta >= teta_2) && (teta >= epsilone) {
-          teta = teta - teta_2;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-
-        while (teta >= teta_3) && (teta >= epsilone) {
-          teta = teta - teta_3;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-
-        while (teta >= teta_4) && (teta >= epsilone) {
-          teta = teta - teta_4;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-
-        while (teta >= teta_5) && (teta >= epsilone) {
-          teta = teta - teta_5;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-
-        while (teta >= teta_6) && (teta >= epsilone) {
-          teta = teta - teta_6;
-          temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
-        }
-        if (teta < epsilone) return (Y/X);
-        k = k+1;
-
-        //a partir de k=7 teta_k = 10^-k
-        while (teta >= epsilone) {
-          while (teta >= _Puiss(10, k)) && (teta >= epsilone) {
-            teta = teta - _Puiss(10, k);
-            temp = X;
-            X = X - _Puiss(10, k) * Y;
-            Y = Y + _Puiss(10, k) * temp;
-        }
-        k = k+1;
-        }
-        return Y/X;
-
+      while ((f >= teta_0) && (f >= epsilone)) {
+        f = f - teta_0;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
       }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+      while ((f >= teta_1) && (f >= epsilone)) {
+        f = f - teta_1;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
+      }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+
+      while ((f >= teta_2) && (f >= epsilone)) {
+        f = f - teta_2;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
+      }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+
+      while ((f >= teta_3) && (f >= epsilone)) {
+        f = f - teta_3;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
+      }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+
+      while ((f >= teta_4) && (f >= epsilone)) {
+        f = f - teta_4;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
+      }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+
+      while ((f >= teta_5) && (f >= epsilone)) {
+        f = f - teta_5;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
+      }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+
+      while ((f >= teta_6) && (f >= epsilone)) {
+        f = f - teta_6;
+        temp = X;
+        X = X - _Puiss(10, k) * Y;
+        Y = Y + _Puiss(10, k) * temp;
+      }
+      if (f < epsilone) return (Y/X);
+      k = k+1;
+
+      //a partir de k=7 teta_k = 10^-k
+      while (f >= epsilone) {
+        while ((f >= _Puiss(10, k)) && (f >= epsilone)) {
+          f = f - _Puiss(10, k);
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+      }
+      k = k+1;
+      }
+      return Y/X;
+
+    }
 
     float sin(float f) {
 
-      return tan(f)/(_Puiss(1+tan(f)*tan(f), 1/2));
+      return _tan(f)/(_Puiss(1+_tan(f)*_tan(f), 1/2));
         // println("sin(f) not yet implemented");
     }
     float cos(float f) {
-      return 1/(_Puiss(1+tan(f)*tan(f),1/2));
+      return 1/(_Puiss(1+_tan(f)*_tan(f),1/2));
         // println("cos(f) not yet implemented");
     }
 
