@@ -183,7 +183,7 @@ if_then_else returns[IfThenElse tree]
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
             // A FAIRE : peut être utile pour la gestion du else if
-           $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst()); 
+           $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
@@ -369,7 +369,7 @@ mult_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Divide($e1.tree, $e2.tree);
-            setLocation($tree, $SLASH);            
+            setLocation($tree, $SLASH);
         }
     | e1=mult_expr PERCENT e2=unary_expr {
             assert($e1.tree != null);
@@ -386,11 +386,12 @@ unary_expr returns[AbstractExpr tree]
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-			$tree = new Not($e.tree);
+			      $tree = new Not($e.tree);
         }
     | select_expr {
             assert($select_expr.tree != null);
             $tree = $select_expr.tree;
+            setLocation($tree, $select_expr.start);
         }
     ;
 
@@ -398,6 +399,7 @@ select_expr returns[AbstractExpr tree]
     : e=primary_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
