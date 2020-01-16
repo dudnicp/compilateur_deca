@@ -10,6 +10,8 @@ import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
 
@@ -62,6 +64,11 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     protected DVal dval() {
     	return new ImmediateInteger(value ? 1 : 0);
+    }
+    
+    @Override
+    protected void codeExpr(DecacCompiler compiler, int n) {
+    	compiler.addInstruction(new LOAD(dval(), Register.getR(n)));
     }
 
 }

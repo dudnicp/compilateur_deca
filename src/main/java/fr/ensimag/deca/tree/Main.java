@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.NullType;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.VoidType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -34,12 +37,28 @@ public class Main extends AbstractMain {
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
         
         EnvironmentExp envExpObject = new EnvironmentExp(null);
+        Symbol trueBoolean = envExpObject.createSymbol("true");
+        Symbol falseBoolean = envExpObject.createSymbol("false");
+
+        try {
+            envExpObject.declare(trueBoolean, new VariableDefinition(
+                    new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")),
+                    Location.BUILTIN));
+            envExpObject.declare(falseBoolean, new VariableDefinition(
+                    new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")),
+                    Location.BUILTIN));
+        } catch (DoubleDefException e) {
+            // this won't happen since we initialize the env_expr
+            e.printStackTrace();
+        }
+        // we inherit the true and false "variables"
+        // TODO: make it constant
         EnvironmentExp localEnv = new EnvironmentExp(envExpObject);
         
-		declVariables.verifyListDeclVariable(compiler, localEnv , null);
-		
-		// we need to assign a returnType to the list of instructions
-		Type defaultType = compiler.getEnvTypes().getDefinitionFromName("null").getType();
+        declVariables.verifyListDeclVariable(compiler, localEnv , null);
+        
+        // we need to assign a returnType to the list of instructions
+        Type defaultType = compiler.getEnvTypes().getDefinitionFromName("null").getType();
         insts.verifyListInst(compiler, localEnv, null, defaultType);
     }
 
