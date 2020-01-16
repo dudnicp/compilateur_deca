@@ -2,22 +2,178 @@
 // Library for class Math of Deca, coded in Deca
 
 class Math {
+
+  //methode pour calculer x^n a ameliorer ?
+  double _Puiss(double x, int n) {
+    if (n==0) return 1;
+    double res = 1;
+    for (int i = 0; i<n; i++) {
+      res = res*x;
+    }
+    return res;
+  }
+
+
+    float _tan(float f) {
+      int k = 0; //definit le plus grand angle courant de rotation possible
+      double X = 1; //Abscisse du point Mj courant
+      double Y = 0; //Ordonnée du point Mj courant
+      double epsilone = _Puiss(1/2,45); //Precision voulue sur l'angle teta
+      //Precision absolue voulue = 2^-45 d'après poly
+      // println("sin(f) not yet implemented");
+
+      //A FAIRE initialiser les 6 premiers teta
+        int temp;
+
+        while (teta >= teta_0) && (teta >= epsilone) {
+          teta = teta - teta_0;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+        while (teta >= teta_1) && (teta >= epsilone) {
+          teta = teta - teta_1;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+
+        while (teta >= teta_2) && (teta >= epsilone) {
+          teta = teta - teta_2;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+
+        while (teta >= teta_3) && (teta >= epsilone) {
+          teta = teta - teta_3;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+
+        while (teta >= teta_4) && (teta >= epsilone) {
+          teta = teta - teta_4;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+
+        while (teta >= teta_5) && (teta >= epsilone) {
+          teta = teta - teta_5;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+
+        while (teta >= teta_6) && (teta >= epsilone) {
+          teta = teta - teta_6;
+          temp = X;
+          X = X - _Puiss(10, k) * Y;
+          Y = Y + _Puiss(10, k) * temp;
+        }
+        if (teta < epsilone) return (Y/X);
+        k++;
+
+        //a partir de k=7 teta_k = 10^-k
+        while (teta >= epsilone) {
+          while (teta >= _Puiss(10, k)) && (teta >= epsilone) {
+            teta = teta - _Puiss(10, k);
+            temp = X;
+            X = X - _Puiss(10, k) * Y;
+            Y = Y + _Puiss(10, k) * temp;
+        }
+          k++;
+        }
+        return Y/X;
+
+      }
+
     float sin(float f) {
-        println("sin(f) not yet implemented");
+
+      return tan(f)/(_Puiss(1+tan(f)*tan(f), 1/2));
+        // println("sin(f) not yet implemented");
     }
     float cos(float f) {
-        println("cos(f) not yet implemented");
+      return 1/(_Puiss(1+tan(f)*tan(f),1/2));
+        // println("cos(f) not yet implemented");
     }
+
+    //calcul pour |f| <=1
     float asin(float f) {
-        println("asin(f) not yet implemented");
+
+      //on se limite a la puissance 9 dans
+      //le Developpement en serie entière de asin
+      //asin = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
+
+      //A FAIRE initialiser les coeff sous forme de float
+
+
+      //On utilise la méthode de Horner
+      return ((((a*z*z+b)*z*z+c)*z*z+d)*z*z+e)*z;
+        // println("asin(f) not yet implemented");
     }
+
+    //calcul pour |f| <=1
     float atan(float f) {
-        println("atan(f) not yet implemented");
+      //on se limite a la puissance 9 dans
+      //le Developpement en serie entière de atan
+      //atan = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
+
+      //A FAIRE initialiser les coeff sous forme de float
+
+      //On utilise la méthode de Horner
+      //Pareil avec asin mais just les coeff differents
+      return ((((a*z*z+b)*z*z+c)*z*z+d)*z*z+e)*z;
+
+
+        // println("atan(f) not yet implemented");
     }
+
+    //calcul de la puissance 2 du float
+    int _log2f (float f) {
+      int i = 0;
+      if (f < 0) f = -f;
+      else if (f <= 1){
+        while (f <= 1)
+         i = i-1;
+         f = f*2;
+        return i;
+      }
+
+      else {
+        while (f >= 2) {
+          f = f/2;
+          i++
+        }
+        return i;
+      }
+
+    }
+
     float ulp(float f) {
-        println("ulp(f) not yet implemented");
+
+      return _Puiss(2, _log2f(f)) * _Puiss(1/2,23);
+
+        // println("ulp(f) not yet implemented");
     }
 }
 
-
-// End of Deca Math library
