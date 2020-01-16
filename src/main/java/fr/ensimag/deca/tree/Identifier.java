@@ -25,6 +25,7 @@ import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
@@ -261,7 +262,7 @@ public class Identifier extends AbstractIdentifier {
     
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+    	compiler.addInstruction(new LOAD(this.daddr(), Register.getR(n)));
     }
     
     @Override

@@ -92,7 +92,7 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void codeGenDecl(DecacCompiler compiler) {
     	DAddr addr = varName.daddr();
-    	initialization.codeExpr(compiler, 2, addr);
+    	initialization.codeExpr(compiler, 1, addr);
     }
     
 }
