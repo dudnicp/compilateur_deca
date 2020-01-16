@@ -1,0 +1,10 @@
+/*
+    Description: Test de la fonction printx sur un flottant négatif
+
+    Résultat : à définir...
+*/
+{
+    float z = -52175.253;
+    printx(z);
+    print(", Si 0xc74bcf41 a été affiché (hexa de la val -52175.253), test réussi ! ");
+}
