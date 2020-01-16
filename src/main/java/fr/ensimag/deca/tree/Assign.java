@@ -1,8 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import org.apache.log4j.Logger;
 
@@ -46,12 +50,5 @@ public class Assign extends AbstractBinaryExpr {
     protected String getOperatorName() {
         return "=";
     }
-
-	@Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op,
-			GPRegister register) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    
 }

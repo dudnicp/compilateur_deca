@@ -11,7 +11,8 @@ public class Register extends DVal {
 	
 	private static final GPRegister[] R = initRegisters();
 	
-	private static int RMAX = 2;
+	private static int RMAX = 15;
+	private static int nextAddr = 3;
 	
 	public static int getRMAX() {
 		return RMAX;
@@ -20,6 +21,14 @@ public class Register extends DVal {
 	public void setRMAX(int n) {
 		RMAX = n;
 	}
+	
+	
+	public static int getNextAddr() {
+		int temp = nextAddr;
+		nextAddr ++;
+		return temp;
+	}
+	
 	
     private String name;
     protected Register(String name) {

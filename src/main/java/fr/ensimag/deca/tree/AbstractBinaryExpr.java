@@ -67,8 +67,10 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     
-    protected abstract void codeGenInst(DecacCompiler compiler, DVal op, 
-    		GPRegister register);
+    protected void codeGenInst(DecacCompiler compiler, DVal op, 
+    		GPRegister register) {
+    	throw new UnsupportedOperationException("not yet implemented");
+    }
     
     @Override
 	protected void codeExpr(DecacCompiler compiler, int n) {

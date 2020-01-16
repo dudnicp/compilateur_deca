@@ -7,6 +7,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -153,11 +154,15 @@ public abstract class AbstractExpr extends AbstractInst {
     	throw new UnsupportedOperationException("not yet implemented");
     }
     
-    protected void codeExpr(DecacCompiler compiler, int registerIndex) {
+    protected void codeExpr(DecacCompiler compiler, int n) {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
     
     protected DVal dval() {
+		return null;
+	}
+    
+    protected DAddr daddr() {
 		return null;
 	}
     
