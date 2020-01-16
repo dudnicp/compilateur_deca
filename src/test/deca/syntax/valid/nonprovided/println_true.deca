@@ -1,9 +1,0 @@
-/*
-    Description : test sur literal : TRUE
-
-    Résultat : OK
-
-*/
-{
-    println(true);
-}

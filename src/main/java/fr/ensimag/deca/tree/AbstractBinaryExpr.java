@@ -66,6 +66,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         rightOperand.iter(f);
     }
 
+<<<<<<< Updated upstream
+=======
     
     protected void codeGenInst(DecacCompiler compiler, DVal op, 
     		GPRegister register) {
@@ -100,6 +102,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 	}
     
     
+>>>>>>> Stashed changes
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         leftOperand.prettyPrint(s, prefix, false);

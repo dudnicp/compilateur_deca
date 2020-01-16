@@ -1,0 +1,9 @@
+{
+boolean x;
+boolean y;
+if (x) {
+	x = false;
+} else if (y) {
+	y = false;
+}
+}

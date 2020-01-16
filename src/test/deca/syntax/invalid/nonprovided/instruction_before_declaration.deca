@@ -1,4 +1,0 @@
-{
-    println("Bonjour ! ");
-    int a;
-}

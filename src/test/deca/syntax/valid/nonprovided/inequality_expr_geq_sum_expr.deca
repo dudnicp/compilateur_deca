@@ -1,9 +1,0 @@
-/*
-    Description : test sur "inequality_expr : e1=inequality_expr GEQ e2=sum_expr"
-
-    Résultat : OK
-
-*/
-{
-    40 >= 10;
-}

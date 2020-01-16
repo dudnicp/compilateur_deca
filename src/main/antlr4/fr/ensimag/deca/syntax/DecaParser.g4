@@ -272,9 +272,7 @@ eq_neq_expr returns[AbstractExpr tree]
     : e=inequality_expr {
             assert($e.tree != null);
             $tree = $e.tree;
-
-            setLocation($e.tree, $e.start);
-
+            setLocation($tree, $e.start);
         }
     | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
@@ -385,7 +383,7 @@ unary_expr returns[AbstractExpr tree]
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
- 			$tree = new Not($e.tree);
+			$tree = new Not($e.tree);
         }
     | select_expr {
             assert($select_expr.tree != null);

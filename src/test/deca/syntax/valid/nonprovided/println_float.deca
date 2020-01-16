@@ -1,9 +1,0 @@
-/*
-    Description : test sur literal : fd=FLOAT
-
-    Résultat : OK
-
-*/
-{
-    println(5.8);
-}

@@ -1,0 +1,12 @@
+`> [1, 0] Program
+   +> ListDeclClass [List with 0 elements]
+   `> [1, 0] Main
+      +> ListDeclVar [List with 0 elements]
+      `> ListInst [List with 1 elements]
+         []> [2, 0] Plus
+             +> [2, 0] Int (1)
+             `> [2, 5] Multiply
+                +> [2, 3] Divide
+                |  +> [2, 2] Int (2)
+                |  `> [2, 4] Int (3)
+                `> [2, 6] Int (4)
