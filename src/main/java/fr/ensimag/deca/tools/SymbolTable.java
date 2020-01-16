@@ -32,7 +32,7 @@ public class SymbolTable {
 
     }
     
-    public Symbol contains(String name) {
+    public Symbol get(String name) {
     	return map.get(name);
     }
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 LAUNCHER_FILE="/src/test/script/launchers/test_context"
-CAT_HEADER_FILE="src/test/deca/header_deca.txt"
-CAT_FOOT_FILE="src/test/deca/footer_deca.txt"
+CAT_HEADER_FILE="src/test/deca/context/header_deca.txt"
+CAT_FOOT_FILE="src/test/deca/context/footer_deca.txt"
 
 mvn compile
 for FILE in "$@"
@@ -10,7 +10,6 @@ do
     echo "$FILE"
     if [ -d $FILE ];
     then
-        echo "Directory"
         for DIR_FILE in $FILE*
         do
             cat $CAT_HEADER_FILE

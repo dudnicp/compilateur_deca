@@ -22,70 +22,19 @@ import java.util.Map;
  * @author gl28
  * @date 01/01/2020
  */
-public class EnvironmentExp {
-	private Map<Symbol, ExpDefinition> map;
-    EnvironmentExp parentEnvironment;
-    private SymbolTable symbolMap;
-    
+public class EnvironmentExp extends Environment{
+	
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
-        this.parentEnvironment = parentEnvironment;
         // new environment inherits all of the parent's associations
-        if (parentEnvironment == null) {
-        	this.map = new HashMap<Symbol, ExpDefinition>();
-        } else {
-        this.map = new HashMap<Symbol, ExpDefinition>(parentEnvironment.map);
-        }
-        symbolMap = new SymbolTable();
+    	super(parentEnvironment);
     }
     
-    /**
-     * Create symbols to build the env_exp
-     * @param name
-     * @return
-     */
-    public Symbol createSymbol(String name) {
-    	return this.symbolMap.create(name);
-    }
-    
-    public static class DoubleDefException extends Exception {
-        private static final long serialVersionUID = -2733379901827316441L;
-    }
-
-    public Map<Symbol, ExpDefinition> getMap() {
-    	return this.map;
-    }
-    
-    /**
-     * Return the definition of the symbol in the environment, or null if the
-     * symbol is undefined.
-     */
-    public ExpDefinition get(Symbol key) {
-    	return map.get(key);
-    }
-
-    /**
-     * Add the definition def associated to the symbol name in the environment.
-     * 
-     * Adding a symbol which is already defined in the environment,
-     * - throws DoubleDefException if the symbol is in the "current" dictionary 
-     * - or, hides the previous declaration otherwise.
-     * 
-     * @param name
-     *            Name of the symbol to define
-     * @param def
-     *            Definition of the symbol
-     * @throws DoubleDefException
-     *             if the symbol is already defined at the "current" dictionary
-     *
-     */
-    public void declare(Symbol name, ExpDefinition def) throws DoubleDefException {
-    	assert(parentEnvironment != null); // programmation defensive
-    	if (map.get(name) != null) {
-    		throw new DoubleDefException(); // exists in current dictionary
-    	} else if (parentEnvironment.getMap().get(name) != null) {
-    		map.put(name, def); // hides previous declaration 
-    	} else {
-    		map.put(name, def); // adds new definition - symbol association
+    @Override
+    public void declare(Symbol name, Definition def) throws DoubleDefException {
+    	if (this.get(name) != null) { // already exists in this
+    		throw new DoubleDefException(); // environment
+    	} else { // else we add it to the map
+    		this.getDefinitionMap().put(name, def);
     	}
     }
 

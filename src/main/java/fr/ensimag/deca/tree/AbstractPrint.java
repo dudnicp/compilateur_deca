@@ -41,6 +41,11 @@ public abstract class AbstractPrint extends AbstractInst {
             throws ContextualError {
     	// rule (3.31)
     	for (AbstractExpr a : getArguments().getList()) {
+            if (a.getType() == null) {
+                // decorating here
+                // ie case: print(1+2+3)
+                a.verifyExpr(compiler, localEnv, currentClass);
+            }
     		if (!(a.getType().isFloat() || a.getType().isString() || a.getType().isInt())) {
     			throw new ContextualError("Arguments type must be String, int or float", a.getLocation());
     		}

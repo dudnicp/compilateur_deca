@@ -93,7 +93,6 @@ public abstract class AbstractExpr extends AbstractInst {
     		throw new ContextualError("A type is null, decoration required here", this.getLocation());
     	}
     	else if (this.getType().isInt() && expectedType.isFloat()) {
-    		LOG.debug("verify convfloat");
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);
     		return convFloat;

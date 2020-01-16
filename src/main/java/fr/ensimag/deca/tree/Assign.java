@@ -36,6 +36,7 @@ public class Assign extends AbstractBinaryExpr {
     	LOG.debug("verifyExpr assign start");
     	Identifier lValue = (Identifier)this.getLeftOperand();
     	Type lValueType = lValue.verifyExpr(compiler, localEnv, currentClass);
+    	// return this or convfloat if needed
     	this.setRightOperand(this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lValueType));
     	LOG.debug("verifyExpr assign end");
     	return this.getLeftOperand().getType();

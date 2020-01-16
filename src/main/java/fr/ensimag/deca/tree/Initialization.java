@@ -38,9 +38,8 @@ public class Initialization extends AbstractInitialization {
     protected void verifyInitialization(DecacCompiler compiler, Type t,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	// verify that variable and initialization types match
     	LOG.debug("verifyInitialization start");
-    	expression.verifyExpr(compiler, localEnv, currentClass);
+    	expression = expression.verifyRValue(compiler, localEnv, currentClass, t);
     	if (!expression.getType().sameType(t)) {
     		throw new ContextualError("Initialization of type " + expression.getType()
     			+ " to variable of type " + t, expression.getLocation());
