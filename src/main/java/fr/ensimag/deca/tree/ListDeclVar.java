@@ -42,6 +42,8 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
     
     protected void codeGenDecl(DecacCompiler compiler) {
     	for (AbstractDeclVar declVar : getList()) {
+    		String declComment = declVar.decompile();
+    		compiler.addComment(declComment);
     		declVar.codeGenDecl(compiler);
     	}
 	}

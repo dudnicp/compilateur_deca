@@ -112,11 +112,19 @@ public abstract class AbstractExpr extends AbstractInst {
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
     	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
-    	if (verifiedType == null || returnType == null) {} // programmation defensive
-    	else if (!verifiedType.sameType(returnType) && !verifiedType.isFloat() && !verifiedType.isInt()) throw new ContextualError("type error in instruction",
+    	if (returnType == null) { // programmation defensive
+        	this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
+    	} else {
+        	this.setType(returnType);
+		}
+    	if (verifiedType == null) { // programmation defensive
+    	} else if (!verifiedType.sameType(returnType) &&
+    			!verifiedType.isFloat() && 
+    			!verifiedType.isInt()) {
+    		throw new ContextualError("type error in instruction",
     			this.getLocation());
-
     	}
+    }
 
     /**
      * Verify the expression as a condition, i.e. check that the type is

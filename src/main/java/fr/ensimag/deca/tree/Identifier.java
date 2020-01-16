@@ -25,6 +25,9 @@ import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 /**
  * Deca Identifier
@@ -254,5 +257,21 @@ public class Identifier extends AbstractIdentifier {
     public DAddr daddr() {
     	return Register.getAddr(name.toString());
     }
-
+    
+    
+    @Override
+    protected void codeExpr(DecacCompiler compiler, int n) {
+    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+    }
+    
+    @Override
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
+    	Type type = definition.getType();
+    	if (type.isInt() || type.isBoolean()) {
+			compiler.addInstruction(new WINT());
+		}
+    	else if (type.isFloat()) {
+			compiler.addInstruction(new WFLOAT());
+		}
+    }
 }
