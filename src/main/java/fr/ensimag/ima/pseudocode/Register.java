@@ -18,7 +18,7 @@ public class Register extends DVal {
 		return RMAX;
 	}
 	
-	public void setRMAX(int n) {
+	public static void setRMAX(int n) {
 		RMAX = n;
 	}
 	
