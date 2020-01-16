@@ -164,9 +164,7 @@ public abstract class AbstractExpr extends AbstractInst {
 		return null;
 	}
     
-    protected DAddr daddr() {
-		return null;
-	}
+
     
 
     @Override

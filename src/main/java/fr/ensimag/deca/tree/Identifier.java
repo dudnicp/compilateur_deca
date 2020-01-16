@@ -19,6 +19,10 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
  * Deca Identifier
@@ -236,6 +240,16 @@ public class Identifier extends AbstractIdentifier {
             s.print(d);
             s.println();
         }
+    }
+    
+    @Override
+    protected DVal dval() {
+    	return daddr();
+    }
+    
+    @Override
+    public DAddr daddr() {
+    	return Register.getAddr(name.toString());
     }
 
 }
