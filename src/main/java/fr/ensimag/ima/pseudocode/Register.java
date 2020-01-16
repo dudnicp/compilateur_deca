@@ -22,14 +22,6 @@ public class Register extends DVal {
 		RMAX = n;
 	}
 	
-	
-	public static int getNextAddr() {
-		int temp = nextAddr;
-		nextAddr ++;
-		return temp;
-	}
-	
-	
     private String name;
     protected Register(String name) {
         this.name = name;
