@@ -67,7 +67,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     
-    protected void codeGenInst(DecacCompiler compiler, DVal op, 
+    protected void mnemo(DecacCompiler compiler, DVal op, 
     		GPRegister register) {
     	throw new UnsupportedOperationException("not yet implemented");
     }
@@ -77,19 +77,19 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     	leftOperand.codeExpr(compiler, n);
     	DVal rightDVal = rightOperand.dval();
     	if (rightDVal != null) {
-    		codeGenInst(compiler, rightOperand.dval(), Register.getR(n));
+    		mnemo(compiler, rightOperand.dval(), Register.getR(n));
 		}
     	else {
 			if (n < Register.getRMAX()) {
 				rightOperand.codeExpr(compiler, n + 1);
-				codeGenInst(compiler, Register.getR(n + 1), Register.getR(n));
+				mnemo(compiler, Register.getR(n + 1), Register.getR(n));
 			}
 			else {
 				compiler.addInstruction(new PUSH(Register.getR(n)));
 				rightOperand.codeExpr(compiler, n);
 				compiler.addInstruction(new LOAD(Register.getR(n), Register.R0));
 				compiler.addInstruction(new POP(Register.getR(n)));;
-				codeGenInst(compiler, Register.R0, Register.getR(n));
+				mnemo(compiler, Register.R0, Register.getR(n));
 			}
 		}
 	}

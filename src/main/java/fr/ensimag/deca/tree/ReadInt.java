@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.instructions.RINT;
+
 import java.io.PrintStream;
 
 /**
@@ -22,8 +24,7 @@ public class ReadInt extends AbstractReadExpr {
     	try {
     		return typeExpr;
     	} catch (NullPointerException e) {
-    		throw new ContextualError("Expression must be of type int",
-    				this.getLocation());
+    		throw new ContextualError("Expression must be of type int", this.getLocation());
     	}
     }
 
@@ -41,6 +42,11 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
+    }
+    
+    @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+    	compiler.addInstruction(new RINT());
     }
 
 }

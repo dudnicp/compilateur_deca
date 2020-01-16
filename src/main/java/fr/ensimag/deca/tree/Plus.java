@@ -21,7 +21,7 @@ public class Plus extends AbstractOpArith {
     }
     
     @Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op,
+	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
     	compiler.addInstruction(new ADD(op, register));
 	}
