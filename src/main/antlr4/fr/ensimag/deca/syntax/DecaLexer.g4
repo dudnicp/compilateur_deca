@@ -61,9 +61,14 @@ AND: '&&';
 OR: '||';
 
 
+// Identifiers
+fragment LETTER: 'a'..'z' | 'A'..'Z';
+IDENT: (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
+
 // Litterals
 fragment POSITIVE_DIGIT: '1'..'9';
 INT: '0' | POSITIVE_DIGIT DIGIT*;
+DIGIT: '0'..'9';
 
 // Floats
 fragment NUM: DIGIT+;

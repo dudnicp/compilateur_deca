@@ -24,7 +24,6 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	LOG.debug("verify OpBoolstart");
     	this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
     	this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
     	if (!this.getLeftOperand().getType().isBoolean()) {
@@ -37,7 +36,6 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     				this.getRightOperand().getLocation());
     	}
     	this.setType(this.getLeftOperand().getType());
-    	LOG.debug("verify OpBool end");
     	return this.getType();
     }
 

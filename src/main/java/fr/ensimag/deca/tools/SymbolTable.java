@@ -3,11 +3,6 @@ package fr.ensimag.deca.tools;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import com.sun.tools.javac.util.List;
-
-import fr.ensimag.deca.tree.Main;
 
 /**
  * Manage unique symbols.

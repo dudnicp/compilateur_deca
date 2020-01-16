@@ -32,8 +32,6 @@ public class Main extends AbstractMain {
 
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
-        LOG.debug("verify Main: start");
-        // A FAIRE: define localEnv et currentClass + returnType pour les instructions
         
         EnvironmentExp envExpObject = new EnvironmentExp(null);
         EnvironmentExp localEnv = new EnvironmentExp(envExpObject);
@@ -43,7 +41,6 @@ public class Main extends AbstractMain {
 		// we need to assign a returnType to the list of instructions
 		Type defaultType = compiler.getEnvTypes().getDefinitionFromName("null").getType();
         insts.verifyListInst(compiler, localEnv, null, defaultType);
-        LOG.debug("verify Main: end");
     }
 
     @Override

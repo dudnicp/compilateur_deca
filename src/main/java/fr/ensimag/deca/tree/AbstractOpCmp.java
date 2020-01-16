@@ -25,7 +25,6 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	LOG.debug("verify OpCmpstart");
     	this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
     	this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
     	if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
@@ -34,7 +33,6 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     				this.getLocation());	
     	}
     	this.setType(new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")));
-    	LOG.debug("verify OpCmp end");
     	return this.getType();
     }
 

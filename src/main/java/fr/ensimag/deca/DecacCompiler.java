@@ -2,7 +2,7 @@ package fr.ensimag.deca;
 
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
-// import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
 public class DecacCompiler {
     private static final Logger LOG = Logger.getLogger(DecacCompiler.class);
     
-	private EnvironmentType envTypes = new EnvironmentType();
+	private EnvironmentType envTypes = new EnvironmentType(null);
 	    
     public EnvironmentType getEnvTypes() {
         return envTypes;
@@ -52,11 +52,6 @@ public class DecacCompiler {
      * Portable newline character.
      */
     private static final String nl = System.getProperty("line.separator", "\n");
-    private EnvironmentType envTypes = new EnvironmentType(null);
-    
-//    public EnvironmentType getEnvTypes() {
-//    	return envTypes;
-//    }
     
     
     public DecacCompiler(CompilerOptions compilerOptions, File source) {

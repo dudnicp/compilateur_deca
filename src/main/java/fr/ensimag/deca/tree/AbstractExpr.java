@@ -89,9 +89,7 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-    	LOG.debug("b4 verifyRValue" + this.getClass());
     	this.verifyExpr(compiler, localEnv, currentClass); // decorate this with its type
-    	LOG.debug("decoration ? verifyRValue" + this.getType());
 
     	if (this.getType() == null || expectedType == null) { // programmation defensive
     		throw new ContextualError("A type is null, decoration required here", this.getLocation());

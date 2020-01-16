@@ -38,12 +38,20 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	LOG.debug("verifyDeclVar start");
-    
+    	
+    	
     	// decoration {name |-> (var,type)}
     	Type typeVerified = type.verifyType(compiler);
+    	
+    	if (typeVerified == null) {
+			
+		}
+    	type.setDefinition(new TypeDefinition(typeVerified, type.getLocation()));
+    	
+    	
        	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
+    	
  
     	try {
     		// ajout de la variable dans l'environnement;
@@ -54,9 +62,6 @@ public class DeclVar extends AbstractDeclVar {
 					varName.getLocation());
 		}
     	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
-    	
-    	LOG.debug("verifyDeclVar end");
-
     }
 
     

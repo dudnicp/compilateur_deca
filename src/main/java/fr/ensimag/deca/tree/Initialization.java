@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
  * @date 01/01/2020
  */
 public class Initialization extends AbstractInitialization {
-    private static final Logger LOG = Logger.getLogger(Initialization.class);
 
     public AbstractExpr getExpression() {
         return expression;
@@ -38,13 +37,11 @@ public class Initialization extends AbstractInitialization {
     protected void verifyInitialization(DecacCompiler compiler, Type t,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	LOG.debug("verifyInitialization start");
     	expression = expression.verifyRValue(compiler, localEnv, currentClass, t);
     	if (!expression.getType().sameType(t)) {
     		throw new ContextualError("Initialization of type " + expression.getType()
     			+ " to variable of type " + t, expression.getLocation());
     	}
-    	LOG.debug("verifyInitialization end");
 
     }
 

@@ -28,7 +28,6 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     	//Identifier lValue = (Identifier)this.getLeftOperand();
     	//Type lValueType = localEnv.get(lValue.getName()).getType();
     	//this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lValueType);
-    	LOG.debug("verify OpArith start");
     	Type lType = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
     	Type rType = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
     	
@@ -45,7 +44,6 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     				this.getLocation());
     	}
     	this.setType(this.getLeftOperand().getType());
-    	LOG.debug("verify OpArith end");
     	return this.getType();
     }
 }
