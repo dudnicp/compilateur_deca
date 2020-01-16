@@ -18,7 +18,13 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	Type typeExpr = this.getType().isFloat() ? this.getType() : null;
+    	try {
+    		return typeExpr;
+    	} catch (NullPointerException e) {
+    		throw new ContextualError("Expression must be of type int",
+    				this.getLocation());
+    	}
     }
 
 

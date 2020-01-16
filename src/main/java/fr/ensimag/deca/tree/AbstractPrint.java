@@ -1,14 +1,11 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.FloatType;
-import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -39,7 +36,17 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        // rule (3.31)
+        for (AbstractExpr a : getArguments().getList()) {
+            if (a.getType() == null) {
+                // decorating here
+                // ie case: print(1+2+3)
+                a.verifyExpr(compiler, localEnv, currentClass);
+            }
+            if (!(a.getType().isFloat() || a.getType().isString() || a.getType().isInt())) {
+                throw new ContextualError("Arguments type must be String, int or float", a.getLocation());
+            }
+        }
     }
 
     @Override
@@ -55,7 +62,11 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+    	s.print("print");
+    	s.print(this.getSuffix());
+    	s.print("(");
+    	arguments.decompile(s);
+    	s.print(");");
     }
 
     @Override

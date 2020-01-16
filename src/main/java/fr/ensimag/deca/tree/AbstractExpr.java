@@ -1,4 +1,4 @@
-package fr.ensimag.deca.tree;
+	package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -7,9 +7,14 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * Expression, i.e. anything that has a value.
@@ -18,6 +23,8 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2020
  */
 public abstract class AbstractExpr extends AbstractInst {
+    private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
+
     /**
      * @return true if the expression does not correspond to any concrete token
      * in the source code (and should be decompiled to the empty string).
@@ -53,7 +60,7 @@ public abstract class AbstractExpr extends AbstractInst {
      *    of [SyntaxeContextuelle] in pass 3
      *
      * @param compiler  (contains the "env_types" attribute)
-     * @param localEnv
+     * @param localEnvcodeGenPrint
      *            Environment in which the expression should be checked
      *            (corresponds to the "env_exp" attribute)
      * @param currentClass
@@ -82,7 +89,15 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	this.verifyExpr(compiler, localEnv, currentClass); // decorate this with its type
+    	if (this.getType() == null || expectedType == null) { // programmation defensive
+    		throw new ContextualError("A type is null, decoration required here", this.getLocation());
+    	}
+    	else if (!this.getType().sameType(expectedType)) {
+    		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
+    		+ expectedType, this.getLocation());
+    	}
+    	return this;
     }
     
     
@@ -90,8 +105,16 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    	LOG.debug("verifyInst start");
+    	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
+    	LOG.debug("verifiedType " + verifiedType);
+    	// Comprendre si le type *return* doit etre décoré par le type synthetisé par **expr** ou autre
+    	if (verifiedType == null || returnType == null) {} // programmation defensive
+    	else if (!verifiedType.sameType(returnType)) throw new ContextualError("type error in instruction",
+    			this.getLocation());
+    	LOG.debug("verifyInst end");
+
+    	}
 
     /**
      * Verify the expression as a condition, i.e. check that the type is
@@ -105,7 +128,10 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	if (!this.getType().isBoolean()) {
+    		throw new ContextualError("Condition must be of type boolean",
+    				this.getLocation());
+    	}
     }
 
     /**
@@ -114,13 +140,31 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+    	codeGenInst(compiler);
+    	compiler.addInstruction(new LOAD(Register.R2, Register.R1));
+    	codeGenPrintInstruction(compiler);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        codeExpr(compiler, 2);
     }
+    
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
+    	throw new UnsupportedOperationException("not yet implemented");
+    }
+    
+    protected void codeExpr(DecacCompiler compiler, int n) {
+		throw new UnsupportedOperationException("not yet implemented");
+	}
+    
+    protected DVal dval() {
+		return null;
+	}
+    
+    protected DAddr daddr() {
+		return null;
+	}
     
 
     @Override

@@ -26,12 +26,36 @@ public class DecacMain {
             System.exit(1);
         }
         if (options.getPrintBanner()) {
-            throw new UnsupportedOperationException("decac -b not yet implemented");
+        	// -b
+            System.out.println("GL28");
+        }
+        if (options.getParse()) {
+        	
+        }
+        if (options.getVerification()) {
+        	// -v
+        	throw new UnsupportedOperationException("decac -v not yet implemented");
+//        	if (options.getParse()) {
+//        		throw new UnsupportedOperationException("-p and -v incompatible");
+//        	}
+        }
+        if (options.getNocheck()) {
+        	// -n
+        	throw new UnsupportedOperationException("decac -n not yet implemented");
+        }
+        if (options.getRegisters() != -1) {
+        	// -r
+        	throw new UnsupportedOperationException("decac -r not yet implemented");
+        }
+        if (options.getDebug() != 0) {
+        	// -d
+        	throw new UnsupportedOperationException("decac -d not yet implemented");
         }
         if (options.getSourceFiles().isEmpty()) {
             throw new UnsupportedOperationException("decac without argument not yet implemented");
         }
         if (options.getParallel()) {
+        	// -P
             // A FAIRE : instancier DecacCompiler pour chaque fichier à
             // compiler, et lancer l'exécution des méthodes compile() de chaque
             // instance en parallèle. Il est conseillé d'utiliser

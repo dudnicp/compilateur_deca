@@ -35,6 +35,7 @@ THIS: 'this';
 TRUE: 'true';
 WHILE: 'while';
 
+
 // Symboles
 LT: '<';
 GT: '>';
@@ -59,33 +60,24 @@ LEQ: '<=';
 AND: '&&';
 OR: '||';
 
-// Identifiers
-fragment LETTER: 'a'..'z' | 'A'..'Z';
-fragment DIGIT: '0'..'9';
-IDENT: (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
 // Litterals
-// A FAIRE: entiers hexa ??
 fragment POSITIVE_DIGIT: '1'..'9';
 INT: '0' | POSITIVE_DIGIT DIGIT*;
 
 // Floats
-// A FAIRE: Comprendre quel token doit etre
-// A FAIRE: utilise pour renvoyer un flottant:
-// A FAIRE: FLOATDEC/FLOATHEX ou FLOAT
 fragment NUM: DIGIT+;
 fragment SIGN: '+' | '-' ;
 fragment DIGITHEX: DIGIT | 'a'..'f' | 'A'..'F';
 fragment EXP: ('E' | 'e') SIGN? NUM;
 fragment NUMHEX:  DIGITHEX+;
 fragment DEC: NUM '.' NUM;
-FLOATDEC: (DEC | DEC EXP) ('F' | 'f')?;
-FLOATHEX: '0' ('x' | 'X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
+fragment FLOATDEC: (DEC | DEC EXP) ('F' | 'f')?;
+fragment FLOATHEX: '0' ('x' | 'X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
 FLOAT: FLOATDEC | FLOATHEX;
 
-
 // Strings
-fragment STRING_CAR: ~('"' | '\\');
+fragment STRING_CAR: ~('"' | '\\' | '\n');
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"';
 
@@ -103,6 +95,8 @@ WS  :   ( ' '
     ;
 
 DUMMY_TOKEN: .  {
-	System.out.println("Unrecognised character" + getText());
+	if (true) {
+		throw new UnsupportedOperationException("A FAIRE, remplacer ce message d'erreur --> Unrecognized Char" + getText());
+	}
 	skip();
 				};

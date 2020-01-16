@@ -1,5 +1,8 @@
 # Do not version generated files.
 /target
+# horraires effectif
+working_hours.txt
+.gitignore
 
 # These are IDE-specific files. We version pom.xml, and rely on IDE
 # integration with maven (or with maven's generation of IDE files like
@@ -8,3 +11,20 @@
 .project
 .metadata
 .settings
+
+doc/
+planning/PlanningPrevisionnel.html
+planning/PlanningPrevisionnel.planner
+src/test/deca/codegen/valid/cond0.deca
+src/test/deca/codegen/valid/ecrit0.deca
+src/test/deca/codegen/valid/entier1.deca
+src/test/deca/codegen/valid/exdoc.deca
+src/test/deca/codegen/valid/exmathdoc.deca
+src/test/deca/context/invalid/affect-incompatible.deca
+src/test/deca/context/valid/hello-world.deca
+src/test/deca/syntax/invalid/chaine_incomplete.deca
+src/test/deca/syntax/invalid/integers.deca
+src/test/deca/syntax/invalid/simple_lex.deca
+src/test/deca/syntax/old/
+src/test/script/.test-all.sh.swp
+

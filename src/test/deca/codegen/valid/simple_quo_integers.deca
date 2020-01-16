@@ -1,0 +1,11 @@
+/*
+    Description : division de 2 nombres entiers
+
+    Résultat : à définir...
+
+*/
+
+{
+    println(8/4);
+    println("Si le résultat affiché est 4, test réussi !);
+}

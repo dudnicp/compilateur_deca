@@ -1,5 +1,6 @@
 package fr.ensimag.ima.pseudocode;
 
+
 /**
  * Register operand (including special registers like SP).
  * 
@@ -7,6 +8,28 @@ package fr.ensimag.ima.pseudocode;
  * @date 01/01/2020
  */
 public class Register extends DVal {
+	
+	private static final GPRegister[] R = initRegisters();
+	
+	private static int RMAX = 15;
+	private static int nextAddr = 3;
+	
+	public static int getRMAX() {
+		return RMAX;
+	}
+	
+	public void setRMAX(int n) {
+		RMAX = n;
+	}
+	
+	
+	public static int getNextAddr() {
+		int temp = nextAddr;
+		nextAddr ++;
+		return temp;
+	}
+	
+	
     private String name;
     protected Register(String name) {
         this.name = name;
@@ -33,7 +56,6 @@ public class Register extends DVal {
      * General Purpose Registers. Array is private because Java arrays cannot be
      * made immutable, use getR(i) to access it.
      */
-    private static final GPRegister[] R = initRegisters();
     /**
      * General Purpose Registers
      */
@@ -48,6 +70,9 @@ public class Register extends DVal {
      * Convenience shortcut for R[1]
      */
     public static final GPRegister R1 = R[1];
+    
+    public static final GPRegister R2 = R[2];
+    
     static private GPRegister[] initRegisters() {
         GPRegister [] res = new GPRegister[16];
         for (int i = 0; i <= 15; i++) {

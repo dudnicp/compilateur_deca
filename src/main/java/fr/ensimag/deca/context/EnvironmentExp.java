@@ -1,6 +1,9 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Dictionary associating identifier's ExpDefinition to their names.
@@ -20,26 +23,44 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
  * @date 01/01/2020
  */
 public class EnvironmentExp {
-    // A FAIRE : implémenter la structure de donnée représentant un
-    // environnement (association nom -> définition, avec possibilité
-    // d'empilement).
-
+	private Map<Symbol, ExpDefinition> map;
     EnvironmentExp parentEnvironment;
+    private SymbolTable symbolMap;
     
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
+        // new environment inherits all of the parent's associations
+        if (parentEnvironment == null) {
+        	this.map = new HashMap<Symbol, ExpDefinition>();
+        } else {
+        this.map = new HashMap<Symbol, ExpDefinition>(parentEnvironment.map);
+        }
+        symbolMap = new SymbolTable();
     }
-
+    
+    /**
+     * Create symbols to build the env_exp
+     * @param name
+     * @return
+     */
+    public Symbol createSymbol(String name) {
+    	return this.symbolMap.create(name);
+    }
+    
     public static class DoubleDefException extends Exception {
         private static final long serialVersionUID = -2733379901827316441L;
     }
 
+    public Map<Symbol, ExpDefinition> getMap() {
+    	return this.map;
+    }
+    
     /**
      * Return the definition of the symbol in the environment, or null if the
      * symbol is undefined.
      */
     public ExpDefinition get(Symbol key) {
-        throw new UnsupportedOperationException("not yet implemented");
+    	return map.get(key);
     }
 
     /**
@@ -58,7 +79,14 @@ public class EnvironmentExp {
      *
      */
     public void declare(Symbol name, ExpDefinition def) throws DoubleDefException {
-        throw new UnsupportedOperationException("not yet implemented");
+    	assert(parentEnvironment != null); // programmation defensive
+    	if (map.get(name) != null) {
+    		throw new DoubleDefException(); // exists in current dictionary
+    	} else if (parentEnvironment.getMap().get(name) != null) {
+    		map.put(name, def); // hides previous declaration 
+    	} else {
+    		map.put(name, def); // adds new definition - symbol association
+    	}
     }
 
 }

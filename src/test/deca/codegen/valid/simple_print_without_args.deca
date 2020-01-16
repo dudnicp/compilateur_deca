@@ -1,0 +1,10 @@
+/*
+    Description : test si l'appel "print()" ne fait rien
+
+    Résultat : à définir
+*/
+
+{
+    print();
+    println("Test réussi si cette phrase est l'unique chose affichée");
+}
