@@ -5,7 +5,10 @@
 */
 
 {
-    readFloat();
-    println("Si non int entré et que ce message s'affiche, erreur, sinon test réussi !");
+    int x = readInt();
+    println("Si non int entré et que ce message s'affiche, erreur");
+    print("x = ");
+    println(x);
+    println("Si x < -(2pow31)-1 ou que x > 2pow31, erreur, sinon test réussi !")
     println("cf p 99 paragraphe 11.2 si erreur");
 }

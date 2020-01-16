@@ -6,6 +6,6 @@
 
 {
     readFloat();
-    println("Si non float entré et que ce message s'affiche, erreur, sinon test réussi !");
+    println("Si non float entré ou nombre float supérieur à 3.41*10pow38 ou nombre float inférieur à 1.4*10pow-45 et que ce message s'affiche, erreur, sinon test réussi !");
     println("cf p 99 paragraphe 11.2 si erreur");
 }
