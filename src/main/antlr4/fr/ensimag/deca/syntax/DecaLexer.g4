@@ -98,10 +98,3 @@ WS  :   ( ' '
         | '\n'
         ) {skip();}
     ;
-
-DUMMY_TOKEN: .  {
-	if (true) {
-		throw new UnsupportedOperationException("A FAIRE, remplacer ce message d'erreur --> Unrecognized Char" + getText());
-	}
-	skip();
-				};
