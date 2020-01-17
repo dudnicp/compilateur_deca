@@ -1,0 +1,5 @@
+{
+	int x = 3+2;
+	int y = readInt();
+	print(y, "*", x, "=", x*y);
+}

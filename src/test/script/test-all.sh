@@ -7,9 +7,9 @@ PATH=./src/test/script/launchers:"$PATH"
 # fait appel à test_lex sur tous les fichiers src/test/deca/syntax/*/lex/*.deca
 # et compare avec le résultat attendu indiqué en ligne de commentaire
 # pas de commentaire signifie pas d'erreurs attendue
-catPgm="true"
+catPgm="false"
 catEoutp="true"
-catAss="false"
+catAss="true"
 
 if [ $1 = "lex" ];
 then
@@ -17,61 +17,16 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/syntax/valid/lex/*.deca
 		do
-		echo -en "$f"
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		eoutput=$(test_lex $f 2>&1 > /dev/null | head -n 1)
-		if [[ $catEoutp == "true" ]];
-		then
-			echo $eoutput
-		fi
-		if [ -n $eoutput ];
-		then
-			echo -e " \e[92mpassed"	
-		else
-			echo -e " \e[91mfailed"
-			echo $eoutput		
-		fi
-		echo -e "\e[39m<<<================================>>>"
+			./src/test/script/testlexvalid.sh $f $catPgm $catEoutp
 		done
-		
+
 	# invalid
 	echo -e "INVALID"
 	for f in ./src/test/deca/syntax/invalid/lex/*.deca
 		do
-		echo -en "$f"
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		eoutput=$(test_lex $f 2>&1 > /dev/null | head -n 1)
-		if [[ $catEoutp == "true" ]];
-		then
-			echo $eoutput
-		fi
-		y=$(grep @expected_output $f)
-		y=${y:20}
-		if [[ $eoutput == *"$y"* ]];
-		then
-		
-		if [[ -z $y ]];
-		then
-			echo -e " \e[93mno @expected_output not found in the file! $eoutput"
-		else
-			echo -e " \e[92mpassed"
-		fi
-		else
-			echo -e " \e[91mfailed"
-			echo $y
-			echo $eoutput
-		fi
-		echo -e "\e[39m<<<================================>>>"
+			./src/test/script/testlexinvalid.sh $f $catPgm $catEoutp
 		done
-	
+
 
 # SYNT
 # fait appel à test_synt sur tous les fichiers src/test/deca/syntax/*/synt/*.deca
@@ -81,72 +36,14 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/syntax/valid/synt/*.deca
 		do
-		echo -en "$f"
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		eoutput=$(test_synt $f 2>&1 > /dev/null | head -n 1)
-		if [[ $catEoutp == "true" ]];
-		then
-			echo $eoutput
-		fi
-		xtree=$(grep @expected_tree $f | cut -c19-)
-		tree=$(test_synt $f)
-		# SI ERREUR = VIDE && TREE EST BON ALORS VALIDE
-		if [[ -z $eoutput ]];
-		then
-			if [[ -n $xtree ]];
-			then
-				if [[ "$tree" == "$xtree" ]];
-				then
-					echo -e " \e[92mpassed"
-				else
-					echo -e " \e[91mfailed"
-					echo -e "expected"
-					echo $xtree
-				fi
-			else
-				echo -e " \e[93mno @expected_tree not found in the file!"
-				echo -e " $tree"
-			fi
-		else
-			echo -e " \e[91mfailed"		
-		fi
-		echo -e "\e[39m<<<================================>>>"
+			./src/test/script/testsyntvalid.sh $f $catPgm $catEoutp
 		done
-	
+
 	# invalid
 	echo -e "INVALID"
 	for f in ./src/test/deca/syntax/invalid/synt/*.deca
 		do
-		echo -en "$f"
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		eoutput=$(test_synt $f 2>&1 > /dev/null | head -n 1)
-		if [[ $catEoutp == "true" ]];
-		then
-			echo $eoutput
-		fi
-		y=$(grep @expected_output $f)
-		y=${y:20}
-		if [[ $eoutput == *"$y"* ]];
-		then
-		
-		if [[ -z $y ]];
-		then
-			echo -e " \e[93mno @expected_output not found in the file! $eoutput"
-		else
-			echo -e " \e[92mpassed"
-		fi
-		else
-			echo -e "\e[91mfailed"
-		fi
-		echo -e "\e[39m<<<================================>>>"
+			./src/test/script/testsyntinvalid.sh $f $catPgm $catEoutp
 		done
 
 # CONT
@@ -157,72 +54,14 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/context/valid/*.deca
 		do
-		echo -en "$f"
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		eoutput=$(test_context $f 2>&1 > /dev/null | head -n 1)
-		if [[ $catEoutp == "true" ]];
-		then
-			echo $eoutput
-		fi
-		xtree=$(grep @expected_tree $f | cut -c19-)
-		tree=$(test_context $f)
-		# SI ERREUR = VIDE && TREE EST BON ALORS VALIDE
-		if [[ -z $eoutput ]];
-		then
-			if [[ -n $xtree ]];
-			then
-				if [[ "$tree" == "$xtree" ]];
-				then
-					echo -e " \e[92mpassed"
-				else
-					echo -e " \e[91mfailed"
-					echo -e "expected"
-					echo $xtree
-				fi
-			else
-				echo -e " \e[93mno @expected_tree not found in the file!"
-				echo -e " $tree"
-			fi
-		else
-			echo -e " \e[91mfailed"		
-		fi
-		echo -e "\e[39m<<<================================>>>"
+			./src/test/script/testcontextvalid.sh $f $catPgm $catEoutp
 		done
-	
+
 	# invalid
 	echo -e "INVALID"
 	for f in ./src/test/deca/context/invalid/*.deca
 		do
-		echo -en "$f"
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		eoutput=$(test_context $f 2>&1 > /dev/null | head -n 1)
-		if [[ $catEoutp == "true" ]];
-		then
-			echo $eoutput
-		fi
-		y=$(grep @expected_output $f)
-		y=${y:20}
-		if [[ $eoutput == *"$y"* ]];
-		then
-		
-		if [[ -z $y ]];
-		then
-			echo -e " \e[93mno @expected_output not found in the file $eoutput!"
-		else
-			echo -e " \e[92mpassed"
-		fi
-		else
-			echo -e " \e[91mfailed"
-		fi
-		echo -e "\e[39m<<<================================>>>"
+			./src/test/script/testcontextinvalid.sh $f $catPgm $catEoutp
 		done
 
 # CODEGEN
@@ -233,35 +72,10 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/codegen/valid/*.deca
 	do
-	echo -en "$f"
-		a=${f:: -5}.ass
-		decac $f > /dev/null
-		if [[ $catPgm == "true" ]];
-		then
-			echo
-			cat $f
-		fi
-		if [[ $catAss == "true" ]];
-		then
-			echo
-			cat $a
-		fi
-		if [ ! -f $a ]; then
-		    echo -e "\e[93mFichier .ass non généré."
-		    echo -en "\e[39m"
-		fi
-		result=$(ima $a)
-		expresult=$(grep @result $f | cut -c12-)
-		if [[ $result == $expresult ]];
-		then
-			echo -e " \e[92mpassed"
-		else
-			echo -e " \e[91mfailed"
-		fi
-		echo -e "\e[39m<<<================================>>>"
+		./src/test/script/testcodegenvalid.sh $f $catPgm $catAss
 	done
 else
- 
+
 	echo "Please, use one argument among lex, synt, context and codegen"
 
 fi
