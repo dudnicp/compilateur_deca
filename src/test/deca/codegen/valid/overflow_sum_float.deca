@@ -1,11 +1,11 @@
+// @result 10000000000
 /*
     Description : Test sur la gestion de l'overflow sur la somme de float
 
     Résultat : à définir...
 
 */
-
 {
     println(5000000000.5+5000000000.1);
-    println("Test échoué : voir p96 paragraphe 5 phrase 3 et 5");
+    //println("Test réussi : 10000000000");
 }
