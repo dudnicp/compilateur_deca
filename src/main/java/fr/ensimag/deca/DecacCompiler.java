@@ -193,7 +193,8 @@ public class DecacCompiler {
     		System.out.println(output);
     		System.out.println("END");
     	} else {
-    	
+    		
+    		
 		    AbstractProgram prog = doLexingAndParsing(sourceName, err);
 		
 		    if (prog == null) {
@@ -202,10 +203,15 @@ public class DecacCompiler {
 		    }
 		    assert(prog.checkAllLocations());
 		
-		
-		    prog.verifyProgram(this);
-		    assert(prog.checkAllDecorations());
-		
+		    if (this.getCompilerOptions().getVerification()) {
+		    	prog.verifyProgram(this);
+		    	assert(prog.checkAllDecorations());
+		    	return false;
+		    }				
+	    	prog.verifyProgram(this);
+	    	assert(prog.checkAllDecorations());
+
+
 		    addComment("start main program");
 		    prog.codeGenProgram(this);
 		    addComment("end main program");
