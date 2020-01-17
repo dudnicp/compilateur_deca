@@ -16,7 +16,7 @@ class Math {
   }
 
 
-  float _tan(float f) {
+  float tan(float f) {
     int k = 0; //definit le plus grand angle courant de rotation possible
     float X = 1.0f; //Abscisse du point Mj courant
     float Y = 0.0f; //Ordonnée du point Mj courant
@@ -106,7 +106,7 @@ class Math {
       //a partir de k=7 teta_k = 10^-k
       while (f >= epsilone) {
         while ((f >= Puiss(10, k)) && (f >= epsilone)) {
-          f = f - _Puiss(10, k);
+          f = f - Puiss(10, k);
           temp = X;
           X = X - Puiss(10, k) * Y;
           Y = Y + Puiss(10, k) * temp;
@@ -169,7 +169,7 @@ class Math {
     }
 
     //calcul de la puissance 2 du float
-    int _log2f (float f) {
+    int log2f (float f) {
       int i = 0;
       if (f < 0) return log2f(-f);
       else if (f <= 1){
