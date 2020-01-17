@@ -7,7 +7,7 @@ PATH=./src/test/script/launchers:"$PATH"
 # fait appel à test_lex sur tous les fichiers src/test/deca/syntax/*/lex/*.deca
 # et compare avec le résultat attendu indiqué en ligne de commentaire
 # pas de commentaire signifie pas d'erreurs attendue
-catPgm="true"
+catPgm="false"
 catEoutp="true"
 catAss="false"
 
@@ -105,7 +105,7 @@ then
 				else
 					echo -e " \e[91mfailed"
 					echo -e "expected"
-					echo $xtree
+					echo "$xtree"
 				fi
 			else
 				echo -e " \e[93mno @expected_tree not found in the file!"
@@ -249,6 +249,9 @@ then
 		if [ ! -f $a ]; then
 		    echo -e "\e[93mFichier .ass non généré."
 		    echo -en "\e[39m"
+		else
+			result=$(ima $a)
+			rm $a
 		fi
 		result=$(ima $a)
 		expresult=$(grep @result $f | cut -c12-)
