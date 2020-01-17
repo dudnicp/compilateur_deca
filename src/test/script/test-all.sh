@@ -9,6 +9,7 @@ PATH=./src/test/script/launchers:"$PATH"
 # pas de commentaire signifie pas d'erreurs attendue
 catPgm="true"
 catEoutp="true"
+catAss="true"
 
 if [ $1 = "lex" ];
 then
@@ -103,6 +104,8 @@ then
 					echo -e " \e[92mpassed"
 				else
 					echo -e " \e[91mfailed"
+					echo -e "expected"
+					echo $xtree
 				fi
 			else
 				echo -e " \e[93mno @expected_tree not found in the file!"
@@ -177,6 +180,8 @@ then
 					echo -e " \e[92mpassed"
 				else
 					echo -e " \e[91mfailed"
+					echo -e "expected"
+					echo $xtree
 				fi
 			else
 				echo -e " \e[93mno @expected_tree not found in the file!"
@@ -224,7 +229,37 @@ then
 # fait appel à decac sur tous les fichiers src/test/deca/codegen/*/*.deca
 elif [ $1 = "codegen" ];
 then
-	echo
+	# valid
+	echo -e "VALID"
+	for f in ./src/test/deca/codegen/valid/*.deca
+	do
+	echo -en "$f"
+		a=${f:: -5}.ass
+		decac $f || exit 1
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
+		if [[ $catAss == "true" ]];
+		then
+			echo
+			cat $a
+		fi
+		if [ ! -f $a ]; then
+		    echo "Fichier .ass non généré."
+		    exit 1
+		fi
+		result=$(ima $a) || exit 1
+		expresult=$(grep @result $f | cut -c12-)
+		if [[ $result == $expresult ]];
+		then
+			echo -e " \e[92mpassed"
+		else
+			echo -e " \e[91mfailed"
+		fi
+		echo -e "\e[39m<<<================================>>>"
+	done
 else
  
 	echo "Please, use one argument among lex, synt, context and codegen"
