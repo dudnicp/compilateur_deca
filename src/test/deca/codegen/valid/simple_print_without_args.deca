@@ -1,3 +1,4 @@
+// @result Test réussi si cette phrase est l'unique chose affichée
 /*
     Description : test si l'appel "print()" ne fait rien
 

@@ -1,10 +1,10 @@
+// @expected_output deca:8:4
 /*
     Description : Test sur la gestion de l'overflow d'une somme de 2 entiers eux même en overflow
-                    ( La spécification indique que l'opération doit être faite modulo 2^32)
 
     Résultat : A définir...
 */
 {
     println(5000000000+5000000000);
-    println("Si il est affiché au dessus 1410065408, test réussi !");
+    //println("Si il est affiché au dessus 1410065408, test échoué !");
 }

@@ -1,0 +1,14 @@
+; start main program
+; Main program
+; Beginning of main instructions:
+; println(65540 * 65540);
+	LOAD #65540, R2
+	MUL #65540, R2
+	LOAD R2, R1
+	WINT
+	WNL
+; println("Si il est affiché au dessus 524304, test réussi !");
+	WSTR """Si il est affiché au dessus 524304, test réussi !"""
+	WNL
+	HALT
+; end main program

@@ -1,3 +1,4 @@
+// @result 4105032704
 /*
     Description : Test sur la gestion de l'overflow d'une somme d'entier
                     ( La spécification indique que l'opération doit être faite modulo 2^32)
@@ -7,4 +8,5 @@
 {
     println(2000000000+2000000000+2000000000);
     println("Si il est affiché au dessus 1705032704, test réussi !");
+
 }
