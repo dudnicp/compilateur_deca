@@ -23,10 +23,8 @@ public class Equals extends AbstractOpExactCmp {
 
 
 	@Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op,
+	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
-		// TODO Auto-generated method stub
-		
 	}    
     
 }

@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.QUO;
 
 /**
  *
@@ -22,9 +23,15 @@ public class Divide extends AbstractOpArith {
     }
 
     @Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op,
+	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
-    	compiler.addInstruction(new DIV(op, register));
+    	if (getLeftOperand().getType().isInt()) {
+			compiler.addInstruction(new QUO(op, register));
+		}
+    	else if (getLeftOperand().getType().isFloat()) {
+    		compiler.addInstruction(new DIV(op, register));
+		}
+    	
     }
     
 }

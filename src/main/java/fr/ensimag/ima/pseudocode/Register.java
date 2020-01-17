@@ -1,5 +1,10 @@
 package fr.ensimag.ima.pseudocode;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import fr.ensimag.deca.tree.AbstractIdentifier;
+import fr.ensimag.deca.tree.AbstractLValue;
 
 /**
  * Register operand (including special registers like SP).
@@ -11,15 +16,28 @@ public class Register extends DVal {
 	
 	private static final GPRegister[] R = initRegisters();
 	
+	private static Map<String, DAddr> identifierMap = new HashMap<String, DAddr>();
+	
 	private static int RMAX = 15;
 	private static int nextAddr = 3;
+	
+	public static final int defaultRegisterIndex = 2;
 	
 	public static int getRMAX() {
 		return RMAX;
 	}
 	
-	public void setRMAX(int n) {
+	public static void setRMAX(int n) {
+		assert(n > 1 && n < 16);
 		RMAX = n;
+	}
+	
+	public static DAddr getAddr(String name) {
+		if (!identifierMap.containsKey(name)) {
+			identifierMap.put(name.toString(), new RegisterOffset(nextAddr, GB)); // variante sans objet;
+			nextAddr++;
+		}
+		return identifierMap.get(name);
 	}
 	
     private String name;

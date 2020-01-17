@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.REM;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -32,10 +33,9 @@ public class Modulo extends AbstractOpArith {
     }
 
 	@Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op,
+	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
-		// TODO Auto-generated method stub
-		
+		compiler.addInstruction(new REM(op, register));
 	}
 
 }

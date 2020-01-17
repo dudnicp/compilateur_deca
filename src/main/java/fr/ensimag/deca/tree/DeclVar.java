@@ -2,7 +2,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -43,15 +44,8 @@ public class DeclVar extends AbstractDeclVar {
     	// decoration {name |-> (var,type)}
     	Type typeVerified = type.verifyType(compiler);
     	
-    	if (typeVerified == null) {
-			
-		}
-    	type.setDefinition(new TypeDefinition(typeVerified, type.getLocation()));
-    	
-    	
        	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
-    	
  
     	try {
     		// ajout de la variable dans l'environnement;
@@ -88,4 +82,11 @@ public class DeclVar extends AbstractDeclVar {
         varName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    protected void codeGenDecl(DecacCompiler compiler) {
+    	DAddr addr = varName.daddr();
+    	initialization.codeExpr(compiler, Register.defaultRegisterIndex, addr);
+    }
+    
 }
