@@ -1,6 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import org.apache.log4j.Logger;
 
@@ -32,9 +35,13 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
     				this.getLocation());	
     	}
-    	this.setType(new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")));
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("boolean").getType());
     	return this.getType();
     }
-
+    
+    @Override
+    protected void mnemo(DecacCompiler compiler, DVal op, GPRegister register) {
+    	compiler.addInstruction(new CMP(op, register));
+    }
 
 }

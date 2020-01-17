@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SEQ;
 
 /**
  *
@@ -25,6 +26,7 @@ public class Equals extends AbstractOpExactCmp {
 	@Override
 	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
+		super.mnemo(compiler, op, register);
+		compiler.addInstruction(new SEQ(register));
 	}    
-    
 }
