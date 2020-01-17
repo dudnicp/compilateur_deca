@@ -9,7 +9,12 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
@@ -135,8 +140,9 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	if (!this.getType().isBoolean()) {
-    		throw new ContextualError("Condition must be of type boolean",
+    	this.setType(this.verifyExpr(compiler, localEnv, currentClass));
+    	if (!(this.getType().isBoolean() || this.getType().isInt() || this.getType().isFloat())) {
+    		throw new ContextualError("Condition must be of type boolean, int or float",
     				this.getLocation());
     	}
     }
@@ -165,11 +171,20 @@ public abstract class AbstractExpr extends AbstractInst {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
     
+    protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
+    	codeExpr(compiler, 0);
+    	compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.R0));
+    	if (b) {
+			compiler.addInstruction(new BNE(label));
+		}
+    	else {
+			compiler.addInstruction(new BEQ(label));
+		}
+    }
+    
     protected DVal dval() {
 		return null;
 	}
-    
-
     
 
     @Override
