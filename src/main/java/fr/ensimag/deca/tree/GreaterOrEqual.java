@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SGE;
 
 /**
  * Operator "x >= y"
@@ -26,8 +27,8 @@ public class GreaterOrEqual extends AbstractOpIneq {
 	@Override
 	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
-		// TODO Auto-generated method stub
-		
+		super.mnemo(compiler, op, register);
+		compiler.addInstruction(new SGE(register));		
 	}
 
 }
