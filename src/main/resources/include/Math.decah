@@ -4,7 +4,7 @@
 class Math {
 
   //methode pour calculer x^n a ameliorer ?
-  float _Puiss(float x, int n) {
+  float Puiss(float x, int n) {
     if (n == 0) return 1;
     float res = 1.0f;
     int i = 0;
@@ -20,7 +20,7 @@ class Math {
     int k = 0; //definit le plus grand angle courant de rotation possible
     float X = 1.0f; //Abscisse du point Mj courant
     float Y = 0.0f; //Ordonnée du point Mj courant
-    float epsilone = _Puiss(1/2,45); //Precision voulue sur l'angle teta
+    float epsilone = Puiss(1/2,45); //Precision voulue sur l'angle teta
     //Precision absolue voulue = 2^-45 d'après poly
     // println("sin(f) not yet implemented");
 
@@ -38,8 +38,8 @@ class Math {
       while ((f >= teta_0) && (f >= epsilone)) {
         f = f - teta_0;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
@@ -47,8 +47,8 @@ class Math {
       while ((f >= teta_1) && (f >= epsilone)) {
         f = f - teta_1;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
@@ -57,8 +57,8 @@ class Math {
       while ((f >= teta_2) && (f >= epsilone)) {
         f = f - teta_2;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
@@ -67,8 +67,8 @@ class Math {
       while ((f >= teta_3) && (f >= epsilone)) {
         f = f - teta_3;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
@@ -77,8 +77,8 @@ class Math {
       while ((f >= teta_4) && (f >= epsilone)) {
         f = f - teta_4;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
@@ -87,8 +87,8 @@ class Math {
       while ((f >= teta_5) && (f >= epsilone)) {
         f = f - teta_5;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
@@ -97,19 +97,19 @@ class Math {
       while ((f >= teta_6) && (f >= epsilone)) {
         f = f - teta_6;
         temp = X;
-        X = X - _Puiss(10, k) * Y;
-        Y = Y + _Puiss(10, k) * temp;
+        X = X - Puiss(10, k) * Y;
+        Y = Y + Puiss(10, k) * temp;
       }
       if (f < epsilone) return (Y/X);
       k = k+1;
 
       //a partir de k=7 teta_k = 10^-k
       while (f >= epsilone) {
-        while ((f >= _Puiss(10, k)) && (f >= epsilone)) {
+        while ((f >= Puiss(10, k)) && (f >= epsilone)) {
           f = f - _Puiss(10, k);
           temp = X;
-          X = X - _Puiss(10, k) * Y;
-          Y = Y + _Puiss(10, k) * temp;
+          X = X - Puiss(10, k) * Y;
+          Y = Y + Puiss(10, k) * temp;
       }
       k = k+1;
       }
@@ -119,11 +119,11 @@ class Math {
 
     float sin(float f) {
 
-      return _tan(f)/(_Puiss(1+_tan(f)*_tan(f), 1/2));
+      return tan(f)/(Puiss(1+tan(f)*tan(f), 1/2));
         // println("sin(f) not yet implemented");
     }
     float cos(float f) {
-      return 1/(_Puiss(1+_tan(f)*_tan(f),1/2));
+      return 1/(Puiss(1+tan(f)*tan(f),1/2));
         // println("cos(f) not yet implemented");
     }
 
@@ -134,7 +134,12 @@ class Math {
       //le Developpement en serie entière de asin
       //asin = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
 
-      //A FAIRE initialiser les coeff sous forme de float
+      //initialiser les coeff sous forme de float
+      float a = 0.030381944f;
+      float b = 0.044642857f;
+      float c = 0.075000000f;
+      float d = 0.166666666f;
+      float e = 1.000000000f;
 
 
       //On utilise la méthode de Horner
@@ -148,7 +153,12 @@ class Math {
       //le Developpement en serie entière de atan
       //atan = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
 
-      //A FAIRE initialiser les coeff sous forme de float
+      //initialiser les coeff sous forme de float
+      float a = 0.1111111111f;
+      float b = -0.142857142f;
+      float c = 0.20000000f;
+      float d = -0.3333333333f;
+      float e = 1.00000f;
 
       //On utilise la méthode de Horner
       //Pareil avec asin mais just les coeff differents
@@ -161,7 +171,7 @@ class Math {
     //calcul de la puissance 2 du float
     int _log2f (float f) {
       int i = 0;
-      if (f < 0) return _log2f(-f);
+      if (f < 0) return log2f(-f);
       else if (f <= 1){
         while (f <= 1)
          i = i-1;
@@ -180,7 +190,7 @@ class Math {
 
     float ulp(float f) {
 
-      return _Puiss(2, _log2f(f)) * _Puiss(1/2,23);
+      return Puiss(2, log2f(f)) * Puiss(1/2f,23);
 
         // println("ulp(f) not yet implemented");
     }
