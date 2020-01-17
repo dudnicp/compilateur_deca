@@ -9,7 +9,7 @@ PATH=./src/test/script/launchers:"$PATH"
 # pas de commentaire signifie pas d'erreurs attendue
 catPgm="true"
 catEoutp="true"
-catAss="true"
+catAss="false"
 
 if [ $1 = "lex" ];
 then
@@ -235,7 +235,7 @@ then
 	do
 	echo -en "$f"
 		a=${f:: -5}.ass
-		decac $f || exit 1
+		decac $f > /dev/null
 		if [[ $catPgm == "true" ]];
 		then
 			echo
@@ -247,10 +247,10 @@ then
 			cat $a
 		fi
 		if [ ! -f $a ]; then
-		    echo "Fichier .ass non généré."
-		    exit 1
+		    echo -e "\e[93mFichier .ass non généré."
+		    echo -en "\e[39m"
 		fi
-		result=$(ima $a) || exit 1
+		result=$(ima $a)
 		expresult=$(grep @result $f | cut -c12-)
 		if [[ $result == $expresult ]];
 		then
