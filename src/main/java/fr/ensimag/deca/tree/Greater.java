@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.SGT;
 
 /**
@@ -28,6 +29,12 @@ public class Greater extends AbstractOpIneq {
 			GPRegister register) {
 		super.mnemo(compiler, op, register);
 		compiler.addInstruction(new SGT(register));		
+	}
+	
+	@Override
+	protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
+		// TODO Auto-generated method stub
+		super.codeCond(compiler, b, label);
 	}
 
 }
