@@ -111,18 +111,15 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
+    	// A FAIRE : lancer les ContextualError a définir
     	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
     	if (returnType == null) { // programmation defensive
-        	this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
-    	} else {
-        	this.setType(returnType);
+        	this.setType(compiler.getEnvTypes().getDefinitionFromName("void").getType());
 		}
     	if (verifiedType == null) { // programmation defensive
-    	} else if (!verifiedType.sameType(returnType) &&
-    			!verifiedType.isFloat() && 
-    			!verifiedType.isInt()) {
-    		throw new ContextualError("type error in instruction",
-    			this.getLocation());
+    		this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
+    	} else {
+    		this.setType(verifiedType);
     	}
     }
 
