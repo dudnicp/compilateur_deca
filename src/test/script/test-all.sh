@@ -7,6 +7,9 @@ PATH=./src/test/script/launchers:"$PATH"
 # fait appel à test_lex sur tous les fichiers src/test/deca/syntax/*/lex/*.deca
 # et compare avec le résultat attendu indiqué en ligne de commentaire
 # pas de commentaire signifie pas d'erreurs attendue
+catPgm="true"
+catEoutp="true"
+
 if [ $1 = "lex" ];
 then
 	# valid
@@ -14,12 +17,22 @@ then
 	for f in ./src/test/deca/syntax/valid/lex/*.deca
 		do
 		echo -en "$f"
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
 		eoutput=$(test_lex $f 2>&1 > /dev/null | head -n 1)
+		if [[ $catEoutp == "true" ]];
+		then
+			echo $eoutput
+		fi
 		if [ -n $eoutput ];
 		then
 			echo -e " \e[92mpassed"	
 		else
-			echo -e " \e[91mfailed"			
+			echo -e " \e[91mfailed"
+			echo $eoutput		
 		fi
 		echo -e "\e[39m<<<================================>>>"
 		done
@@ -29,7 +42,16 @@ then
 	for f in ./src/test/deca/syntax/invalid/lex/*.deca
 		do
 		echo -en "$f"
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
 		eoutput=$(test_lex $f 2>&1 > /dev/null | head -n 1)
+		if [[ $catEoutp == "true" ]];
+		then
+			echo $eoutput
+		fi
 		y=$(grep @expected_output $f)
 		y=${y:20}
 		if [[ $eoutput == *"$y"* ]];
@@ -37,7 +59,7 @@ then
 		
 		if [[ -z $y ]];
 		then
-			echo -e " \e[93mno @expected_output not found in the file $eoutput"
+			echo -e " \e[93mno @expected_output not found in the file! $eoutput"
 		else
 			echo -e " \e[92mpassed"
 		fi
@@ -59,13 +81,35 @@ then
 	for f in ./src/test/deca/syntax/valid/synt/*.deca
 		do
 		echo -en "$f"
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
 		eoutput=$(test_synt $f 2>&1 > /dev/null | head -n 1)
-		# SI ERREUR = VIDE ALORS VALIDE
+		if [[ $catEoutp == "true" ]];
+		then
+			echo $eoutput
+		fi
+		xtree=$(grep @expected_tree $f | cut -c19-)
+		tree=$(test_synt $f)
+		# SI ERREUR = VIDE && TREE EST BON ALORS VALIDE
 		if [[ -z $eoutput ]];
 		then
-			echo -e " \e[92mpassed"
+			if [[ -n $xtree ]];
+			then
+				if [[ "$tree" == "$xtree" ]];
+				then
+					echo -e " \e[92mpassed"
+				else
+					echo -e " \e[91mfailed"
+				fi
+			else
+				echo -e " \e[93mno @expected_tree not found in the file!"
+				echo -e " $tree"
+			fi
 		else
-			echo -e "\e[91mfailed"		
+			echo -e " \e[91mfailed"		
 		fi
 		echo -e "\e[39m<<<================================>>>"
 		done
@@ -75,7 +119,16 @@ then
 	for f in ./src/test/deca/syntax/invalid/synt/*.deca
 		do
 		echo -en "$f"
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
 		eoutput=$(test_synt $f 2>&1 > /dev/null | head -n 1)
+		if [[ $catEoutp == "true" ]];
+		then
+			echo $eoutput
+		fi
 		y=$(grep @expected_output $f)
 		y=${y:20}
 		if [[ $eoutput == *"$y"* ]];
@@ -83,7 +136,7 @@ then
 		
 		if [[ -z $y ]];
 		then
-			echo -e " \e[93mno @expected_output not found in the file $eoutput"
+			echo -e " \e[93mno @expected_output not found in the file! $eoutput"
 		else
 			echo -e " \e[92mpassed"
 		fi
@@ -102,13 +155,35 @@ then
 	for f in ./src/test/deca/context/valid/*.deca
 		do
 		echo -en "$f"
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
 		eoutput=$(test_context $f 2>&1 > /dev/null | head -n 1)
-		# SI ERREUR = VIDE ALORS VALIDE
+		if [[ $catEoutp == "true" ]];
+		then
+			echo $eoutput
+		fi
+		xtree=$(grep @expected_tree $f | cut -c19-)
+		tree=$(test_context $f)
+		# SI ERREUR = VIDE && TREE EST BON ALORS VALIDE
 		if [[ -z $eoutput ]];
 		then
-			echo -e " \e[92mpassed"
+			if [[ -n $xtree ]];
+			then
+				if [[ "$tree" == "$xtree" ]];
+				then
+					echo -e " \e[92mpassed"
+				else
+					echo -e " \e[91mfailed"
+				fi
+			else
+				echo -e " \e[93mno @expected_tree not found in the file!"
+				echo -e " $tree"
+			fi
 		else
-			echo -e " \e[91mfailed"			
+			echo -e " \e[91mfailed"		
 		fi
 		echo -e "\e[39m<<<================================>>>"
 		done
@@ -118,7 +193,16 @@ then
 	for f in ./src/test/deca/context/invalid/*.deca
 		do
 		echo -en "$f"
+		if [[ $catPgm == "true" ]];
+		then
+			echo
+			cat $f
+		fi
 		eoutput=$(test_context $f 2>&1 > /dev/null | head -n 1)
+		if [[ $catEoutp == "true" ]];
+		then
+			echo $eoutput
+		fi
 		y=$(grep @expected_output $f)
 		y=${y:20}
 		if [[ $eoutput == *"$y"* ]];
@@ -126,7 +210,7 @@ then
 		
 		if [[ -z $y ]];
 		then
-			echo -e " \e[93mno @expected_output not found in the file $eoutput"
+			echo -e " \e[93mno @expected_output not found in the file $eoutput!"
 		else
 			echo -e " \e[92mpassed"
 		fi
