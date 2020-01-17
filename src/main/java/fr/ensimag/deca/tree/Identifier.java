@@ -205,6 +205,7 @@ public class Identifier extends AbstractIdentifier {
     				this.getLocation());
     	} else {
         	Type type = def.getType();
+        	this.setDefinition(def);
     		this.setType(type);
     	}
     	if (this.getType().isVoid()) {

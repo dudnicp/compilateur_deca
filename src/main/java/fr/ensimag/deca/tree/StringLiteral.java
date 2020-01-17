@@ -36,7 +36,7 @@ public class StringLiteral extends AbstractStringLiteral {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     	// decorate **expr** type
-    	this.setType(new StringType(compiler.getEnvTypes().getSymbolFromMap("String")));
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("String").getType());
     	return this.getType();
     }
 

@@ -23,7 +23,7 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        this.setType(new IntType(compiler.getEnvTypes().getSymbolFromMap("int")));
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("int").getType());
         return this.getType();
     }
 
