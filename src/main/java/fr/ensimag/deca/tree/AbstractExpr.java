@@ -94,19 +94,15 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-    	this.verifyExpr(compiler, localEnv, currentClass); // decorate this with its type
-
-    	if (this.getType() == null || expectedType == null) { // programmation defensive
-    		throw new ContextualError("A type is null, decoration required here", this.getLocation());
-    	}
-    	else if (this.getType().isInt() && expectedType.isFloat()) {
+    	Type type2 = this.verifyExpr(compiler, localEnv, currentClass);
+    	if (type2.isInt() && expectedType.isFloat()) {
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);
     		return convFloat;
     	}
-    	else if (!this.getType().sameType(expectedType)) {
+    	else if (!type2.sameType(expectedType)) {
     		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
-    		+ expectedType, this.getLocation());
+    		+ expectedType + " (3.28)", this.getLocation());
     	}
     	return this;
     }
@@ -116,16 +112,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-    	// A FAIRE : lancer les ContextualError a définir
-    	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
-    	if (returnType == null) { // programmation defensive
-        	this.setType(compiler.getEnvTypes().getDefinitionFromName("void").getType());
-		}
-    	if (verifiedType == null) { // programmation defensive
-    		this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
-    	} else {
-    		this.setType(verifiedType);
-    	}
+    	this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
     }
 
     /**
@@ -140,9 +127,11 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	this.setType(this.verifyExpr(compiler, localEnv, currentClass));
+    	Type type = this.verifyExpr(compiler, localEnv, currentClass);
+    	this.setType(type); // this may be useless
     	if (!(this.getType().isBoolean() || this.getType().isInt() || this.getType().isFloat())) {
-    		throw new ContextualError("Condition must be of type boolean, int or float",
+    		throw new ContextualError("Condition must be of type boolean, int or float (rule (3.29)"
+    				+ " extended to numeric values)",
     				this.getLocation());
     	}
     }

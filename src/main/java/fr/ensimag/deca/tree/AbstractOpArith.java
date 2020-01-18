@@ -25,9 +25,23 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	//Identifier lValue = (Identifier)this.getLeftOperand();
-    	//Type lValueType = localEnv.get(lValue.getName()).getType();
-    	//this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lValueType);
+    	Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+    	Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+    	if (type1.isInt() && type2.isFloat()) {
+    		ConvFloat leftConv = new ConvFloat(this.getLeftOperand());
+    		this.setLeftOperand(leftConv);
+    		this.setType(type2);
+    	} else if (type1.isFloat() && type2.isInt()) {
+    		ConvFloat rightConv = new ConvFloat(this.getRightOperand());
+    		this.setRightOperand(rightConv);
+    		this.setType(type1);
+    	} else {
+    		throw new ContextualError("Arithmetic operation \"" + this.getOperatorName() +  "\" is not supported for types "
+    				+ this.getLeftOperand().getType() + " and " + this.getRightOperand().getType() + " (3.33)",
+    				this.getLocation());
+    	}
+    	return this.getType();
+    	/*
     	Type lType = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
     	Type rType = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
     	
@@ -45,5 +59,6 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     	}
     	this.setType(this.getLeftOperand().getType());
     	return this.getType();
+    	*/
     }
 }
