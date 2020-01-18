@@ -479,18 +479,14 @@ literal returns[AbstractExpr tree]
             try {
                 $tree = new IntLiteral(Integer.parseInt($in.text));
             } catch (NumberFormatException e) {
-				// A FAIRE: Méthode de gestion des erreurs plus fine (cf CalcParser.g4 l 58-59, il est mentionné la nécessité d'utiliser une meilleur gestion des erreurs que ca)
-                // A FAIRE: Insérer peut être un message d'erreur, car c'est une erreur (???), la compilation peut pas passer dans ce cas ???
-                $tree = null;
+		throw new IntegerTooBig(this, $ctx);
             }
         }
     | fd=FLOAT {
             try {
                 $tree = new FloatLiteral(Float.parseFloat($fd.text));
-            } catch (NumberFormatException e) {
-				// A FAIRE: Méthode de gestion des erreurs plus fine (cf CalcParser.g4 l 58-59, il est mentionné la nécessité d'utiliser une meilleur gestion des erreurs que ca)
-                // A FAIRE: Insérer peut être un message d'erreur, car c'est une erreur (???), la compilation peut pas passer dans ce cas ???
-                $tree = null;
+            } catch (Exception e) {
+		        throw new FloatTooBig(this, $ctx);
             }
         }
     | st=STRING {
