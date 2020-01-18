@@ -14,14 +14,18 @@ then
     echo
     cat $a
 fi
+
 if [ ! -f $a ]; then
     echo -e "\e[93mFichier .ass non généré."
     echo -en "\e[39m"
+    exit 1
 else
     result=$(ima $a)
+    echo
+    echo "result : $result"
     rm $a
 fi
-result=$(ima $a)
+
 expresult=$(grep @result $f | cut -c12-)
 if [[ $result == $expresult ]];
 then
