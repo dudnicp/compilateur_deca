@@ -39,20 +39,16 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	
-    	
-    	// decoration {name |-> (var,type)}
+    	// rule (3.17)
     	Type typeVerified = type.verifyType(compiler);
-    	
        	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
- 
     	try {
     		// ajout de la variable dans l'environnement;
 			localEnv.declare(varName.getName(), varName.getExpDefinition());
 		} catch (fr.ensimag.deca.context.Environment.DoubleDefException e1) {
 			throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
-					localEnv.get(varName.getName()).getLocation(),
+					localEnv.get(varName.getName()).getLocation() + " (3.17)",
 					varName.getLocation());
 		}
     	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
