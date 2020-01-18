@@ -46,7 +46,7 @@ public class Initialization extends AbstractInitialization {
     		throw new ContextualError("Initialization of type " + expression.getType()
     			+ " to variable of type " + t, expression.getLocation());
     	}
-
+    	this.setLocation(expression.getLocation());
     }
 
 

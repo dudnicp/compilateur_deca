@@ -7,7 +7,7 @@ PATH=./src/test/script/launchers:"$PATH"
 # fait appel à test_lex sur tous les fichiers src/test/deca/syntax/*/lex/*.deca
 # et compare avec le résultat attendu indiqué en ligne de commentaire
 # pas de commentaire signifie pas d'erreurs attendue
-catPgm="false"
+catPgm="true"
 catEoutp="true"
 catAss="true"
 
@@ -17,14 +17,24 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/syntax/valid/lex/*.deca
 		do
-			./src/test/script/testlexvalid.sh $f $catPgm $catEoutp
+			if [[ $catPgm == "true" ]];
+			then
+			    echo
+			    cat $f
+			fi
+			./src/test/script/testlexvalid.sh $f $catEoutp
 		done
 
 	# invalid
 	echo -e "INVALID"
 	for f in ./src/test/deca/syntax/invalid/lex/*.deca
 		do
-			./src/test/script/testlexinvalid.sh $f $catPgm $catEoutp
+			if [[ $catPgm == "true" ]];
+			then
+			    echo
+			    cat $f
+			fi
+			./src/test/script/testlexinvalid.sh $f $catEoutp
 		done
 
 
@@ -36,14 +46,24 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/syntax/valid/synt/*.deca
 		do
-			./src/test/script/testsyntvalid.sh $f $catPgm $catEoutp
+			if [[ $catPgm == "true" ]];
+			then
+			    echo
+			    cat $f
+			fi
+			./src/test/script/testsyntvalid.sh $f $catEoutp
 		done
 
 	# invalid
 	echo -e "INVALID"
 	for f in ./src/test/deca/syntax/invalid/synt/*.deca
 		do
-			./src/test/script/testsyntinvalid.sh $f $catPgm $catEoutp
+			if [[ $catPgm == "true" ]];
+			then
+			    echo
+			    cat $f
+			fi
+			./src/test/script/testsyntinvalid.sh $f $catEoutp
 		done
 
 # CONT
@@ -54,14 +74,24 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/context/valid/*.deca
 		do
-			./src/test/script/testcontextvalid.sh $f $catPgm $catEoutp
+			if [[ $catPgm == "true" ]];
+			then
+			    echo
+			    cat $f
+			fi
+			./src/test/script/testcontextvalid.sh $f $catEoutp
 		done
 
 	# invalid
 	echo -e "INVALID"
 	for f in ./src/test/deca/context/invalid/*.deca
 		do
-			./src/test/script/testcontextinvalid.sh $f $catPgm $catEoutp
+			if [[ $catPgm == "true" ]];
+			then
+			    echo
+			    cat $f
+			fi
+			./src/test/script/testcontextinvalid.sh $f $catEoutp
 		done
 
 # CODEGEN
@@ -72,7 +102,12 @@ then
 	echo -e "VALID"
 	for f in ./src/test/deca/codegen/valid/*.deca
 	do
-		./src/test/script/testcodegenvalid.sh $f $catPgm $catAss
+		if [[ $catPgm == "true" ]];
+		then
+		    echo
+		    cat $f
+		fi
+		./src/test/script/testcodegenvalid.sh $f $catAss
 	done
 else
 

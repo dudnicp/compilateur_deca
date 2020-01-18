@@ -3,3 +3,4 @@
 {
     x | y;
 }
+// @expected_output deca:4:6: token recognition error

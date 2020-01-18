@@ -4,17 +4,11 @@ cd "$(dirname "$0")"/../../.. || exit 1
 PATH=./src/test/script/launchers:"$PATH"
 
 f=$1
-catPgm=$2
-catAss=$3
+catAss=$2
 
 echo -en "$f"
 a=${f:: -5}.ass
 decac $f > /dev/null
-if [[ $catPgm == "true" ]];
-then
-    echo
-    cat $f
-fi
 if [[ $catAss == "true" ]];
 then
     echo

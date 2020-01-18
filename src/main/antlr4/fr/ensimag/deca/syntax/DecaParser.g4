@@ -266,8 +266,7 @@ and_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new And($e1.tree, $e2.tree);
-            //setLocation($tree, $AND);
-            // A FAIRE: Gérer le set location ici
+            setLocation($tree, $AND);
         }
     ;
 
