@@ -43,8 +43,9 @@ public abstract class AbstractPrint extends AbstractInst {
                 // ie case: print(1+2+3)
                 a.verifyExpr(compiler, localEnv, currentClass);
             }
-            if (!(a.getType().isFloat() || a.getType().isString() || a.getType().isInt())) {
-                throw new ContextualError("Arguments type must be String, int or float", a.getLocation());
+            Type type = a.getType();
+            if (!(type.isFloat() || type.isString() || type.isInt() || type.isBoolean())) {
+                throw new ContextualError("Arguments type must be String, int, float or boolean", a.getLocation());
             }
         }
     }

@@ -4,7 +4,9 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
@@ -105,5 +107,27 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+	protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
+    	getLeftOperand().codeExpr(compiler, n);
+    	DVal rightDVal = getRightOperand().dval();
+    	if (rightDVal != null) {
+    		compiler.addInstruction(new CMP(rightDVal, Register.getR(n)));
+		}
+    	else {
+			if (n < Register.getRMAX()) {
+				getRightOperand().codeExpr(compiler, n + 1);
+				compiler.addInstruction(new CMP(Register.getR(n+1), Register.getR(n)));
+			}
+			else {
+				compiler.addInstruction(new PUSH(Register.getR(n)));
+				getRightOperand().codeExpr(compiler, n);
+				compiler.addInstruction(new LOAD(Register.getR(n), Register.R0));
+				compiler.addInstruction(new POP(Register.getR(n)));;
+				compiler.addInstruction(new CMP(Register.R0, Register.getR(n)));
+			}
+		}
+	}
 
 }
