@@ -94,6 +94,7 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
 		// A FAIRE: Pas d'idée du pourquoi ce bloc existe ici (présent de base), il faut surement y ajouter quelque chose... (retirer les 2 DeclVar en dessous, déclarer l'arbre ici et faire add ???)
+        Initialization init_var;
         }
     : i=ident {
     		assert($t != null);
@@ -105,7 +106,9 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
       		assert($t != null);
       		assert($i.tree != null);
       		assert($e.tree != null);
-			$tree = new DeclVar($t, $i.tree, new Initialization($e.tree));
+            init_var = new Initialization($e.tree);
+			$tree = new DeclVar($t, $i.tree, init_var);
+            setLocation(init_var, $EQUALS);
             setLocation($e.tree, $e.start);
         }
       )? {
@@ -180,7 +183,7 @@ if_then_else returns[IfThenElse tree]
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
             // A FAIRE : peut être utile pour la gestion du else if
-           $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst()); 
+           $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
@@ -366,7 +369,7 @@ mult_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Divide($e1.tree, $e2.tree);
-            setLocation($tree, $SLASH);            
+            setLocation($tree, $SLASH);
         }
     | e1=mult_expr PERCENT e2=unary_expr {
             assert($e1.tree != null);
@@ -383,11 +386,12 @@ unary_expr returns[AbstractExpr tree]
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-			$tree = new Not($e.tree);
+			      $tree = new Not($e.tree);
         }
     | select_expr {
             assert($select_expr.tree != null);
             $tree = $select_expr.tree;
+            setLocation($tree, $select_expr.start);
         }
     ;
 
@@ -395,6 +399,7 @@ select_expr returns[AbstractExpr tree]
     : e=primary_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);

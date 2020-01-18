@@ -8,11 +8,11 @@ int x=2, y=3;
 // @expected_tree       |  []> [2, 4] DeclVar
 // @expected_tree       |  ||  +> [2, 0] Identifier (int)
 // @expected_tree       |  ||  +> [2, 4] Identifier (x)
-// @expected_tree       |  ||  `> Initialization
+// @expected_tree       |  ||  `> [2, 5] Initialization
 // @expected_tree       |  ||     `> [2, 6] Int (2)
 // @expected_tree       |  []> [2, 9] DeclVar
 // @expected_tree       |      +> [2, 0] Identifier (int)
 // @expected_tree       |      +> [2, 9] Identifier (y)
-// @expected_tree       |      `> Initialization
+// @expected_tree       |      `> [2, 10] Initialization
 // @expected_tree       |         `> [2, 11] Int (3)
 // @expected_tree       `> ListInst [List with 0 elements]

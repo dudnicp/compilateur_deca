@@ -7,7 +7,7 @@
     Résultat : A définir...
 */
 {
-    println(-4200000000-4200000000);
-    //println("Si il est affiché au dessus 4105032704 (modulo positif), test réussi !");
-    //println("Ou bien si il est affiché -4105032704 (je crois que c'est ca modulo négatif), test réussi !");
+    println(-2000000000-2000000000-2000000000);
+    println("Si il est affiché au dessus (-)1705032704 (modulo positif/négatif), test réussi !");
+
 }

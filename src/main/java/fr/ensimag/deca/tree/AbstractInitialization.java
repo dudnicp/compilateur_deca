@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -25,5 +26,8 @@ public abstract class AbstractInitialization extends Tree {
     protected abstract void verifyInitialization(DecacCompiler compiler,
             Type t, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
-
+    
+    public void codeExpr(DecacCompiler compiler, int n, DAddr addr) {
+    	// empty by default
+    }
 }

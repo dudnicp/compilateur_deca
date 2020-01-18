@@ -21,7 +21,7 @@ public class And extends AbstractOpBool {
     }
 
 	@Override
-	protected void codeGenInst(DecacCompiler compiler, DVal op,
+	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
 		// TODO Auto-generated method stub
 		

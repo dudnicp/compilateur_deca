@@ -6,6 +6,7 @@
     Résultat : A définir...
 */
 {
-    println(4200000000+4200000000);
-    //println("Si il est affiché au dessus 4105032704, test réussi !");
+    println(2000000000+2000000000+2000000000);
+    println("Si il est affiché au dessus 1705032704, test réussi !");
+
 }

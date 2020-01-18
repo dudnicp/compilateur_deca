@@ -90,8 +90,6 @@ public class CompilerOptions {
         	default:
         		if (arg.endsWith(".deca")) {
         			sourceFiles.add(new File(arg));
-        		} else {
-        			throw new UnsupportedOperationException("invalid parameter ".concat(arg));
         		}
         	argCounter++;
         	}
