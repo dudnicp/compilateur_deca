@@ -37,8 +37,8 @@ public class ListInst extends TreeList<AbstractInst> {
 
     public void codeGenListInst(DecacCompiler compiler) {
         for (AbstractInst i : getList()) {
-        	String commentLine = i.decompile();
-        	compiler.addComment(commentLine);
+//        	String commentLine = i.decompile();
+//        	compiler.addComment(commentLine);
             i.codeGenInst(compiler);
         }
     }

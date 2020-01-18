@@ -36,7 +36,7 @@ public class DecacMain {
         }
         if (options.getVerification()) {
         	// -v
-        	throw new UnsupportedOperationException("decac -v not yet implemented");
+//        	throw new UnsupportedOperationException("decac -v not yet implemented");
 //        	if (options.getParse()) {
 //        		throw new UnsupportedOperationException("-p and -v incompatible");
 //        	}

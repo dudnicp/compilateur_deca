@@ -11,3 +11,4 @@ int x = 3;
 // @expected_tree       |      `> [2, 6] Initialization
 // @expected_tree       |         `> [2, 8] Int (3)
 // @expected_tree       `> ListInst [List with 0 elements]
+// @expected_tree 

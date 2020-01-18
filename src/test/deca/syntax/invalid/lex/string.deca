@@ -1,1 +1,2 @@
 "sal\ut"
+// @expected_output deca:1:0: token recognition error

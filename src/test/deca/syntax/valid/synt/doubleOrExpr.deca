@@ -7,7 +7,7 @@
 // @expected_tree       +> ListDeclVar [List with 0 elements]
 // @expected_tree       `> ListInst [List with 1 elements]
 // @expected_tree          []> [2, 4] Or
-// @expected_tree              +> Or
+// @expected_tree              +> [2, 6] Or
 // @expected_tree              |  +> [2, 4] Identifier (x)
 // @expected_tree              |  `> [2, 9] Identifier (y)
 // @expected_tree              `> [2, 14] Identifier (z)

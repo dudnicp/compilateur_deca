@@ -3,6 +3,10 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BGE;
+import fr.ensimag.ima.pseudocode.instructions.BLT;
+import fr.ensimag.ima.pseudocode.instructions.SLT;
 
 /**
  *
@@ -25,8 +29,18 @@ public class Lower extends AbstractOpIneq {
 	@Override
 	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
-		// TODO Auto-generated method stub
-		
+		super.mnemo(compiler, op, register);
+		compiler.addInstruction(new SLT(register));		
+	}
+	
+	@Override
+	protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
+		super.codeCondExpr(compiler, b, label, n);
+		if (b) {
+			compiler.addInstruction(new BLT(label));
+		} else {
+			compiler.addInstruction(new BGE(label));
+		}
 	}
 
 }
