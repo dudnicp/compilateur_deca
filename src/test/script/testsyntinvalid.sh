@@ -25,5 +25,7 @@ else
 fi
 else
     echo -e "\e[91mfailed"
+    echo $y
+    echo $eoutput
 fi
 echo -e "\e[39m<<<================================>>>"

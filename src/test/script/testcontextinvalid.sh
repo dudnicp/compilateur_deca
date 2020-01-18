@@ -10,7 +10,7 @@ echo -en "$f"
 eoutput=$(test_context $f 2>&1 > /dev/null | head -n 1)
 if [[ $catEoutp == "true" ]];
 then
-    echo $eoutput
+    echo "eoutput $eoutput"
 fi
 y=$(grep @expected_output $f)
 y=${y:20}
@@ -25,5 +25,7 @@ else
 fi
 else
     echo -e " \e[91mfailed"
+    echo $y
+    echo $eoutput
 fi
 echo -e "\e[39m<<<================================>>>"

@@ -25,7 +25,9 @@ then
         else
             echo -e " \e[91mfailed"
             echo -e "expected"
-            echo $xtree
+            echo "$xtree"
+            echo -e "obtained"
+            echo "$tree"
         fi
     else
         echo -e " \e[93mno @expected_tree not found in the file!"
