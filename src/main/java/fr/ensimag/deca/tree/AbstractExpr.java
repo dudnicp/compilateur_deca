@@ -171,16 +171,20 @@ public abstract class AbstractExpr extends AbstractInst {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
     
-    protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
-    	codeExpr(compiler, 0);
-    	compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.R0));
+    protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
+    	codeExpr(compiler, n);
+    	compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
     	if (b) {
 			compiler.addInstruction(new BNE(label));
 		}
     	else {
-			compiler.addInstruction(new BEQ(label));
+			compiler.addInstruction(new BEQ(label));	
 		}
     }
+    
+    protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
+    	codeCondExpr(compiler, b, label, 2);
+	}
     
     protected DVal dval() {
 		return null;

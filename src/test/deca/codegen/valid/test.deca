@@ -1,0 +1,13 @@
+{
+	int x = readInt();
+	int y = readInt();
+	if(x >= 5 && y * 2 > 3) {
+		println("hey");
+	} else {
+		println("yeh");
+		while(x < 5) {
+			x = x + 1;
+			println(x);
+		}
+	}
+}
