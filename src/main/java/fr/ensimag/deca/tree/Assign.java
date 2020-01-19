@@ -50,7 +50,7 @@ public class Assign extends AbstractBinaryExpr {
     protected String getOperatorName() {
         return "=";
     }
-    
+     
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
     	getRightOperand().codeExpr(compiler, n);

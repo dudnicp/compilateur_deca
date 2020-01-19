@@ -252,18 +252,20 @@ public class Identifier extends AbstractIdentifier {
     
     @Override
     protected DVal dval() {
-    	return daddr();
+    	return this.daddr();
     }
     
-    @Override
-    public DAddr daddr() {
-    	return Register.getAddr(name.toString());
-    }
+    protected DAddr daddr() {
+    	if (definition.isExpression()) {
+			return getExpDefinition().getOperand();
+		}
+    	return null;
+	}
     
     
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(this.daddr(), Register.getR(n)));
+    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
     }
     
     @Override
