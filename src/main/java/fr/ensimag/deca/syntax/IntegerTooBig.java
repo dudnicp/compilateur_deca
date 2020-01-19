@@ -18,6 +18,6 @@ public class IntegerTooBig extends DecaRecognitionException {
 
     @Override
     public String getMessage() {
-        return "value cannot be stored as a integer value";
+        return "value cannot be stored as an integer value";
     }
 }
