@@ -127,7 +127,6 @@ public class CompilerOptions {
     }
 
     protected void displayUsage() {
-    	// A FAIRE
-        throw new UnsupportedOperationException("not yet implemented");
+    	// pass
     }
 }
