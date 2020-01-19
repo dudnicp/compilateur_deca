@@ -17,6 +17,7 @@ import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
@@ -152,11 +153,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void codeGenPrintHex(DecacCompiler compiler) {
     	codeGenInst(compiler);
     	compiler.addInstruction(new LOAD(Register.getR(Register.defaultRegisterIndex), Register.R1));
-    	codeGenPrintHexInstruction(compiler);
-	}
-    
-    protected void codeGenPrintHexInstruction(DecacCompiler compiler) {
-    	throw new UnsupportedOperationException("not yet implemented");
+    	compiler.addInstruction(new WFLOATX());
 	}
 
     @Override
