@@ -1,0 +1,12 @@
+/*
+    Description : Test sur la bonne gestion des parenthèses (addition, multiplication, division)
+
+    Résultat : OK
+*/
+{
+    int x = 2;
+    int y = -9;
+    int z = 12;
+
+    x = z/(z-12)+-(x*y);
+}
