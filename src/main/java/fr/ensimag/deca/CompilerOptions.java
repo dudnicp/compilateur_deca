@@ -123,8 +123,6 @@ public class CompilerOptions {
         } else {
             logger.info("Java assertions disabled");
         }
-        // A FAIRE
-      //  throw new UnsupportedOperationException("not yet implemented");
 
     }
 
