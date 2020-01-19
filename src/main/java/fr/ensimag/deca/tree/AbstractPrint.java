@@ -65,7 +65,7 @@ public abstract class AbstractPrint extends AbstractInst {
     	s.print(printHex ? "x" : "");
     	s.print("(");
     	arguments.decompile(s);
-    	s.print(")");
+    	s.print(");");
     }
 
     @Override
