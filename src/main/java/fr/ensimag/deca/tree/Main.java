@@ -80,6 +80,7 @@ public class Main extends AbstractMain {
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenDecl(compiler);
         insts.codeGenListInst(compiler);
+        compiler.addInstruction(new HALT());
         
         // checking stack size for stack overflow
         compiler.addFirst(new ADDSP(CodeTSTO.getNLocalVariables()));
@@ -87,7 +88,6 @@ public class Main extends AbstractMain {
         compiler.addFirst(new TSTO(CodeTSTO.getMaxStackSize()));
         
         // coding errors
-        compiler.addInstruction(new HALT());
         compiler.addLabel(Label.STACKOVERFLOW);
         compiler.addInstruction(new WSTR(new ImmediateString("Error: stack overflow, exiting program")));
         compiler.addInstruction(new ERROR());
