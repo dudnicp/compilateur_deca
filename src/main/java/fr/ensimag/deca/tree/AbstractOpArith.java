@@ -40,31 +40,12 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     	} else if ((type1.isInt() && type2.isInt()) ||
     			(type1.isFloat() && type2.isFloat())){
     		this.setType(type1);
-    		// no conversion needed
+    		// compatible types
     	} else {
     		throw new ContextualError("Arithmetic operation \"" + this.getOperatorName() +  "\" is not supported for types "
     				+ this.getLeftOperand().getType() + " and " + this.getRightOperand().getType() + " (3.33)",
     				this.getLocation());
     	}
     	return this.getType();
-    	/*
-    	Type lType = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-    	Type rType = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-    	
-    	// handle conversion to float
-    	if (this.getLeftOperand().getType().isFloat() && this.getRightOperand().getType().isInt()) {
-        	this.setRightOperand(this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lType));
-    	} else if (this.getLeftOperand().getType().isInt() && this.getRightOperand().getType().isFloat()) {
-        	this.setLeftOperand(this.getLeftOperand().verifyRValue(compiler, localEnv, currentClass, rType));
-        
-        // else if types are not compatible
-    	} else if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
-    		throw new ContextualError("Arithmetic operation \"" + this.getOperatorName() +  "\" is invalid between type "
-    				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
-    				this.getLocation());
-    	}
-    	this.setType(this.getLeftOperand().getType());
-    	return this.getType();
-    	*/
     }
 }
