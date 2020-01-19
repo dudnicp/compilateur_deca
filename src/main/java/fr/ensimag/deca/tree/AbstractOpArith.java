@@ -35,6 +35,9 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     		ConvFloat rightConv = new ConvFloat(this.getRightOperand());
     		this.setRightOperand(rightConv);
     		this.setType(type1);
+    	} else if ((type1.isInt() && type2.isInt()) ||
+    			(type1.isFloat() && type2.isFloat())){
+    		// no conversion needed
     	} else {
     		throw new ContextualError("Arithmetic operation \"" + this.getOperatorName() +  "\" is not supported for types "
     				+ this.getLeftOperand().getType() + " and " + this.getRightOperand().getType() + " (3.33)",
