@@ -54,11 +54,6 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenPrintHexInstruction(DecacCompiler compiler) {
-        compiler.addInstruction(new WFLOATX());
-    }
-
-    @Override
 	protected void codeExpr(DecacCompiler compiler, int registerIndex) {
     	compiler.addInstruction(new LOAD(new ImmediateFloat(value), Register.getR(registerIndex)));
 	}

@@ -30,8 +30,11 @@ public class Divide extends AbstractOpArith {
     	if (getLeftOperand().getType().isInt()) {
 			compiler.addInstruction(new QUO(op, register));
 		}
-    	else if (getLeftOperand().getType().isFloat()) {
+    	else if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
     		compiler.addInstruction(new DIV(op, register));
+        	if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
+    			compiler.addInstruction(new BOV(Label.OVERFLOW));
+    		}
 		}
     	compiler.addInstruction(new BOV(Label.DIVBYZERO));
     }
