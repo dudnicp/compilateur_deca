@@ -175,19 +175,22 @@ inst returns[AbstractInst tree]
 
 if_then_else returns[IfThenElse tree]
 @init {
-    // A FAIRE : peut être utile pour la gestion du else if
-    //ListInst listOfInst = new ListInst();
+    IfThenElse temp;
+    ListInst list_inst_else = new ListInst();
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
-           $tree = new IfThenElse($condition.tree, $li_if.tree, new ListInst());
+           $tree = new IfThenElse($condition.tree, $li_if.tree, list_inst_else);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-            // A FAIRE : peut être utile pour la gestion du else if
-           $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
+           temp = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
+           setLocation(temp, $ELSE);
+           list_inst_else.add(temp);
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
-            $tree = new IfThenElse($condition.tree, $li_if.tree, $li_else.tree);
+           temp = new IfThenElse($condition.tree, new ListInst(), $li_else.tree);
+           setLocation(temp, $ELSE);
+           list_inst_else.add(temp);
         }
       )?
     ;
