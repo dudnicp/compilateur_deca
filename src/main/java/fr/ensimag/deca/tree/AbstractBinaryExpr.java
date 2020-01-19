@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.CodeTSTO;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -88,9 +89,11 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 			}
 			else {
 				compiler.addInstruction(new PUSH(Register.getR(n)));
+				CodeTSTO.incCurrentStackSize();
 				rightOperand.codeExpr(compiler, n);
 				compiler.addInstruction(new LOAD(Register.getR(n), Register.R0));
 				compiler.addInstruction(new POP(Register.getR(n)));;
+				CodeTSTO.decCurrentStackSize();
 				mnemo(compiler, Register.R0, Register.getR(n));
 			}
 		}
@@ -122,9 +125,11 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 			}
 			else {
 				compiler.addInstruction(new PUSH(Register.getR(n)));
+				CodeTSTO.incCurrentStackSize();
 				getRightOperand().codeExpr(compiler, n);
 				compiler.addInstruction(new LOAD(Register.getR(n), Register.R0));
-				compiler.addInstruction(new POP(Register.getR(n)));;
+				compiler.addInstruction(new POP(Register.getR(n)));
+				CodeTSTO.decCurrentStackSize();
 				compiler.addInstruction(new CMP(Register.R0, Register.getR(n)));
 			}
 		}

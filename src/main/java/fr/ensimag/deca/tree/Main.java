@@ -14,6 +14,7 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.ERROR;
+import fr.ensimag.ima.pseudocode.instructions.HALT;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 import java.io.PrintStream;
@@ -75,6 +76,7 @@ public class Main extends AbstractMain {
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenDecl(compiler);
         insts.codeGenListInst(compiler);
+        compiler.addInstruction(new HALT());
         compiler.addLabel(Label.STACKOVERFLOW);
         compiler.addInstruction(new WSTR(new ImmediateString("Error: stack overflow, exiting program")));
         compiler.addInstruction(new ERROR());
@@ -82,7 +84,7 @@ public class Main extends AbstractMain {
         compiler.addInstruction(new WSTR(new ImmediateString("Error: division by zero, exiting program")));
         compiler.addInstruction(new ERROR());
         compiler.addLabel(Label.INVALIDINPUT);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: invalid input")));
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: invalid input, exiting program")));
         compiler.addInstruction(new ERROR());
     }
     

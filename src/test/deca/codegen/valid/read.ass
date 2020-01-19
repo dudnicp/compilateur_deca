@@ -1,0 +1,22 @@
+; start main program
+; Main program
+; Beginning of main instructions:
+; int x = readInt();
+	RINT
+	BOV invalid_input
+	LOAD R1, R2
+	STORE R2, 1(GB)
+	LOAD 1(GB), R2
+	LOAD R2, R1
+	WINT
+stack_overflow:
+	WSTR "Error: stack overflow, exiting program"
+	ERROR
+div_by_zero:
+	WSTR "Error: division by zero, exiting program"
+	ERROR
+invalid_input:
+	WSTR "Error: invalid input"
+	ERROR
+	HALT
+; end main program

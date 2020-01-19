@@ -95,7 +95,6 @@ public abstract class AbstractExpr extends AbstractInst {
             Type expectedType)
             throws ContextualError {
     	Type type2 = this.verifyExpr(compiler, localEnv, currentClass);
-    	LOG.debug(type2.toString() + " /// " + expectedType.toString());
     	if (type2.isInt() && expectedType.isFloat()) {
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);

@@ -6,6 +6,7 @@ import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.CodeTSTO;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -83,6 +84,7 @@ public class DeclVar extends AbstractDeclVar {
     protected void codeGenDecl(DecacCompiler compiler) {
     	DAddr addr = Register.getNewAddr();
     	varName.getVariableDefinition().setOperand(addr);
+    	CodeTSTO.incCurrentStackSize();
     	initialization.codeExpr(compiler, Register.defaultRegisterIndex, addr);
     }
     
