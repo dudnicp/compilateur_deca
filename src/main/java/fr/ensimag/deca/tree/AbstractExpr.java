@@ -113,7 +113,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-    	this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
+    	Type type = this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
     }
 
     /**
