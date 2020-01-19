@@ -7,9 +7,9 @@ PATH=./src/test/script/launchers:"$PATH"
 # fait appel à test_lex sur tous les fichiers src/test/deca/syntax/*/lex/*.deca
 # et compare avec le résultat attendu indiqué en ligne de commentaire
 # pas de commentaire signifie pas d'erreurs attendue
-catPgm=""
+catPgm="false"
 catEoutp="true"
-catAss="true"
+catAss=""
 
 if [ $1 = "lex" ];
 then

@@ -11,6 +11,11 @@ import org.apache.commons.lang.Validate;
  */
 public class Label extends Operand {
 	
+	public static final Label STACKOVERFLOW = new Label("stack_overflow");
+	public static final Label DIVBYZERO = new Label("div_by_zero");
+	public static final Label INVALIDINPUT = new Label("invalid_input");
+	public static final Label OVERFLOW = new Label("overflow");
+	
 	private static int endAndLabelCounter = 0;
 	private static int endOrLabelCounter = 0;
 	private static int endIfLabelCounter = 0;

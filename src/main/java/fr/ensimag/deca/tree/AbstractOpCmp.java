@@ -33,12 +33,21 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-    	this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-    	if (!this.getLeftOperand().getType().sameType(this.getRightOperand().getType())) {
-    		throw new ContextualError("Invalid comparaison operation between type "
-    				+ this.getLeftOperand().getType() + " and type " + this.getRightOperand().getType(),
-    				this.getLocation());	
+    	Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+    	Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+    	if (type1.isInt() && type2.isFloat()) {
+    		ConvFloat leftConv = new ConvFloat(this.getLeftOperand());
+    		this.setLeftOperand(leftConv);
+    	} else if (type1.isFloat() && type2.isInt()) {
+    		ConvFloat rightConv = new ConvFloat(this.getRightOperand());
+    		this.setRightOperand(rightConv);
+    	} else if ((type1.isInt() && type2.isInt()) ||
+    			(type1.isFloat() && type2.isFloat())){
+    		// compatible types
+    	} else {
+    		throw new ContextualError("Comparison operation \"" + this.getOperatorName() +  "\" is not supported for types "
+    				+ this.getLeftOperand().getType() + " and " + this.getRightOperand().getType() + " (3.33)",
+    				this.getLocation());
     	}
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("boolean").getType());
     	return this.getType();
