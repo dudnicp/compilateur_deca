@@ -38,15 +38,12 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     	if (type1.isInt() && type2.isFloat()) {
     		ConvFloat leftConv = new ConvFloat(this.getLeftOperand());
     		this.setLeftOperand(leftConv);
-    		this.setType(type2);
     	} else if (type1.isFloat() && type2.isInt()) {
     		ConvFloat rightConv = new ConvFloat(this.getRightOperand());
     		this.setRightOperand(rightConv);
-    		this.setType(type1);
     	} else if ((type1.isInt() && type2.isInt()) ||
     			(type1.isFloat() && type2.isFloat())){
-    		this.setType(type1);
-    		// no conversion needed
+    		// compatible types
     	} else {
     		throw new ContextualError("Comparison operation \"" + this.getOperatorName() +  "\" is not supported for types "
     				+ this.getLeftOperand().getType() + " and " + this.getRightOperand().getType() + " (3.33)",
