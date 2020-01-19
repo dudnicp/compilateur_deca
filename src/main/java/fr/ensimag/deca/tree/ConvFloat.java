@@ -23,7 +23,7 @@ public class ConvFloat extends AbstractUnaryExpr {
             ClassDefinition currentClass) {
     	// set type := float decoration on **operand**
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("float").getType());
-    	return this.getOperand().getType();
+    	return this.getType();
 
     	}
 
