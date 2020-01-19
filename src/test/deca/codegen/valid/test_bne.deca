@@ -17,9 +17,9 @@
         }
 
         if (!(2 != 2)) {
-                println("ko");
-        } else {
                 println("ok");
+        } else {
+                println("ko");
         }
 
         if (!(1 != 2)) {
