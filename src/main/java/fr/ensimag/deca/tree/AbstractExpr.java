@@ -114,7 +114,6 @@ public abstract class AbstractExpr extends AbstractInst {
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
     	Type type = this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
-    	this.setType(type);
     }
 
     /**
