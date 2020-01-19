@@ -84,7 +84,7 @@ public class DeclVar extends AbstractDeclVar {
     protected void codeGenDecl(DecacCompiler compiler) {
     	DAddr addr = Register.getNewAddr();
     	varName.getVariableDefinition().setOperand(addr);
-    	CodeTSTO.incCurrentStackSize();
+    	CodeTSTO.incLocalVariables();
     	initialization.codeExpr(compiler, Register.defaultRegisterIndex, addr);
     }
     

@@ -82,6 +82,10 @@ public class DecacCompiler {
     public void add(AbstractLine line) {
         program.add(line);
     }
+    
+    public void addFirst(Instruction i) {
+    	program.addFirst(i);
+    }
 
     /**
      * @see fr.ensimag.ima.pseudocode.IMAProgram#addComment(java.lang.String)

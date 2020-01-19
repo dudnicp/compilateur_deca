@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.CodeTSTO;
 import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
@@ -13,8 +14,11 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.ERROR;
 import fr.ensimag.ima.pseudocode.instructions.HALT;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 import java.io.PrintStream;
@@ -76,6 +80,13 @@ public class Main extends AbstractMain {
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenDecl(compiler);
         insts.codeGenListInst(compiler);
+        
+        // checking stack size for stack overflow
+        compiler.addFirst(new ADDSP(CodeTSTO.getNLocalVariables()));
+        compiler.addFirst(new BOV(Label.STACKOVERFLOW));
+        compiler.addFirst(new TSTO(CodeTSTO.getMaxStackSize()));
+        
+        // coding errors
         compiler.addInstruction(new HALT());
         compiler.addLabel(Label.STACKOVERFLOW);
         compiler.addInstruction(new WSTR(new ImmediateString("Error: stack overflow, exiting program")));
