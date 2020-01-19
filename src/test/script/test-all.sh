@@ -9,7 +9,7 @@ PATH=./src/test/script/launchers:"$PATH"
 # pas de commentaire signifie pas d'erreurs attendue
 catPgm="false"
 catEoutp="true"
-catAss="true"
+catAss=""
 
 if [ $1 = "lex" ];
 then

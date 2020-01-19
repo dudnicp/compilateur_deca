@@ -90,12 +90,17 @@ public class CompilerOptions {
         	default:
         		if (arg.endsWith(".deca")) {
         			sourceFiles.add(new File(arg));
+        		} else {
+        			throw new CLIException("invalid argument" + arg);
         		}
         	argCounter++;
         	}
-        	
- new CLIException("invalid argument");
         }
+        
+        if (parse && verification) {
+        	throw new CLIException("-v & -p incompatible, please remove one");
+        }
+        
         Logger logger = Logger.getRootLogger();
         // map command-line debug option to log4j's level.
         switch (getDebug()) {

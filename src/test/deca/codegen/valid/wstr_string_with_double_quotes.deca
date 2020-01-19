@@ -1,3 +1,4 @@
+// @result Chaine valide en "Deca", test réussi si le mot Deca affiché avant est entre double quotes
 /*
     Description: Affichage d'une chaine de caractère contenant des "
 

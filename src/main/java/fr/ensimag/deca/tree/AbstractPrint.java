@@ -36,7 +36,7 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        // rule (3.31)
+        // rule (3.21) -- nothing to do for (3.26) and (3.27)
         for (AbstractExpr a : getArguments().getList()) {
         	// rule (3.30)
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
@@ -75,6 +75,7 @@ public abstract class AbstractPrint extends AbstractInst {
     public void decompile(IndentPrintStream s) {
     	s.print("print");
     	s.print(this.getSuffix());
+    	s.print(printHex ? "x" : "");
     	s.print("(");
     	arguments.decompile(s);
     	s.print(");");
