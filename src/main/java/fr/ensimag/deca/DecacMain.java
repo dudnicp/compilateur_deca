@@ -29,16 +29,6 @@ public class DecacMain {
         	// -b
             System.out.println("GL28");
         }
-        if (options.getParse()) {
-        	
-        }
-        if (options.getVerification()) {
-        	// -v
-        	throw new UnsupportedOperationException("decac -v not yet implemented");
-//        	if (options.getParse()) {
-//        		throw new UnsupportedOperationException("-p and -v incompatible");
-//        	}
-        }
         if (options.getNocheck()) {
         	// -n
         	throw new UnsupportedOperationException("decac -n not yet implemented");
