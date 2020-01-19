@@ -11,6 +11,10 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.VoidType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.ERROR;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -68,10 +72,18 @@ public class Main extends AbstractMain {
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
-        // A FAIRE: traiter les déclarations de variables.
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenDecl(compiler);
         insts.codeGenListInst(compiler);
+        compiler.addLabel(Label.STACKOVERFLOW);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: stack overflow, exiting program")));
+        compiler.addInstruction(new ERROR());
+        compiler.addLabel(Label.DIVBYZERO);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: division by zero, exiting program")));
+        compiler.addInstruction(new ERROR());
+        compiler.addLabel(Label.INVALIDINPUT);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: invalid input")));
+        compiler.addInstruction(new ERROR());
     }
     
     @Override
