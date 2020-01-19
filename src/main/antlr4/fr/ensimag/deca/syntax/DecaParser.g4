@@ -438,10 +438,7 @@ primary_expr returns[AbstractExpr tree]
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
-            // cette règle peut servir à multiplier récursivement les parenthèses ((()))
-            // A FAIRE : cette règle est non gérée dans le cadre du langage sans objet
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            $tree = $expr.tree;
         }
     | READINT OPARENT CPARENT {
             $tree = new ReadInt();
