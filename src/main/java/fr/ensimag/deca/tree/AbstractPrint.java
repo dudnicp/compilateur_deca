@@ -40,10 +40,16 @@ public abstract class AbstractPrint extends AbstractInst {
         for (AbstractExpr a : getArguments().getList()) {
         	// rule (3.30)
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
-            a.setType(type); // this may be useless
-            if (!(type.isFloat() || type.isString() || type.isInt() || type.isBoolean())) {
-                throw new ContextualError("Arguments type must be String, int, float or boolean (3.31)", a.getLocation());
-            }
+            if (this.getPrintHex()) {
+            	if (!(type.isFloat() || type.isInt())) {
+            		throw new ContextualError("Arguments type of 'printx' must be int or float",
+            				this.getLocation());
+            	}
+            } else {
+            	if (!(type.isFloat() || type.isString() || type.isInt() || type.isBoolean())) {
+            		throw new ContextualError("Arguments type must be String, int, float or boolean (3.31)", a.getLocation());
+            	}
+        	}
         }
     }
 
