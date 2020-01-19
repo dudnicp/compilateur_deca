@@ -38,23 +38,33 @@ public abstract class AbstractPrint extends AbstractInst {
             throws ContextualError {
         // rule (3.31)
         for (AbstractExpr a : getArguments().getList()) {
-            if (a.getType() == null) {
-                // decorating here
-                // ie case: print(1+2+3)
-                a.verifyExpr(compiler, localEnv, currentClass);
-            }
-            Type type = a.getType();
-            if (!(type.isFloat() || type.isString() || type.isInt() || type.isBoolean())) {
-                throw new ContextualError("Arguments type must be String, int, float or boolean", a.getLocation());
-            }
+        	// rule (3.30)
+            Type type = a.verifyExpr(compiler, localEnv, currentClass);
+            if (this.getPrintHex()) {
+            	if (!(type.isFloat() || type.isInt())) {
+            		throw new ContextualError("Arguments type of 'printx' must be int or float",
+            				this.getLocation());
+            	}
+            } else {
+            	if (!(type.isFloat() || type.isString() || type.isInt())) {
+            		throw new ContextualError("Arguments type must be String, int or float (3.31)", a.getLocation());
+            	}
+        	}
         }
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        for (AbstractExpr a : getArguments().getList()) {
-            a.codeGenPrint(compiler);
-        }
+    	if (printHex) {
+            for (AbstractExpr a : getArguments().getList()) {
+                a.codeGenPrintHex(compiler);
+            }
+		}
+    	else {
+    		for (AbstractExpr a : getArguments().getList()) {
+                a.codeGenPrint(compiler);
+            }
+		}
     }
 
     private boolean getPrintHex() {

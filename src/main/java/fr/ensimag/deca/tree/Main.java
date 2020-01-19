@@ -68,6 +68,23 @@ public class Main extends AbstractMain {
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenDecl(compiler);
         insts.codeGenListInst(compiler);
+        compiler.addInstruction(new HALT());
+        
+        // checking stack size for stack overflow
+        compiler.addFirst(new ADDSP(CodeTSTO.getNLocalVariables()));
+        compiler.addFirst(new BOV(Label.STACKOVERFLOW));
+        compiler.addFirst(new TSTO(CodeTSTO.getMaxStackSize()));
+        
+        // coding errors
+        compiler.addLabel(Label.STACKOVERFLOW);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Stack overflow, exiting program")));
+        compiler.addInstruction(new ERROR());
+        compiler.addLabel(Label.DIVBYZERO);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Division by zero, exiting program")));
+        compiler.addInstruction(new ERROR());
+        compiler.addLabel(Label.INVALIDINPUT);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Invalid input, exiting program")));
+        compiler.addInstruction(new ERROR());
     }
     
     @Override
