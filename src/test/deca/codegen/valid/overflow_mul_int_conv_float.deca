@@ -1,0 +1,11 @@
+// @result Test reussi 6365370880.0
+/*
+    Description : Test sur la multiplication d'entiers modulo 2pow32 convertie en flottant
+
+    Résultat : à définir...
+
+*/
+{
+    println(900000*900000*2.5);
+    println("Test reussi 6365370880.0");
+}

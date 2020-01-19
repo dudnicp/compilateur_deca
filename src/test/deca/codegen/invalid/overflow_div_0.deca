@@ -1,3 +1,4 @@
+// @result ERROR: INTEGER DIVIDE OVERFLOW
 /*
     Description : Test sur la gestion de la division par 0
 

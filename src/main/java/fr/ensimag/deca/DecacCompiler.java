@@ -183,15 +183,26 @@ public class DecacCompiler {
             throws DecacFatalError, LocationException {
     	
     	if (this.getCompilerOptions().getParse()) {
-    		System.out.println("-p reached, begining step A");
+    		
     		AbstractProgram prog = doLexingAndParsing(sourceName, err);
-    		System.out.println("step A complete, output :");
-    		System.out.println(prog.prettyPrint());
-    		System.out.println("starting decompiling");
+    		if (prog == null) {
+		        LOG.info("Parsing failed");
+		        return true;
+		    }
     		String output = prog.decompile();
-    		System.out.println("decompiler output BEGIN");
     		System.out.println(output);
-    		System.out.println("END");
+    		
+    	} else if (this.getCompilerOptions().getVerification()) {
+    		
+    		AbstractProgram prog = doLexingAndParsing(sourceName, err);
+    		if (prog == null) {
+		        LOG.info("Parsing failed");
+		        return true;
+		    }
+    		assert(prog.checkAllLocations());				
+	    	prog.verifyProgram(this);
+	    	assert(prog.checkAllDecorations());
+    		
     	} else {
     		
     		
@@ -201,13 +212,7 @@ public class DecacCompiler {
 		        LOG.info("Parsing failed");
 		        return true;
 		    }
-		    assert(prog.checkAllLocations());
-		
-		    if (this.getCompilerOptions().getVerification()) {
-		    	prog.verifyProgram(this);
-		    	assert(prog.checkAllDecorations());
-		    	return false;
-		    }				
+		    assert(prog.checkAllLocations());				
 	    	prog.verifyProgram(this);
 	    	assert(prog.checkAllDecorations());
 
