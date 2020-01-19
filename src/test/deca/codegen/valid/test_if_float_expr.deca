@@ -1,0 +1,15 @@
+// @result ok
+// @result ok
+{
+        if (2.34) {
+                println("ok");
+        } else {
+                println("ko");
+        }
+
+        if (0.0) {
+                println("ko");
+        } else {
+                println("ok");
+        }
+}

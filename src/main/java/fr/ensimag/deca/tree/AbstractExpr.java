@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -16,6 +17,7 @@ import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -150,7 +152,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void codeGenPrintHex(DecacCompiler compiler) {
     	codeGenInst(compiler);
     	compiler.addInstruction(new LOAD(Register.getR(Register.defaultRegisterIndex), Register.R1));
-    	codeGenPrintInstruction(compiler);
+    	codeGenPrintHexInstruction(compiler);
 	}
     
     protected void codeGenPrintHexInstruction(DecacCompiler compiler) {
@@ -163,7 +165,7 @@ public abstract class AbstractExpr extends AbstractInst {
     }
     
     protected void codeGenPrintInstruction(DecacCompiler compiler) {
-    	throw new UnsupportedOperationException("not yet implemented");
+    	compiler.addInstruction(new WINT());
     }
     
     protected void codeExpr(DecacCompiler compiler, int n) {
@@ -172,7 +174,11 @@ public abstract class AbstractExpr extends AbstractInst {
     
     protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
     	codeExpr(compiler, n);
-    	compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+    	if (getType().isFloat()) {
+    		compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+		} else {
+			compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+		}
     	if (b) {
 			compiler.addInstruction(new BNE(label));
 		}

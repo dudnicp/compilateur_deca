@@ -46,8 +46,8 @@ public abstract class AbstractPrint extends AbstractInst {
             				this.getLocation());
             	}
             } else {
-            	if (!(type.isFloat() || type.isString() || type.isInt() || type.isBoolean())) {
-            		throw new ContextualError("Arguments type must be String, int, float or boolean (3.31)", a.getLocation());
+            	if (!(type.isFloat() || type.isString() || type.isInt())) {
+            		throw new ContextualError("Arguments type must be String, int or float (3.31)", a.getLocation());
             	}
         	}
         }
@@ -60,9 +60,11 @@ public abstract class AbstractPrint extends AbstractInst {
                 a.codeGenPrintHex(compiler);
             }
 		}
-        for (AbstractExpr a : getArguments().getList()) {
-            a.codeGenPrint(compiler);
-        }
+    	else {
+    		for (AbstractExpr a : getArguments().getList()) {
+                a.codeGenPrint(compiler);
+            }
+		}
     }
 
     private boolean getPrintHex() {

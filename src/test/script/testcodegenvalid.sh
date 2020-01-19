@@ -22,7 +22,6 @@ if [ ! -f $a ]; then
 else
     result=$(ima $a)
     echo
-    echo "result : $result"
     rm $a
 fi
 

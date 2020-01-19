@@ -89,13 +89,13 @@ public class Main extends AbstractMain {
         
         // coding errors
         compiler.addLabel(Label.STACKOVERFLOW);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: stack overflow, exiting program")));
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Stack overflow, exiting program")));
         compiler.addInstruction(new ERROR());
         compiler.addLabel(Label.DIVBYZERO);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: division by zero, exiting program")));
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Division by zero, exiting program")));
         compiler.addInstruction(new ERROR());
         compiler.addLabel(Label.INVALIDINPUT);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: invalid input, exiting program")));
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Invalid input, exiting program")));
         compiler.addInstruction(new ERROR());
     }
     
