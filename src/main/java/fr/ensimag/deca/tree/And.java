@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
@@ -50,6 +51,7 @@ public class And extends AbstractOpBool {
     		getLeftOperand().codeCondExpr(compiler, false, endLabelAux, n);
 		}
     	getRightOperand().codeExpr(compiler, n);
+    	compiler.addInstruction(new BRA(endLabel));
     	compiler.addLabel(endLabelAux);
     	compiler.addInstruction(new POP(Register.getR(n)));
     	compiler.addLabel(endLabel);
