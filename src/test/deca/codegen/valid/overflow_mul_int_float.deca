@@ -1,0 +1,12 @@
+// @result 2392040039062.5
+/*
+    Description : Test sur la gestion de l'overflow sur la multiplication (int/float)
+
+    Résultat : à définir...
+
+*/
+
+{
+    println(4000000000*588.01);
+    //println("Test réussi : 2392040039062.5");
+}

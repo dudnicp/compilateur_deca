@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.NullType;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.VoidType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -32,21 +35,42 @@ public class Main extends AbstractMain {
 
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
+    	// envTypes is herited through **compiler**
+        // environment of superclass (for **bloc** only cf rule (3.18))
+        EnvironmentExp envExpSup = new EnvironmentExp(null);
+        // environment (of parameters for **bloc**) 
+        EnvironmentExp envExp = new EnvironmentExp(envExpSup);
+        //Class 0
+        Type voidType = compiler.getEnvTypes().getDefinitionFromName("void").getType();
         
-        EnvironmentExp envExpObject = new EnvironmentExp(null);
-        EnvironmentExp localEnv = new EnvironmentExp(envExpObject);
+        /* TODO: test if the parser init actually works
+        //Symbol trueBoolean = envExpObject.createSymbol("true");
+        //Symbol falseBoolean = envExpObject.createSymbol("false");
+
+        try {
+            envExpObject.declare(trueBoolean, new VariableDefinition(
+                    new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")),
+                    Location.BUILTIN));
+            envExpObject.declare(falseBoolean, new VariableDefinition(
+                    new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")),
+                    Location.BUILTIN));
+        } catch (DoubleDefException e) {
+            // this won't happen since we initialize the env_expr
+            e.printStackTrace();
+        }
+        */
         
-		declVariables.verifyListDeclVariable(compiler, localEnv , null);
-		
-		// we need to assign a returnType to the list of instructions
-		Type defaultType = compiler.getEnvTypes().getDefinitionFromName("null").getType();
-        insts.verifyListInst(compiler, localEnv, null, defaultType);
+        declVariables.verifyListDeclVariable(compiler, envExp , null);
+        
+        // we need to assign a returnType to the list of instructions
+        insts.verifyListInst(compiler, envExp, null, voidType);
     }
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
         // A FAIRE: traiter les déclarations de variables.
         compiler.addComment("Beginning of main instructions:");
+        declVariables.codeGenDecl(compiler);
         insts.codeGenListInst(compiler);
     }
     

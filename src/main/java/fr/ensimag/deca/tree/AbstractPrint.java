@@ -36,15 +36,13 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        // rule (3.31)
+        // rule (3.21) -- nothing to do for (3.26) and (3.27)
         for (AbstractExpr a : getArguments().getList()) {
-            if (a.getType() == null) {
-                // decorating here
-                // ie case: print(1+2+3)
-                a.verifyExpr(compiler, localEnv, currentClass);
-            }
-            if (!(a.getType().isFloat() || a.getType().isString() || a.getType().isInt())) {
-                throw new ContextualError("Arguments type must be String, int or float", a.getLocation());
+        	// rule (3.30)
+            Type type = a.verifyExpr(compiler, localEnv, currentClass);
+            a.setType(type); // this may be useless
+            if (!(type.isFloat() || type.isString() || type.isInt() || type.isBoolean())) {
+                throw new ContextualError("Arguments type must be String, int, float or boolean (3.31)", a.getLocation());
             }
         }
     }

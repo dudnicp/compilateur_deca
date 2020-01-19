@@ -1,0 +1,9 @@
+/*
+    Description: Test de la fonction printx sur un entier positif
+
+    Résultat : à définir...
+*/
+{
+    printx(10);
+    print(", Si 10 a été affiché en décimal, test réussi ! ");
+}

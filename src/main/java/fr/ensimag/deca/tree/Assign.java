@@ -38,17 +38,25 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+    	// rule (3.32)
     	Identifier lValue = (Identifier)this.getLeftOperand();
     	Type lValueType = lValue.verifyExpr(compiler, localEnv, currentClass);
-    	// return this or convfloat if needed
+    	// verifyRValue returns **this** or **convfloat(this)** if needed
     	this.setRightOperand(this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, lValueType));
-    	return this.getLeftOperand().getType();
+    	this.setType(lValueType);
+    	return this.getType();
     }
 
 
     @Override
     protected String getOperatorName() {
         return "=";
+    }
+    
+    @Override
+    protected void codeExpr(DecacCompiler compiler, int n) {
+    	getRightOperand().codeExpr(compiler, n);
+    	compiler.addInstruction(new STORE(Register.getR(n), getLeftOperand().daddr()));
     }
     
 }

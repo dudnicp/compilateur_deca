@@ -7,6 +7,10 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -42,7 +46,7 @@ public class Initialization extends AbstractInitialization {
     		throw new ContextualError("Initialization of type " + expression.getType()
     			+ " to variable of type " + t, expression.getLocation());
     	}
-
+    	this.setLocation(expression.getLocation());
     }
 
 
@@ -61,5 +65,11 @@ public class Initialization extends AbstractInitialization {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         expression.prettyPrint(s, prefix, true);
+    }
+    
+    @Override
+	public void codeExpr(DecacCompiler compiler, int n, DAddr addr) {
+    	expression.codeExpr(compiler, n);
+    	compiler.addInstruction(new STORE(Register.getR(n), addr));
     }
 }

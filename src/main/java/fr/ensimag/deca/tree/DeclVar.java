@@ -2,7 +2,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -38,27 +39,16 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-    	
-    	
-    	// decoration {name |-> (var,type)}
+    	// rule (3.17)
     	Type typeVerified = type.verifyType(compiler);
-    	
-    	if (typeVerified == null) {
-			
-		}
-    	type.setDefinition(new TypeDefinition(typeVerified, type.getLocation()));
-    	
-    	
        	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
-    	
- 
     	try {
     		// ajout de la variable dans l'environnement;
 			localEnv.declare(varName.getName(), varName.getExpDefinition());
 		} catch (fr.ensimag.deca.context.Environment.DoubleDefException e1) {
 			throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
-					localEnv.get(varName.getName()).getLocation(),
+					localEnv.get(varName.getName()).getLocation() + " (3.17)",
 					varName.getLocation());
 		}
     	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
@@ -88,4 +78,11 @@ public class DeclVar extends AbstractDeclVar {
         varName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    protected void codeGenDecl(DecacCompiler compiler) {
+    	DAddr addr = varName.daddr();
+    	initialization.codeExpr(compiler, Register.defaultRegisterIndex, addr);
+    }
+    
 }

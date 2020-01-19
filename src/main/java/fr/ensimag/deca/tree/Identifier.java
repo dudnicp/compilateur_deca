@@ -2,6 +2,8 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
+import javax.security.auth.x500.X500Principal;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -19,6 +21,14 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 /**
  * Deca Identifier
@@ -171,10 +181,11 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     	if (localEnv.get(this.getName()) == null) {
-    		throw new ContextualError("Undefined identifier " + this.getName(),
+    		throw new ContextualError("Undefined identifier " + this.getName() + " (0.1)",
     				this.getLocation());
     	} else {
     		Type definedType = localEnv.get(this.getName()).getType();
+    		this.setDefinition(localEnv.get(this.getName()));
     		this.setType(definedType);
     		return definedType;
     	}
@@ -190,14 +201,16 @@ public class Identifier extends AbstractIdentifier {
     	EnvironmentType envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(this.getName().toString());
     	if (def == null) {
-    		throw new ContextualError("Type " + this.getName() + " is not defined",
+    		throw new ContextualError("Type " + this.getName() + " is not defined (0.2)",
     				this.getLocation());
     	} else {
         	Type type = def.getType();
+        	this.setDefinition(def);
     		this.setType(type);
     	}
     	if (this.getType().isVoid()) {
-    		throw new ContextualError("Variable cannot be of type void", this.getLocation());
+    		throw new ContextualError("Identifier" + this.getName() + " cannot be of type void",
+    				this.getLocation());
     	} else {
     		return this.getType();
     	}
@@ -237,5 +250,31 @@ public class Identifier extends AbstractIdentifier {
             s.println();
         }
     }
-
+    
+    @Override
+    protected DVal dval() {
+    	return daddr();
+    }
+    
+    @Override
+    public DAddr daddr() {
+    	return Register.getAddr(name.toString());
+    }
+    
+    
+    @Override
+    protected void codeExpr(DecacCompiler compiler, int n) {
+    	compiler.addInstruction(new LOAD(this.daddr(), Register.getR(n)));
+    }
+    
+    @Override
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
+    	Type type = definition.getType();
+    	if (type.isInt() || type.isBoolean()) {
+			compiler.addInstruction(new WINT());
+		}
+    	else if (type.isFloat()) {
+			compiler.addInstruction(new WFLOAT());
+		}
+    }
 }

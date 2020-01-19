@@ -3,6 +3,8 @@ package fr.ensimag.deca;
 import java.io.File;
 import org.apache.log4j.Logger;
 
+import fr.ensimag.ima.pseudocode.Register;
+
 /**
  * Main class for the command-line Deca compiler.
  *
@@ -34,8 +36,7 @@ public class DecacMain {
         	throw new UnsupportedOperationException("decac -n not yet implemented");
         }
         if (options.getRegisters() != -1) {
-        	// -r
-        	throw new UnsupportedOperationException("decac -r not yet implemented");
+        	Register.setRMAX(options.getRegisters());
         }
         if (options.getDebug() != 0) {
         	// -d

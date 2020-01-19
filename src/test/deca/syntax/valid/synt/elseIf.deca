@@ -7,3 +7,4 @@ if (x) {
 	y = false;
 }
 }
+// @expected_tree X

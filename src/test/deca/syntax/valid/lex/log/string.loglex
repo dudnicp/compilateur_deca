@@ -1,3 +1,0 @@
-STRING: [@0,0:8='"Bonjour"',<48>,1:0]
-STRING: [@1,10:18='"Sa\"lut"',<48>,2:0]
-MULTI_LINE_STRING: [@2,20:29='"bon\njour"',<49>,3:0]

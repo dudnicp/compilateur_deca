@@ -1,3 +1,4 @@
+// @result Test réussi  si toute la phrase est sur la même ligne
 /*
     Description : test si l'appel "print()" fonctionne comme attendu
 

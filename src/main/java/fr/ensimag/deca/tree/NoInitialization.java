@@ -21,6 +21,7 @@ public class NoInitialization extends AbstractInitialization {
     protected void verifyInitialization(DecacCompiler compiler, Type t,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+    	// nothing to do -- rule (3.9)
     }
 
 
@@ -46,5 +47,4 @@ public class NoInitialization extends AbstractInitialization {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
     }
-
 }
