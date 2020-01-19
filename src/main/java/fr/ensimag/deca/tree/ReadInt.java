@@ -25,11 +25,6 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	Type type = this.verifyExpr(compiler, localEnv, currentClass);
-    	if (!type.isInt()) {
-    		throw new ContextualError("ReadInt must read int, not " + type + " (3.35)",
-    				this.getLocation());
-    	}
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("int").getType());
         return this.getType();
     }
