@@ -205,7 +205,7 @@ public class DecacCompiler {
 	    prog.verifyProgram(this);
 	    assert(prog.checkAllDecorations());
 	    
-		if (this.getCompilerOptions().getParse()) {
+		if (this.getCompilerOptions().getVerification()) {
 			// si -v alors on s'arrête après vérification de l'étape B
 			return false;
 		}
