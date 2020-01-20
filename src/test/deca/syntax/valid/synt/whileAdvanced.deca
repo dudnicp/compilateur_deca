@@ -18,4 +18,4 @@
 // @expected_tree                     `> ListInst [List with 1 elements]
 // @expected_tree                        []> [4, 12] Println
 // @expected_tree                            `> ListExpr [List with 1 elements]
-// @expected_tree                               []> [4, 20] StringLiteral ("bonjour")
+// @expected_tree                               []> [4, 20] StringLiteral (bonjour)

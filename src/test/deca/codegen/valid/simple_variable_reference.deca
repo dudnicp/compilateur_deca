@@ -1,3 +1,5 @@
+// @result h = 169857
+// @result c = -55844
 /**
     Description: test sur la correction de l'accès à une variable référencée sur la pile
 
@@ -13,6 +15,6 @@
     int g = 5987455;
     int h = 169857;
     int i = 14587;
-    println("h = ", h, "(169857) ?");
-    print("c = ", c, "(-55844) ?");
+    println("h = ", h);
+    print("c = ", c);
 }

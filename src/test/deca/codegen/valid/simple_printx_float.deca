@@ -1,9 +1,0 @@
-/*
-    Description: Test de la fonction printx sur un flottant positif
-
-    Résultat : à définir...
-*/
-{
-    printx(117.5);
-    print(", Si 0x42eb0000 a été affiché (hexa de la val 117.5), test réussi ! ");
-}

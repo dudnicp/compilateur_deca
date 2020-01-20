@@ -1,9 +1,0 @@
-/**
-    Description: test sur la gestion d'erreur sur la conversion d'un flottant négatif en dehors des bornes d'un entier
-
-    Résultat : à définir...
-*/
-{
-    int x = (float)(40000000000);
-    println("Test échoué (cf p99 paragraphe 11.1 ligne 2)");
-}
