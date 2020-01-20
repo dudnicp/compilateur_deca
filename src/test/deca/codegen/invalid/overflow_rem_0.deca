@@ -1,4 +1,4 @@
-// @result ERROR: REMINDER OVERFLOW
+// @result Error: Overflow during arithmetic operation
 /*
     Description : Test sur la gestion du modulo par 0
 
