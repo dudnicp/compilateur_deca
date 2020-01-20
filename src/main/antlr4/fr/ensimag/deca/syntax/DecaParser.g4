@@ -533,7 +533,6 @@ class_decl
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
-    	$tree = new Identifier(tableSymbol.create($ident.getText()));
         }
     | /* epsilon */ {
         }

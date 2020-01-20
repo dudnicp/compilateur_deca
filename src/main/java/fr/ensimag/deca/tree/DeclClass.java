@@ -13,7 +13,18 @@ import fr.ensimag.deca.tools.IndentPrintStream;
  * @date 01/01/2020
  */
 public class DeclClass extends AbstractDeclClass {
-
+	private AbstractIdentifier className;
+	private AbstractIdentifier superClassName;
+	private ListDeclVar fields;
+	private ListDeclMethod methods;
+	
+	public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName,
+			ListDeclVar fields, ListDeclMethod methods) {
+		this.className = className;
+		this.superClassName = superClassName;			
+		this.fields = fields;
+		this.methods = methods;
+	}
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class { ... A FAIRE ... }");
