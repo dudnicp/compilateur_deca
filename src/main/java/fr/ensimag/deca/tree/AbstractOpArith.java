@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
 
 import org.apache.log4j.Logger;
 
@@ -47,5 +49,10 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     				this.getLocation());
     	}
     	return this.getType();
+    }
+    
+    @Override
+    protected void codeCMP(DecacCompiler compiler, int n) {
+    	getLeftOperand().codeCMP(compiler, n);
     }
 }

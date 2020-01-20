@@ -1,7 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
@@ -46,5 +48,9 @@ public class ConvFloat extends AbstractUnaryExpr {
     protected void codeGenPrintInstruction(DecacCompiler compiler) {
     	compiler.addInstruction(new WFLOAT());
     }
-
+    
+     @Override
+    protected void codeCMP(DecacCompiler compiler, int n) {
+    	 compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+    }
 }

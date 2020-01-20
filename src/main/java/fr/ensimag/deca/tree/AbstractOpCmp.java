@@ -58,4 +58,8 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     	compiler.addInstruction(new CMP(op, register));
     }
     
+    @Override
+    protected void codeCMP(DecacCompiler compiler, int n) {
+    	// empty : the comparaison in a comparaison operation is already done in the mnemo fucntion, used by codeExpr
+    }
 }

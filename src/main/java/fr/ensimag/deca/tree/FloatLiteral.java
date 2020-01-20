@@ -9,8 +9,10 @@ import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
@@ -57,6 +59,11 @@ public class FloatLiteral extends AbstractExpr {
 	protected void codeExpr(DecacCompiler compiler, int registerIndex) {
     	compiler.addInstruction(new LOAD(new ImmediateFloat(value), Register.getR(registerIndex)));
 	}
+    
+    @Override
+    protected void codeCMP(DecacCompiler compiler, int n) {
+    	compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+    }
     
     @Override
     protected DVal dval() {
