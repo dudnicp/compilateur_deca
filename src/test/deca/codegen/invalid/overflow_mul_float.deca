@@ -1,4 +1,4 @@
-// @result ERROR: FLOAT MULTIPLY OVERFLOW
+// @result Error: Overflow during arithmetic operation
 /*
     Description : Test sur la gestion de l'overflow sur la multiplication de float
 

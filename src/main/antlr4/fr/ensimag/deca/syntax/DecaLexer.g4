@@ -84,7 +84,9 @@ FLOAT: FLOATDEC | FLOATHEX;
 // Strings
 fragment STRING_CAR: ~('"' | '\\' | '\n');
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')* '"'
-		{setText(getText().substring(1, getText().length()-1));}; // remove quotes
+		{setText(getText().substring(1, getText().length()-1));
+		 setText(getText().replaceAll("\\\\\"", "\""));
+		}; // remove quotes
 MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"';
 
 // Comments
