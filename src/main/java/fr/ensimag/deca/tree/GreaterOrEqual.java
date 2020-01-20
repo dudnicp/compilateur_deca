@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BGE;
 import fr.ensimag.ima.pseudocode.instructions.BLT;
 import fr.ensimag.ima.pseudocode.instructions.SGE;
@@ -26,23 +27,20 @@ public class GreaterOrEqual extends AbstractOpIneq {
         return ">=";
     }
 
-
 	@Override
-	protected void mnemo(DecacCompiler compiler, DVal op,
-			GPRegister register) {
-		super.mnemo(compiler, op, register);
-		compiler.addInstruction(new SGE(register));		
-	}
-	
-	@Override
-	protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
-		super.codeCondExpr(compiler, b, label, n);
+	protected void codeBranch(DecacCompiler compiler, boolean b, Label label) {
 		if (b) {
 			compiler.addInstruction(new BGE(label));
 		}
 		else {
 			compiler.addInstruction(new BLT(label));
 		}
+	}
+	
+	@Override
+	protected void codeAssign(DecacCompiler compiler, int n) {
+		codeExpr(compiler, n);
+		compiler.addInstruction(new SGE(Register.getR(n)));		
 	}
 
 }

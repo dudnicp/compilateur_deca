@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
@@ -168,19 +169,26 @@ public abstract class AbstractExpr extends AbstractInst {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
     
-    protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
-    	codeExpr(compiler, n);
-    	if (getType().isFloat()) {
-    		compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
-		} else {
-			compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
-		}
+    protected void codeCMP(DecacCompiler compiler, int n) {
+    	throw new UnsupportedOperationException("not yet implemented");
+	}
+    
+    protected void codeAssign(DecacCompiler compiler, int n) {
+		codeExpr(compiler, n);
+	}
+    
+    protected void codeBranch(DecacCompiler compiler, boolean b, Label label) {
     	if (b) {
 			compiler.addInstruction(new BNE(label));
+		} else {
+			compiler.addInstruction(new BEQ(label));
 		}
-    	else {
-			compiler.addInstruction(new BEQ(label));	
-		}
+	}
+    
+    protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
+    	codeExpr(compiler, n);
+    	codeCMP(compiler, n);
+    	codeBranch(compiler, b, label);
     }
     
     protected void codeCond(DecacCompiler compiler, boolean b, Label label) {

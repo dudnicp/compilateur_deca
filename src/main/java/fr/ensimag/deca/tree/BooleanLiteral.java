@@ -9,10 +9,12 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
@@ -74,7 +76,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
     
     @Override
-    protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
+    protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
     	if ((value && b) || (!value && !b)) {
 			compiler.addInstruction(new BRA(label));
 		}
