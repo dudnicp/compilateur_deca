@@ -1,4 +1,4 @@
-// @expected_output deca:8:8:
+// @expected_output deca:8:19: missing IDENT at '='
 /*
     Description : Test sur un déclaration de variable avec un nom réservé
     

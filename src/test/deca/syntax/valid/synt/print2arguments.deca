@@ -8,5 +8,5 @@ println("Hello", "World");
 // @expected_tree       `> ListInst [List with 1 elements]
 // @expected_tree          []> [2, 0] Println
 // @expected_tree              `> ListExpr [List with 2 elements]
-// @expected_tree                 []> [2, 8] StringLiteral ("Hello")
-// @expected_tree                 []> [2, 17] StringLiteral ("World")
+// @expected_tree                 []> [2, 8] StringLiteral (Hello)
+// @expected_tree                 []> [2, 17] StringLiteral (World)
