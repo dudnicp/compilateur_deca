@@ -131,11 +131,11 @@ public abstract class AbstractExpr extends AbstractInst {
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     	Type type = this.verifyExpr(compiler, localEnv, currentClass);
-    	this.setType(type); // this may be useless
-    	if (!(this.getType().isBoolean())) {
-    		throw new ContextualError("Condition must be of type boolean (3.29)",
+    	if (!(type.isBoolean() || type.isInt() || type.isFloat())) {
+    		throw new ContextualError("Condition must be of type boolean int or float",
     				this.getLocation());
     	}
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("boolean").getType());
     }
 
     /**
