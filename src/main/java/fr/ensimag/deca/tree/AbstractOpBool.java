@@ -27,12 +27,12 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     	Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
     	Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
     	if (!type1.isBoolean()) {
-    		throw new ContextualError("Invalid type for left operand: " 
-    				+ type1 + " instead of boolean (3.33)",
+    		throw new ContextualError("Invalid type for boolean operation " + this.getOperatorName() +
+    				": left operand is of type " + type1 + " instead of boolean (3.33)",
     				this.getLeftOperand().getLocation());
     	} else if (!type2.isBoolean()) {
-    		throw new ContextualError("Invalid type for right operand: " 
-    				+ type2 + " instead of boolean (3.33)",
+    		throw new ContextualError("Invalid type for boolean operation " + this.getOperatorName() +
+    				": right operand is of type " + type2 + " instead of boolean (3.33)",
     				this.getRightOperand().getLocation());
     	}
     	this.setType(this.getLeftOperand().getType());
