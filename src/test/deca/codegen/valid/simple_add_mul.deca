@@ -1,3 +1,4 @@
+// @result 49
 /*
     Description: Vérification de la correction du résultat d'additions / multiplications
 
@@ -7,5 +8,5 @@
 
 {
     println(-5*2+4*7*2+3);
-    println("Si le résultat affiché ci-dessus est 49, test réussi !");
+    //println("Si le résultat affiché ci-dessus est 49, test réussi !");
 }
