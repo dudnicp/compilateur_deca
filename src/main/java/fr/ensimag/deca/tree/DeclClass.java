@@ -21,7 +21,9 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	// TODO
+    	// implement class in envTypes
+    	
     }
 
     @Override

@@ -36,7 +36,7 @@ public class Program extends AbstractProgram {
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
     	// rule (3.1)
-        //classes.verifyListClass(compiler);
+        classes.verifyListClass(compiler);
     	// the EnvironmentType attribute of compiler is updated
     	// after the first pass (2.1)
         main.verifyMain(compiler);
