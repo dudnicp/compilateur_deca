@@ -40,15 +40,22 @@ public class StringLiteral extends AbstractStringLiteral {
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("String").getType());
     	return this.getType();
     }
+    
+    @Override
+    protected void codeExpr(DecacCompiler compiler, int n) {
+    	// pass, nothing to code
+    }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
         compiler.addInstruction(new WSTR(new ImmediateString(value)));
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
+    	s.print('\"');
         s.print(this.getValue());
+        s.print('\"');
     }
 
     @Override

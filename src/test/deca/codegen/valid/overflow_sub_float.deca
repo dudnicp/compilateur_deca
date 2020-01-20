@@ -1,0 +1,11 @@
+// @result -1.00000e+10
+/*
+    Description : Test sur la gestion de l'overflow sur la soustraction de float
+
+    Résultat : à définir...
+
+*/
+{
+    println(-5000000000.5-5000000000.1);
+    //println("Test reussi : -10000000000");
+}

@@ -1,9 +1,11 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.CodeTSTO;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
@@ -48,11 +50,14 @@ public class Or extends AbstractOpBool {
     	else {
     		compiler.addInstruction(new PUSH(Register.getR(n)));
     		getLeftOperand().codeCondExpr(compiler, true, endLabel, n);
-			compiler.addInstruction(new POP(Register.getR(n)));
 		}
     	getRightOperand().codeExpr(compiler, n);
-    	compiler.addLabel(endLabelAux);
-    	compiler.addInstruction(new POP(Register.getR(n)));
+    	compiler.addInstruction(new BRA(endLabel));
+    	if (n >= Register.getRMAX()) {
+    		compiler.addLabel(endLabelAux);
+        	compiler.addInstruction(new POP(Register.getR(n)));	
+        	CodeTSTO.decCurrentStackSize();
+		}
     	compiler.addLabel(endLabel);
 	}
 

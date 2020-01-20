@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -23,7 +25,7 @@ public class ConvFloat extends AbstractUnaryExpr {
             ClassDefinition currentClass) {
     	// set type := float decoration on **operand**
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("float").getType());
-    	return this.getOperand().getType();
+    	return this.getType();
 
     	}
 
@@ -36,7 +38,13 @@ public class ConvFloat extends AbstractUnaryExpr {
     
     @Override
 	protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new FLOAT(getOperand().dval(), Register.getR(n)));
+    	getOperand().codeExpr(compiler, n);
+    	compiler.addInstruction(new FLOAT(Register.getR(n), Register.getR(n)));
 	}
+    
+    @Override
+    protected void codeGenPrintInstruction(DecacCompiler compiler) {
+    	compiler.addInstruction(new WFLOAT());
+    }
 
 }

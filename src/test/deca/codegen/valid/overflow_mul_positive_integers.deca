@@ -1,3 +1,4 @@
+// @result 524304
 /*
     Description : Test sur la gestion de l'overflow d'une multiplication d'entiers positifs
                     ( La spécification indique que l'opération doit être faite modulo 2^32)
@@ -6,5 +7,5 @@
 */
 {
     println(65540*65540);
-    println("Si il est affiché au dessus 524304, test réussi !");
+    //println("Si il est affiché au dessus 524304, test réussi !");
 }

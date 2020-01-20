@@ -4,19 +4,13 @@ cd "$(dirname "$0")"/../../.. || exit 1
 PATH=./src/test/script/launchers:"$PATH"
 
 f=$1
-catPgm=$2
-catEoutp=$3
+catEoutp=$2
 
 echo -en "$f"
-if [[ $catPgm == "true" ]];
-then
-    echo
-    cat $f
-fi
 eoutput=$(test_context $f 2>&1 > /dev/null | head -n 1)
 if [[ $catEoutp == "true" ]];
 then
-    echo $eoutput
+    echo "eoutput $eoutput"
 fi
 y=$(grep @expected_output $f)
 y=${y:20}
@@ -31,5 +25,7 @@ else
 fi
 else
     echo -e " \e[91mfailed"
+    echo $y
+    echo $eoutput
 fi
 echo -e "\e[39m<<<================================>>>"

@@ -15,11 +15,9 @@ import fr.ensimag.deca.tree.AbstractLValue;
 public class Register extends DVal {
 	
 	private static final GPRegister[] R = initRegisters();
-	
-	private static Map<String, DAddr> identifierMap = new HashMap<String, DAddr>();
-	
+		
 	private static int RMAX = 15;
-	private static int nextAddr = 3;
+	private static int nextAddr = 1;
 	
 	public static final int defaultRegisterIndex = 2;
 	
@@ -32,12 +30,10 @@ public class Register extends DVal {
 		RMAX = n;
 	}
 	
-	public static DAddr getAddr(String name) {
-		if (!identifierMap.containsKey(name)) {
-			identifierMap.put(name.toString(), new RegisterOffset(nextAddr, GB)); // variante sans objet;
-			nextAddr++;
-		}
-		return identifierMap.get(name);
+	public static DAddr getNewAddr() {
+		DAddr retAddr = new RegisterOffset(nextAddr, GB); // variante sans objet;
+		nextAddr++;
+		return retAddr;
 	}
 	
     private String name;

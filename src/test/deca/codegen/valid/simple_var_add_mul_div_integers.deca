@@ -1,3 +1,4 @@
+// @result 49
 /*
     Description : test sur l'addition, multiplication, et division de variables
 
@@ -10,8 +11,7 @@
     int c = 4;
     int d = 7;
     int e = 2;
-    int f = 3
+    int f = 3;
 
     println(a*b+c*d*e+f);
-    println("Si le résultat affiché ci-dessus est 49, test réussi !");
 }

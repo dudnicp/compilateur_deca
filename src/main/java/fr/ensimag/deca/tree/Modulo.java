@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.REM;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -23,7 +25,15 @@ public class Modulo extends AbstractOpArith {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+    	Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+    	if (!(type1.isInt() && type2.isInt())) {
+    		throw new ContextualError("Modulo operation is not supported for types "
+    				+ type1 + " and " + type2 + " (3.51)",
+    				this.getLocation());
+    	}
+    	this.setType(type1);
+    	return this.getType();
     }
 
 
@@ -36,6 +46,7 @@ public class Modulo extends AbstractOpArith {
 	protected void mnemo(DecacCompiler compiler, DVal op,
 			GPRegister register) {
 		compiler.addInstruction(new REM(op, register));
+		compiler.addInstruction(new BOV(Label.OVERFLOW));
 	}
 
 }

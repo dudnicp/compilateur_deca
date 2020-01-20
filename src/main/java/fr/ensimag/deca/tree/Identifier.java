@@ -181,7 +181,7 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     	if (localEnv.get(this.getName()) == null) {
-    		throw new ContextualError("Undefined identifier " + this.getName(),
+    		throw new ContextualError("Undefined identifier " + this.getName() + " (0.1)",
     				this.getLocation());
     	} else {
     		Type definedType = localEnv.get(this.getName()).getType();
@@ -201,7 +201,7 @@ public class Identifier extends AbstractIdentifier {
     	EnvironmentType envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(this.getName().toString());
     	if (def == null) {
-    		throw new ContextualError("Type " + this.getName() + " is not defined",
+    		throw new ContextualError("Type " + this.getName() + " is not defined (0.2)",
     				this.getLocation());
     	} else {
         	Type type = def.getType();
@@ -209,7 +209,8 @@ public class Identifier extends AbstractIdentifier {
     		this.setType(type);
     	}
     	if (this.getType().isVoid()) {
-    		throw new ContextualError("Variable cannot be of type void", this.getLocation());
+    		throw new ContextualError("Type cannot be of type void (3.17)",
+    				this.getLocation());
     	} else {
     		return this.getType();
     	}
@@ -252,18 +253,20 @@ public class Identifier extends AbstractIdentifier {
     
     @Override
     protected DVal dval() {
-    	return daddr();
+    	return this.daddr();
     }
     
-    @Override
-    public DAddr daddr() {
-    	return Register.getAddr(name.toString());
-    }
+    protected DAddr daddr() {
+    	if (definition.isExpression()) {
+			return getExpDefinition().getOperand();
+		}
+    	return null;
+	}
     
     
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(this.daddr(), Register.getR(n)));
+    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
     }
     
     @Override

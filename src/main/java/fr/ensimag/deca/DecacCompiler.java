@@ -82,6 +82,10 @@ public class DecacCompiler {
     public void add(AbstractLine line) {
         program.add(line);
     }
+    
+    public void addFirst(Instruction i) {
+    	program.addFirst(i);
+    }
 
     /**
      * @see fr.ensimag.ima.pseudocode.IMAProgram#addComment(java.lang.String)
@@ -182,54 +186,47 @@ public class DecacCompiler {
             PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
     	
-    	if (this.getCompilerOptions().getParse()) {
-    		System.out.println("-p reached, begining step A");
-    		AbstractProgram prog = doLexingAndParsing(sourceName, err);
-    		System.out.println("step A complete, output :");
-    		System.out.println(prog.prettyPrint());
-    		System.out.println("starting decompiling");
+    	    	
+	    AbstractProgram prog = doLexingAndParsing(sourceName, err);
+	
+	    if (prog == null) {
+	        LOG.info("Parsing failed");
+	        return true;
+	    }
+	    assert(prog.checkAllLocations());
+	    
+	    if (this.getCompilerOptions().getParse()) {
+	    	// si -p alors on s'arrête après la décompilation de l'étape A
     		String output = prog.decompile();
-    		System.out.println("decompiler output BEGIN");
     		System.out.println(output);
-    		System.out.println("END");
-    	} else {
-    		
-    		
-		    AbstractProgram prog = doLexingAndParsing(sourceName, err);
-		
-		    if (prog == null) {
-		        LOG.info("Parsing failed");
-		        return true;
-		    }
-		    assert(prog.checkAllLocations());
-		
-		    if (this.getCompilerOptions().getVerification()) {
-		    	prog.verifyProgram(this);
-		    	assert(prog.checkAllDecorations());
-		    	return false;
-		    }				
-	    	prog.verifyProgram(this);
-	    	assert(prog.checkAllDecorations());
-
-
-		    addComment("start main program");
-		    prog.codeGenProgram(this);
-		    addComment("end main program");
-		    LOG.debug("Generated assembly code:" + nl + program.display());
-		    LOG.info("Output file assembly file is: " + destName);
-		
-		    FileOutputStream fstream = null;
-		    try {
-		        fstream = new FileOutputStream(destName);
-		    } catch (FileNotFoundException e) {
-		        throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
-		    }
-		
-		    LOG.info("Writing assembler file ...");
-		
-		    program.display(new PrintStream(fstream));
-		    LOG.info("Compilation of " + sourceName + " successful.");
+    		return false;
     	}
+	    	
+	    prog.verifyProgram(this);
+	    assert(prog.checkAllDecorations());
+	    
+		if (this.getCompilerOptions().getVerification()) {
+			// si -v alors on s'arrête après vérification de l'étape B
+			return false;
+		}
+	
+	    addComment("start main program");
+	    prog.codeGenProgram(this);
+	    addComment("end main program");
+	    LOG.debug("Generated assembly code:" + nl + program.display());
+	    LOG.info("Output file assembly file is: " + destName);
+	
+	    FileOutputStream fstream = null;
+	    try {
+	        fstream = new FileOutputStream(destName);
+	    } catch (FileNotFoundException e) {
+	        throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
+	    }
+	
+	    LOG.info("Writing assembler file ...");
+	
+	    program.display(new PrintStream(fstream));
+	    LOG.info("Compilation of " + sourceName + " successful.");
 	    return false;
     }
 

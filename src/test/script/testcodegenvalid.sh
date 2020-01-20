@@ -4,30 +4,27 @@ cd "$(dirname "$0")"/../../.. || exit 1
 PATH=./src/test/script/launchers:"$PATH"
 
 f=$1
-catPgm=$2
-catAss=$3
+catAss=$2
 
 echo -en "$f"
 a=${f:: -5}.ass
 decac $f > /dev/null
-if [[ $catPgm == "true" ]];
-then
-    echo
-    cat $f
-fi
 if [[ $catAss == "true" ]];
 then
     echo
     cat $a
 fi
+
 if [ ! -f $a ]; then
     echo -e "\e[93mFichier .ass non généré."
     echo -en "\e[39m"
+    exit 1
 else
     result=$(ima $a)
+    echo
     rm $a
 fi
-result=$(ima $a)
+
 expresult=$(grep @result $f | cut -c12-)
 if [[ $result == $expresult ]];
 then

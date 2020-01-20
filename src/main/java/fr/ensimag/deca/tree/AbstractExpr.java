@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -16,6 +17,8 @@ import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -94,19 +97,15 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-    	this.verifyExpr(compiler, localEnv, currentClass); // decorate this with its type
-
-    	if (this.getType() == null || expectedType == null) { // programmation defensive
-    		throw new ContextualError("A type is null, decoration required here", this.getLocation());
-    	}
-    	else if (this.getType().isInt() && expectedType.isFloat()) {
+    	Type type2 = this.verifyExpr(compiler, localEnv, currentClass);
+    	if (type2.isInt() && expectedType.isFloat()) {
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);
     		return convFloat;
     	}
-    	else if (!this.getType().sameType(expectedType)) {
+    	else if (!type2.sameType(expectedType)) {
     		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
-    		+ expectedType, this.getLocation());
+    		+ expectedType + " (3.28)", this.getLocation());
     	}
     	return this;
     }
@@ -116,16 +115,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-    	// A FAIRE : lancer les ContextualError a définir
-    	Type verifiedType = this.verifyExpr(compiler, localEnv, currentClass);
-    	if (returnType == null) { // programmation defensive
-        	this.setType(compiler.getEnvTypes().getDefinitionFromName("void").getType());
-		}
-    	if (verifiedType == null) { // programmation defensive
-    		this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
-    	} else {
-    		this.setType(verifiedType);
-    	}
+    	Type type = this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
     }
 
     /**
@@ -140,11 +130,12 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	this.setType(this.verifyExpr(compiler, localEnv, currentClass));
-    	if (!(this.getType().isBoolean() || this.getType().isInt() || this.getType().isFloat())) {
-    		throw new ContextualError("Condition must be of type boolean, int or float",
+    	Type type = this.verifyExpr(compiler, localEnv, currentClass);
+    	if (!(type.isBoolean() || type.isInt() || type.isFloat())) {
+    		throw new ContextualError("Condition must be of type boolean int or float",
     				this.getLocation());
     	}
+    	this.setType(compiler.getEnvTypes().getDefinitionFromName("boolean").getType());
     }
 
     /**
@@ -157,6 +148,12 @@ public abstract class AbstractExpr extends AbstractInst {
     	compiler.addInstruction(new LOAD(Register.getR(Register.defaultRegisterIndex), Register.R1));
     	codeGenPrintInstruction(compiler);
     }
+    
+    protected void codeGenPrintHex(DecacCompiler compiler) {
+    	codeGenInst(compiler);
+    	compiler.addInstruction(new LOAD(Register.getR(Register.defaultRegisterIndex), Register.R1));
+    	compiler.addInstruction(new WFLOATX());
+	}
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
@@ -164,7 +161,7 @@ public abstract class AbstractExpr extends AbstractInst {
     }
     
     protected void codeGenPrintInstruction(DecacCompiler compiler) {
-    	throw new UnsupportedOperationException("not yet implemented");
+    	compiler.addInstruction(new WINT());
     }
     
     protected void codeExpr(DecacCompiler compiler, int n) {
@@ -173,7 +170,11 @@ public abstract class AbstractExpr extends AbstractInst {
     
     protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
     	codeExpr(compiler, n);
-    	compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+    	if (getType().isFloat()) {
+    		compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+		} else {
+			compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+		}
     	if (b) {
 			compiler.addInstruction(new BNE(label));
 		}
