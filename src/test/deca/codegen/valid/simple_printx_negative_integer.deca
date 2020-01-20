@@ -1,3 +1,4 @@
+// @result -589647
 /*
     Description: Test de la fonction printx sur un entier négatif
 
@@ -5,5 +6,5 @@
 */
 {
     printx(-589647);
-    print(", Si -589647 a été affiché en décimal, test réussi ! ");
+    //print(", Si -589647 a été affiché en décimal, test réussi ! ");
 }
