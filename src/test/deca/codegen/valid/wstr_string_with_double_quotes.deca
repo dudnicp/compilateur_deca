@@ -1,4 +1,4 @@
-// @result Chaine valide en "Deca", test réussi si le mot Deca affiché avant est entre double quotes
+// @result Chaine valide en "Deca", test reussi si le mot Deca affiche avant est entre double quotes
 /*
     Description: Affichage d'une chaine de caractère contenant des "
 
@@ -6,5 +6,5 @@
 */
 
 {
-    println("Chaine valide en \\"Deca\\", test réussi si le mot Deca affiché avant est entre double quotes");
+    println("Chaine valide en \"Deca\", test reussi si le mot Deca affiche avant est entre double quotes");
 }

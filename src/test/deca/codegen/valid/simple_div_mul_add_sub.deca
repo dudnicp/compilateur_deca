@@ -1,3 +1,4 @@
+// @result 7172
 /*
     Description: Vérification de la correction du résultat de divisions, additions, soustractions et multiplications
 
@@ -7,5 +8,5 @@
 
 {
     println(14387/529*-8-527+3612*5/2);
-    println("Si le résultat affiché ci-dessus est 7172, test réussi !");
+    //println("Si le résultat affiché ci-dessus est 7172, test réussi !");
 }

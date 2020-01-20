@@ -1,3 +1,4 @@
+// @result ERROR: FLOAT CAST TO INT OVERFLOW
 /**
     Description: test sur la gestion d'erreur sur la conversion d'un flottant négatif en dehors des bornes d'un entier
 
