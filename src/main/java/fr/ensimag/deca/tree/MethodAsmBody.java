@@ -2,7 +2,9 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public class MethodAsmBody extends AbstractMethodBody {
 
@@ -25,9 +27,9 @@ public class MethodAsmBody extends AbstractMethodBody {
 	}
 
 	@Override
-	protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) {
+	protected void verifyMethodBody(DecacCompiler compiler, Symbol currentClass) {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 }

@@ -7,6 +7,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public abstract class AbstractDeclField extends Tree {
 
@@ -22,10 +23,12 @@ public abstract class AbstractDeclField extends Tree {
      * @param currentClass 
      *          corresponds to the "class" attribute (null in the main bloc).
      */    
-    protected abstract void verifyDeclField(DecacCompiler compiler, Symbol currentClass,
+    protected void verifyDeclField(DecacCompiler compiler, Symbol currentClass,
     		Symbol superClass)
-            throws ContextualError;
+            throws ContextualError {
+	}
     
     protected abstract void codeGenDeclField(DecacCompiler compiler);
+
     
 }
