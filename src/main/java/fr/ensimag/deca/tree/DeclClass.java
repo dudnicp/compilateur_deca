@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -17,6 +18,7 @@ public class DeclClass extends AbstractDeclClass {
 	private AbstractIdentifier superClassName;
 	private ListDeclField fields;
 	private ListDeclMethod methods;
+	private Symbol classSymbol;
 	
 	public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName,
 			ListDeclField fields, ListDeclMethod methods) {
@@ -35,12 +37,12 @@ public class DeclClass extends AbstractDeclClass {
     	/*
     	EnvironmentType envTypes = compiler.getEnvTypes();
     	try {
-    		Symbol classSymbol = envTypes.createSymbol(name);
+    		this.classSymbol = envTypes.createSymbol(name);
     		if (envTypes.getDefinitionFromName(superclass) == null) {
     			throw new ContextualError("Superclass " + superclass + " is not defined", this.getLocation());
     		}
-    		ClassType classType = new ClassType(classSymbol, name.getLocation(), superclass);
-    		envTypes.declare(classSymbol, classType.getDefinition());
+    		ClassType classType = new ClassType(this.classSymbol, name.getLocation(), superclass);
+    		envTypes.declare(this.classSymbol, classType.getDefinition());
     	} catch (DoubleDefException e) {
     		throw new ContextualError("Class " + name + " is already defined", this.getLocation());
     	}
@@ -50,11 +52,9 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-    	/*
-    	for (AbstractDeclVar field: getFields()) {
-    		field.verifyDeclField(compiler, name, superClass);
-    	}
-    	*/
+    	
+    	fields.verifyListDeclField(compiler, this.classSymbol, this.superClassSymbol);
+    	methods.verifyListDeclMethod(compiler, this.classSymbol);
     }
     
     @Override

@@ -12,8 +12,11 @@ public class ListDeclMethod extends TreeList<DeclMethod>{
 		
 	}
 	
-	public void verifyDeclMethod(DecacCompiler compiler,
-			ClassDefinition currentClass) {
+	public void verifyListDeclMethod(DecacCompiler compiler,
+			Symbol currentClass) {
+		for (DeclMethod m: this.getList()) {
+			m.verifyDeclMethod(compiler, currentClass);
+		}
 	}
 
 }
