@@ -15,11 +15,11 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 public class DeclClass extends AbstractDeclClass {
 	private AbstractIdentifier className;
 	private AbstractIdentifier superClassName;
-	private ListDeclVar fields;
+	private ListDeclField fields;
 	private ListDeclMethod methods;
 	
 	public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName,
-			ListDeclVar fields, ListDeclMethod methods) {
+			ListDeclField fields, ListDeclMethod methods) {
 		this.className = className;
 		this.superClassName = superClassName;			
 		this.fields = fields;
