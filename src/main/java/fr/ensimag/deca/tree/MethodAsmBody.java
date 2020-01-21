@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-public class MethodAsmBody extends Tree {
+public class MethodAsmBody extends AbstractMethodBody {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
@@ -24,4 +24,10 @@ public class MethodAsmBody extends Tree {
 
 	}
 
+	@Override
+	protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

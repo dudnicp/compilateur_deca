@@ -55,7 +55,7 @@ public class Assign extends AbstractBinaryExpr {
      
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
-    	getRightOperand().codeExpr(compiler, n);
+    	getRightOperand().codeAssign(compiler, n);
     	compiler.addInstruction(new STORE(Register.getR(n), getLeftOperand().daddr()));
     }
     

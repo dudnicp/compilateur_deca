@@ -23,8 +23,12 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -267,6 +271,15 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
     	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+    }
+    
+    @Override
+    protected void codeCMP(DecacCompiler compiler, int n) {
+    	if (getDefinition().getType().isFloat()) {
+			compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+		} else {
+			compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+		}
     }
     
     @Override

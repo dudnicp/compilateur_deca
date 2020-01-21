@@ -43,8 +43,8 @@ public class Not extends AbstractUnaryExpr {
     }
     
     @Override
-	protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
-    	getOperand().codeCond(compiler, !b, label);
+	protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
+    	getOperand().codeCondExpr(compiler, !b, label, n);
 	}
     
     @Override

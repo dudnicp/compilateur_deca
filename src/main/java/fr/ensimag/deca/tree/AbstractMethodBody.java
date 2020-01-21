@@ -2,19 +2,14 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
-import org.apache.commons.lang.Validate;
-
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-public class DeclParam extends Tree {
+public abstract class AbstractMethodBody extends Tree {
 
-	private AbstractIdentifier paramType;
-	
-	public DeclParam(AbstractIdentifier paramType) {
-		Validate.notNull(paramType);
-		this.paramType = paramType;
+	public AbstractMethodBody() {
+		// TODO Auto-generated constructor stub
 	}
+
 	@Override
 	public void decompile(IndentPrintStream s) {
 		// TODO Auto-generated method stub
@@ -33,8 +28,7 @@ public class DeclParam extends Tree {
 
 	}
 	
-	public Type verifyDeclParam(DecacCompiler compiler) {
-		// synthetise la signature
-	}
+	protected abstract void verifyMethodBody(DecacCompiler compiler,
+			ClassDefinition currentClass);
 
 }

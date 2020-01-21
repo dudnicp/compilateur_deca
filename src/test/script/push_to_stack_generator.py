@@ -1,7 +1,5 @@
 #!usr/bin/python3
 
-
-
 def add_and_mult(n):
     if n == 0:
         return "1+1"
