@@ -444,7 +444,7 @@ codegenValid () {
     displayProg "$1"
     tmp="$1"
     a=${tmp:: -5}.ass
-    decac $1 > /dev/null
+    decac $1 > /dev/null 2>&1
 
     if [[ $catAss == "true" ]];
     then
@@ -453,7 +453,7 @@ codegenValid () {
     fi
 
     if [ ! -f $a ]; then
-        yellow "Fichier .ass non généré."
+        yellow "Fichier .ass non généré $1"
         exitUn
     else
         result=$(ima $a)
