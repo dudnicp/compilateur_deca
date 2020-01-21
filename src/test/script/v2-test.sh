@@ -64,91 +64,90 @@ fileCategory="none"
 
 for arg in $@
 do
-    if [[ $arg == "lex" ]];
+    if [[ $arg == "-l" ]];
     then
         lex=true
-        echo "parsed lex"
-    elif [[ $arg == "synt" ]];
+
+    elif [[ $arg == "-s" ]];
     then
         synt=true
-        echo "parsed synt"
-    elif [[ $arg == "context" ]];
+
+    elif [[ $arg == "-ct" ]];
     then
         context=true
-        echo "parsed context"
-    elif [[ $arg == "codegen" ]];
+
+    elif [[ $arg == "-cg" ]];
     then
         codegen=true
-        echo "parsed codegen"
-    elif [[ $arg == "pgm" ]];
+
+    elif [[ $arg == "-pgm" ]];
     then
         catPgm=true
-        echo "parsed pgm"
-    elif [[ $arg == "eout" ]];
+
+    elif [[ $arg == "-err" ]];
     then
         catEOutput=true
-        echo "parsed eoutp"
-    elif [[ $arg == "log" ]];
+
+    elif [[ $arg == "-log" ]];
     then
         writeIssues=true
-        echo "parsed log"
-    elif [[ $arg == "exit1" ]];
+
+    elif [[ $arg == "-ex1" ]];
     then
         exitOne=true
-        echo "parsed exit1"
-    elif [[ $arg == "lexO" ]];
+
+    elif [[ $arg == "-lO" ]];
     then
         lexOutput=true
-        echo "parsed lexO"
-    elif [[ $arg == "syntO" ]];
+
+    elif [[ $arg == "-sO" ]];
     then
         syntOutput=true
-        echo "parsed syntO"
-    elif [[ $arg == "contextO" ]];
+
+    elif [[ $arg == "-ctO" ]];
     then
         contextOutput=true
-        echo "parsed contextO"
-    elif [[ $arg == "codegenO" ]];
+
+    elif [[ $arg == "-cgO" ]];
     then
         codegenOutput=true
-        echo "parsed codegenO"
-    elif [[ $arg == "assembly" ]];
+
+    elif [[ $arg == "-ass" ]];
     then
         catAss=true
-        echo "parsed ass"
-    elif [[ $arg == "valid" ]];
+
+    elif [[ $arg == "-v" ]];
     then
         fileCategory=$arg
-        echo "parsed filecat $fileCategory"
-    elif [[ $arg == "invalid" ]];
+
+    elif [[ $arg == "-nv" ]];
     then
         fileCategory=$arg
-        echo "parsed filecat $fileCategory"
+
     elif [[ ${arg: -5} == ".deca" ]];
     then
         if [[ -z $file ]];
         then
             file=$arg
-            echo "parsed file $file"
         else
             echo "2 or more .deca files, exiting..."
             exit 1
         fi
     else
         echo "invalid command arguments, please use one among"
-        echo "lex"
-        echo "synt"
-        echo "context"
-        echo "codegen"
-        echo "pgm"
-        echo "eout"
-        echo "log"
-        echo "exit1"
-        echo "lexO"
-        echo "syntO"
-        echo "contextO"
-        echo "codegenO"
-        echo "assembly"
+        echo "-l"
+        echo "-s"
+        echo "-ct"
+        echo "-cg"
+        echo "-pgm"
+        echo "-err"
+        echo "-log"
+        echo "-ex1"
+        echo "-lO"
+        echo "-sO"
+        echo "-ctO"
+        echo "-cgO"
+        echo "-ass"
         echo ".deca file"
         exit 1
     fi
@@ -455,9 +454,20 @@ codegenValid () {
         exitUn
     else
         result=$(ima $a)
-        echo
+
+        if [[ "$catAss" == true ]];
+        then
+            echo "Assembly Program:"
+            cat $a
+        fi
+
         rm $a
-        ifThenEcho "$codegenOutput" "$result"
+
+        if [[ "$codegenOutput" == true ]];
+        then
+            echo "Ima output:"
+            echo "$result"
+        fi
         expresult=$(grep @result $1 | cut -c12-)
         if [[ "$result" == "$expresult" ]];
         then
