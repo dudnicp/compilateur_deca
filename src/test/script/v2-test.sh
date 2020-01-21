@@ -162,7 +162,7 @@ fi
 
 if [[ $lex = false && $synt = false && $context = false && $codegen = false ]];
 then
-    echo "one among lex, synt, context, codegen should be used, exiting..."
+    echo "one among -l, -s, -ct, -cg should be used, exiting..."
     exit 1
 fi
 
@@ -216,11 +216,15 @@ green () { # $1 = string
     echo -e "\e[39m"
 }
 
+yellow () { # $1 = string
+    echo -en "\e[93m$1"
+    echo -e "\e[39m"
+}
+
 # MAIN
 # LEX
 
 lexValid () { # $1 = file
-    echo -e "$1"
     displayProg "$1"
     eoutput=$(test_lex $1 2>&1 > /dev/null | head -n 1)
     displayEOutput "$eoutput"
@@ -233,11 +237,11 @@ lexValid () { # $1 = file
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        echo "failed"
+        red "$1 failed"
         writeIssues "$eoutput"
         exitUn
     else
-        echo "passed"
+        green "$1 passed"
         passedLex=$passedLex + 1
     fi
     totalLex=$totalLex + 1
@@ -245,17 +249,17 @@ lexValid () { # $1 = file
 
 
 lexInvalid () {
-    echo -e "$1"
+
     displayProg "$1"
     eoutput=$(test_lex $1 2>&1 > /dev/null | head -n 1)
     displayEOutput "$eoutput"
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        echo "passed"
+        green "passed $1"
         passedLex=$passedLex + 1
     else
-        echo "failed"
+        red "failed $1"
         writeIssues "$eoutput"
         exitUn
     fi
@@ -292,7 +296,7 @@ fi
 # SYNT
 
 syntValid () { # $1 = file
-    echo -e "$1"
+
     displayProg "$1"
     eoutput=$(test_synt $1 2>&1 > /dev/null | head -n 1)
     displayEOutput "$eoutput"
@@ -305,11 +309,11 @@ syntValid () { # $1 = file
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        echo "failed"
+        red "failed $1"
         writeIssues "$eoutput"
         exitUn
     else
-        echo "passed"
+        green "passed $1"
         passedSynt=$((passedSynt + 1))
     fi
     totalSynt=$((totalSynt + 1))
@@ -317,17 +321,17 @@ syntValid () { # $1 = file
 
 
 syntInvalid () {
-    echo -e "$1"
+
     displayProg "$1"
     eoutput=$(test_synt $1 2>&1 > /dev/null | head -n 1)
     displayEOutput "$eoutput"
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        echo "passed"
+        green "passed $1"
         passedSynt=$((passedSynt + 1))
     else
-        echo "failed"
+        red "failed $1"
         writeIssues "$eoutput"
         exitUn
     fi
@@ -364,7 +368,7 @@ fi
 # CONTEXT
 
 contextValid () { # $1 = file
-    echo -e "$1"
+
     displayProg "$1"
     eoutput=$(test_context $1 2>&1 > /dev/null | head -n 1)
     displayEOutput "$eoutput"
@@ -377,11 +381,11 @@ contextValid () { # $1 = file
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        echo "failed"
+        red "failed $1"
         writeIssues "$eoutput"
         exitUn
     else
-        echo "passed"
+        green "passed $1"
         passedContext=$((passedContext + 1))
     fi
     totalContext=$((totalContext + 1))
@@ -389,17 +393,17 @@ contextValid () { # $1 = file
 
 
 contextInvalid () {
-    echo -e "$1"
+
     displayProg "$1"
     eoutput=$(test_context $1 2>&1 > /dev/null | head -n 1)
     displayEOutput "$eoutput"
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        echo "passed"
+        green "passed $1"
         passedContext=$((passedContext + 1))
     else
-        echo "failed"
+        red "failed $1"
         writeIssues "$eoutput"
         exitUn
     fi
@@ -436,10 +440,9 @@ fi
 # CODEGEN
 
 codegenValid () {
-    echo -e "$1"
+
     displayProg "$1"
     tmp="$1"
-    echo $tmp
     a=${tmp:: -5}.ass
     decac $1 > /dev/null
 
@@ -450,7 +453,7 @@ codegenValid () {
     fi
 
     if [ ! -f $a ]; then
-        echo "Fichier .ass non généré."
+        yellow "Fichier .ass non généré."
         exitUn
     else
         result=$(ima $a)
@@ -471,10 +474,10 @@ codegenValid () {
         expresult=$(grep @result $1 | cut -c12-)
         if [[ "$result" == "$expresult" ]];
         then
-            echo "passed"
+            green "passed $1"
             passedCodegen=$((passedCodegen + 1))
         else
-            echo "failed"
+            red "failed $1"
             exitUn
         fi
     fi
@@ -515,19 +518,19 @@ fi
 
 if [[ "$lex" == true ]];
 then
-    echo "$passedLex passed out of $totalLex"
+    echo "$passedLex passed out of $totalLex for the lexer"
 fi
 if [[ "$synt" == true ]];
 then
-    echo "$passedSynt passed out of $totalSynt"
+    echo "$passedSynt passed out of $totalSynt for the parser"
 fi
 if [[ "$context" == true ]];
 then
-    echo "$passedContext passed out of $totalContext"
+    echo "$passedContext passed out of $totalContext for the context"
 fi
 if [[ "$codegen" == true ]];
 then
-    echo "$passedCodegen passed out of $totalCodegen"
+    echo "$passedCodegen passed out of $totalCodegen for the codegen"
 fi
 
 echo "check toFix.log in your current directory for more details about the failed tests"
