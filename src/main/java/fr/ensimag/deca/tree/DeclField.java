@@ -49,9 +49,14 @@ public class DeclField extends AbstractDeclField {
 			throws ContextualError {
 		/*
 		Type typeVerified = type.verifyType(compiler);
+		if (typeVerified.isVoid()) {
+			throw new ContextualError("Field type cannot be void (2.5)",
+				type.getLocation());
+		}
 		fieldName.setType(typeVerified);
 		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
 				visibility, currentClass, 0));
+		// TODO handle field already defined in superclass (2.5)
 		try {
 			currentClass.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
 		} catch (DoubleDefException e) {
