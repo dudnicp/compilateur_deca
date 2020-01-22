@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
@@ -34,6 +35,7 @@ public class DeclParam extends Tree {
 	}
 	
 	public Type verifyDeclParam(DecacCompiler compiler) {
+		return null;
 		// synthetise la signature
 	}
 
