@@ -15,8 +15,10 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
-
+		for (AbstractDeclField f: this.getList()) {
+			f.decompile(s);
+			s.println();
+    	}
 	}
 	
 	 void verifyListDeclField(DecacCompiler compiler, Symbol currentClass,

@@ -29,7 +29,21 @@ public class DeclClass extends AbstractDeclClass {
 	}
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("class { ... A FAIRE ... }");
+        s.print("class ");
+        this.className.decompile(s);
+        if (this.superClassName != null) {
+        	s.print(" extends ");
+        	this.superClassName.decompile(s);
+        }
+        s.print(" {");
+        s.println();
+        s.indent();
+        fields.decompile(s);
+        s.println();
+        methods.decompile(s);
+        s.println();
+        s.unindent();
+        s.print("}");
     }
 
     @Override
@@ -69,12 +83,22 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        throw new UnsupportedOperationException("Not yet supported");
+    	s.print(prefix);
+    	this.className.prettyPrint(s, "class ", false);
+    	this.superClassName.prettyPrint(s, " extends ", false);
+    	s.println(" {");
+    	this.fields.prettyPrintChildren(s, "");
+    	this.methods.prettyPrintChildren(s, "");
+    	s.println("}");
+    	
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+    	className.iterChildren(f);
+    	if (superClassName != null) superClassName.iterChildren(f);
+    	fields.iterChildren(f);
+    	methods.iterChildren(f);
     }
 
 }
