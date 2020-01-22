@@ -1,4 +1,6 @@
-"Bonjour"
-"Sa\"lut"
-"bon
-jour"
+{
+    String s = "Bonjour";
+    String s1 = "Sa\"lut";
+    String s2 = "bon
+                jour";
+}
