@@ -1,1 +1,3 @@
-extends
+class Test extends Test2 {
+
+}

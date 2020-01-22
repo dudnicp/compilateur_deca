@@ -1,1 +1,3 @@
-protected
+class Test {
+    protected int x = 2;
+}
