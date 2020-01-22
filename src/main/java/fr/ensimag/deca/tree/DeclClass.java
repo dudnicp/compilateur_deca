@@ -83,13 +83,10 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-    	s.print(prefix);
-    	this.className.prettyPrint(s, "class ", false);
-    	this.superClassName.prettyPrint(s, " extends ", false);
-    	s.println(" {");
-    	this.fields.prettyPrintChildren(s, "");
-    	this.methods.prettyPrintChildren(s, "");
-    	s.println("}");
+    	this.className.prettyPrint(s, prefix, false);
+    	this.superClassName.prettyPrint(s, prefix, false);
+    	this.fields.prettyPrintChildren(s, prefix);
+    	this.methods.prettyPrintChildren(s, prefix);
     	
     }
 
