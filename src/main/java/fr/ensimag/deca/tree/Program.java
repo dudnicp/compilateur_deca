@@ -38,7 +38,7 @@ public class Program extends AbstractProgram {
     	// rule (3.1)
     	// the EnvironmentType attribute of compiler is updated
     	// after the first pass (2.1)
-        // classes.verifyListClass(compiler);
+        classes.verifyListClass(compiler);
         // second pass
         //classes.verifyListClassMembers(compiler);
         // third pass
