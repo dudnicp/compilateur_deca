@@ -2,15 +2,9 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
-import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
-public abstract class AbstractMethodBody extends Tree {
-
-	public AbstractMethodBody() {
-		// TODO Auto-generated constructor stub
-	}
+public class AbstractDeclParam extends Tree {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
@@ -29,8 +23,5 @@ public abstract class AbstractMethodBody extends Tree {
 		// TODO Auto-generated method stub
 
 	}
-	
-	protected abstract void verifyMethodBody(DecacCompiler compiler,
-			Symbol currentClass);
 
 }

@@ -29,22 +29,39 @@ public class DeclClass extends AbstractDeclClass {
 	}
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("class { ... A FAIRE ... }");
+        s.print("class ");
+        this.className.decompile(s);
+        if (this.superClassName != null) {
+        	s.print(" extends ");
+        	this.superClassName.decompile(s);
+        }
+        s.print(" {");
+        s.println();
+        s.indent();
+        fields.decompile(s);
+        s.println();
+        methods.decompile(s);
+        s.println();
+        s.unindent();
+        s.print("}");
     }
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
     	/*
     	EnvironmentType envTypes = compiler.getEnvTypes();
+    	if (supperClassName == null) {
+    	System.out.println("DeclClass.java : superCLass null");
+    	} else if (envTypes.getDefinitionFromName(this.superClasseName.getName().toString()) == null) {
+    		throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
+    			superClassName.getLocation())
+    	}
     	try {
-    		this.classSymbol = envTypes.createSymbol(name);
-    		if (envTypes.getDefinitionFromName(superclass) == null) {
-    			throw new ContextualError("Superclass " + superclass + " is not defined", this.getLocation());
-    		}
+    		this.classSymbol = envTypes.createSymbol(className);
     		ClassType classType = new ClassType(this.classSymbol, name.getLocation(), superclass);
     		envTypes.declare(this.classSymbol, classType.getDefinition());
     	} catch (DoubleDefException e) {
-    		throw new ContextualError("Class " + name + " is already defined", this.getLocation());
+    		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
     	*/
     }
@@ -52,9 +69,10 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-    	
+    	/*
     	fields.verifyListDeclField(compiler, this.classSymbol, this.superClassSymbol);
     	methods.verifyListDeclMethod(compiler, this.classSymbol);
+    	*/
     }
     
     @Override
@@ -65,12 +83,22 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        throw new UnsupportedOperationException("Not yet supported");
+    	s.print(prefix);
+    	this.className.prettyPrint(s, "class ", false);
+    	this.superClassName.prettyPrint(s, " extends ", false);
+    	s.println(" {");
+    	this.fields.prettyPrintChildren(s, "");
+    	this.methods.prettyPrintChildren(s, "");
+    	s.println("}");
+    	
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+    	className.iterChildren(f);
+    	if (superClassName != null) superClassName.iterChildren(f);
+    	fields.iterChildren(f);
+    	methods.iterChildren(f);
     }
 
 }

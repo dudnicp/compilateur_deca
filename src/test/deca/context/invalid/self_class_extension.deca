@@ -1,0 +1,7 @@
+/*
+    Description : Extension de la même classe
+
+    Résultat : erreur contextuelle (deca:6:0) (poly papier page 12 : "L'identificateur super doit être un identificateur de classe préalablement déclaré"
+*/
+class C extends C{}
+// @expected_output deca:6:0

@@ -14,6 +14,7 @@ import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.Register;
 
@@ -48,9 +49,14 @@ public class DeclField extends AbstractDeclField {
 			throws ContextualError {
 		/*
 		Type typeVerified = type.verifyType(compiler);
+		if (typeVerified.isVoid()) {
+			throw new ContextualError("Field type cannot be void (2.5)",
+				type.getLocation());
+		}
 		fieldName.setType(typeVerified);
 		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
 				visibility, currentClass, 0));
+		// TODO handle field already defined in superclass (2.5)
 		try {
 			currentClass.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
 		} catch (DoubleDefException e) {
@@ -75,14 +81,18 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		// TODO Auto-generated method stub
-
+		s.print(visibility.toString() + " ");
+		type.prettyPrint(s, prefix, false);
+		fieldName.prettyPrint(s, prefix, false);
+		initialization.prettyPrint(s, prefix, true);
+		
 	}
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		type.iter(f);
+		fieldName.iter(f);
+		initialization.iter(f);
 	}
 	
 	 @Override
