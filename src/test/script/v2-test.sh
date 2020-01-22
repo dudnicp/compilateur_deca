@@ -229,7 +229,7 @@ yellow () { # $1 = string
 }
 
 blink () { # $1 = string
-    echo -en "\e[5m$1"
+    echo -en "\e[96m$1"
     echo -e "\e[0m"
 }
 

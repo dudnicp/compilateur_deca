@@ -3,7 +3,10 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Environment.DoubleDefException;
+import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
@@ -48,17 +51,16 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-    	/*
     	EnvironmentType envTypes = compiler.getEnvTypes();
-    	if (supperClassName == null) {
-    	System.out.println("DeclClass.java : superCLass null");
-    	} else if (envTypes.getDefinitionFromName(this.superClasseName.getName().toString()) == null) {
+    	if (superClassName.getName().toString() == "0") { 
+    	} else if (envTypes.getDefinitionFromName(className.getName().toString()) == null) {
     		throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
-    			superClassName.getLocation())
+    				superClassName.getLocation());
     	}
+    	/*
     	try {
-    		this.classSymbol = envTypes.createSymbol(className);
-    		ClassType classType = new ClassType(this.classSymbol, name.getLocation(), superclass);
+    		this.classSymbol = envTypes.createSymbol(className.getName().toString());
+    		ClassType classType = new ClassType(this.classSymbol, className.getLocation(), null);
     		envTypes.declare(this.classSymbol, classType.getDefinition());
     	} catch (DoubleDefException e) {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
@@ -85,8 +87,8 @@ public class DeclClass extends AbstractDeclClass {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
     	this.className.prettyPrint(s, prefix, false);
     	this.superClassName.prettyPrint(s, prefix, false);
-    	this.fields.prettyPrintChildren(s, prefix);
-    	this.methods.prettyPrintChildren(s, prefix);
+    	this.fields.prettyPrint(s, prefix, false);
+    	this.methods.prettyPrint(s, prefix, true);
     	
     }
 
