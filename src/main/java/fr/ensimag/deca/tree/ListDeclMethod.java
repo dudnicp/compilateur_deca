@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public class ListDeclMethod extends TreeList<DeclMethod>{
 
@@ -14,9 +15,11 @@ public class ListDeclMethod extends TreeList<DeclMethod>{
 	
 	public void verifyListDeclMethod(DecacCompiler compiler,
 			Symbol currentClass) {
+		/*
 		for (DeclMethod m: this.getList()) {
 			m.verifyDeclMethod(compiler, currentClass);
 		}
+		*/
 	}
 
 }

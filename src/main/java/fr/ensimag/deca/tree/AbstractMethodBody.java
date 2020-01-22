@@ -2,7 +2,9 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public abstract class AbstractMethodBody extends Tree {
 
@@ -29,6 +31,6 @@ public abstract class AbstractMethodBody extends Tree {
 	}
 	
 	protected abstract void verifyMethodBody(DecacCompiler compiler,
-			ClassDefinition currentClass);
+			Symbol currentClass);
 
 }
