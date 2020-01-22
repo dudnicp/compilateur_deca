@@ -7,7 +7,7 @@
   <groupId>fr.ensimag</groupId>
   <artifactId>Deca</artifactId>
   <name>Deca Compiler</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.2-SNAPSHOT</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <compileSource>1.8</compileSource>
