@@ -551,6 +551,7 @@ class_extension returns[AbstractIdentifier tree]
 class_body returns[ListDeclField decls_fields, ListDeclMethod decls_methods]
     @init {
        $decls_fields = new ListDeclField();
+       $decls_methods = new ListDeclMethod();
     }
     : (m=decl_method {
             assert($m.tree != null);
