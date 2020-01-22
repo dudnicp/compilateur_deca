@@ -1,5 +1,7 @@
-azezas
-salut_27
-skdjak$xxx
-_salut
-$ad255
+{
+    int x = azezas;
+    int y = salut_27;
+    int z = skdjak$xxx;
+    int t = _salut;
+    int w = $ad255;
+}

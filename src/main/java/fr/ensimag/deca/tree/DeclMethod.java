@@ -55,7 +55,8 @@ public class DeclMethod extends Tree {
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
 		type.prettyPrint(s, prefix, false);
 		methodName.prettyPrint(s, prefix, false);
-		listDeclParam.prettyPrintChildren(s, prefix);
+		listDeclParam.prettyPrint(s, prefix, false);
+		methodBody.prettyPrint(s, prefix, true);
 	}
 
 	@Override

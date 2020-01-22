@@ -68,7 +68,12 @@ public class DeclField extends AbstractDeclField {
 				*/
 		
 	}
-
+	
+	@Override
+    String prettyPrintNode() {
+		return "[visibility=" + visibility + "] " 
+				+  this.getClass().getSimpleName();
+	}
 
 	@Override
 	public void decompile(IndentPrintStream s) {
@@ -81,11 +86,9 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		s.print(visibility.toString() + " ");
 		type.prettyPrint(s, prefix, false);
 		fieldName.prettyPrint(s, prefix, false);
 		initialization.prettyPrint(s, prefix, true);
-		
 	}
 
 	@Override

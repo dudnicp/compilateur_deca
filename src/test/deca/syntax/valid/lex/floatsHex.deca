@@ -1,2 +1,4 @@
-0xAA.FFp+28f
-0xaf.bcp5
+{
+    float f = 0xAA.FFp+28f
+    float r = 0xaf.bcp5
+}
