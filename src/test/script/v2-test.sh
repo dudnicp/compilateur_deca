@@ -91,6 +91,10 @@ do
     elif [[ $arg == "-log" ]];
     then
         writeIssues=true
+        if [[ -f toFix.log ]]; then
+            rm toFix.log
+        fi
+        touch toFix.log
 
     elif [[ $arg == "-ex1" ]];
     then
@@ -118,11 +122,11 @@ do
 
     elif [[ $arg == "-v" ]];
     then
-        fileCategory=$arg
+        fileCategory="valid"
 
     elif [[ $arg == "-nv" ]];
     then
-        fileCategory=$arg
+        fileCategory="invalid"
 
     elif [[ ${arg: -5} == ".deca" ]];
     then
@@ -149,13 +153,15 @@ do
         echo "-cgO"
         echo "-ass"
         echo ".deca file"
+        echo "-v"
+        echo "-nv"
         exit 1
     fi
 done
 
 if [[ "$fileCategory" == "none" && -n $file ]];
 then
-    echo "file given but no category, please precise valid or invalid"
+    echo "file given but no category, please precise valid (-v) or (-nv)"
     echo "exiting..."
     exit 1
 fi
@@ -187,7 +193,8 @@ displayEOutput () { # $1 = eoutput
 writeIssues () { # $1 = the issue
     if [[ "$writeIssues" == true ]];
     then
-        $1 >> toFix.log
+        echo $1 >> ./toFix.log
+        echo "" >> ./toFix.log
     fi
 }
 
@@ -221,6 +228,11 @@ yellow () { # $1 = string
     echo -e "\e[39m"
 }
 
+blink () { # $1 = string
+    echo -en "\e[96m$1"
+    echo -e "\e[0m"
+}
+
 # MAIN
 # LEX
 
@@ -237,14 +249,15 @@ lexValid () { # $1 = file
     eoutput=$(echo "$eoutput" | grep 'deca:[0-9][0-9]*:')
     if [[ -n "$eoutput" ]];
     then
-        red "$1 failed"
+        red "failed $1"
+        writeIssues "$1 unexpected error:"
         writeIssues "$eoutput"
         exitUn
     else
-        green "$1 passed"
-        passedLex=$passedLex + 1
+        green "passed $1"
+        passedLex=$((passedLex + 1))
     fi
-    totalLex=$totalLex + 1
+    totalLex=$((totalLex + 1))
 }
 
 
@@ -257,13 +270,13 @@ lexInvalid () {
     if [[ -n "$eoutput" ]];
     then
         green "passed $1"
-        passedLex=$passedLex + 1
+        passedLex=$((passedLex + 1))
     else
         red "failed $1"
-        writeIssues "$eoutput"
+        writeIssues "$1 no error found"
         exitUn
     fi
-    totalLex=$totalLex + 1
+    totalLex=$((totalLex + 1))
 }
 
 
@@ -310,6 +323,7 @@ syntValid () { # $1 = file
     if [[ -n "$eoutput" ]];
     then
         red "failed $1"
+        writeIssues "$1 unexpected error:"
         writeIssues "$eoutput"
         exitUn
     else
@@ -332,7 +346,7 @@ syntInvalid () {
         passedSynt=$((passedSynt + 1))
     else
         red "failed $1"
-        writeIssues "$eoutput"
+        writeIssues "$1 no error found"
         exitUn
     fi
     totalSynt=$((totalSynt + 1))
@@ -382,6 +396,7 @@ contextValid () { # $1 = file
     if [[ -n "$eoutput" ]];
     then
         red "failed $1"
+        writeIssues "$1 unexpected error :"
         writeIssues "$eoutput"
         exitUn
     else
@@ -404,6 +419,7 @@ contextInvalid () {
         passedContext=$((passedContext + 1))
     else
         red "failed $1"
+        writeIssues "$1 no error found:"
         writeIssues "$eoutput"
         exitUn
     fi
@@ -444,7 +460,8 @@ codegenValid () {
     displayProg "$1"
     tmp="$1"
     a=${tmp:: -5}.ass
-    decac $1 > /dev/null 2>&1
+    dec=$(decac $1 2>&1 | head -n 1)
+    displayEOutput "$dec"
 
     if [[ $catAss == "true" ]];
     then
@@ -454,6 +471,8 @@ codegenValid () {
 
     if [ ! -f $a ]; then
         yellow "Fichier .ass non généré $1"
+        writeIssues "$1 pas de .ass :"
+        writeIssues "$dec"
         exitUn
     else
         result=$(ima $a)
@@ -478,6 +497,9 @@ codegenValid () {
             passedCodegen=$((passedCodegen + 1))
         else
             red "failed $1"
+            writeIssues "$1 unexpected result :"
+            writeIssues "expected : $expresult"
+            writeIssues "obtained : $result"
             exitUn
         fi
     fi
@@ -518,21 +540,23 @@ fi
 
 if [[ "$lex" == true ]];
 then
-    echo "$passedLex passed out of $totalLex for the lexer"
+    blink "$passedLex passed out of $totalLex for the lexer"
 fi
 if [[ "$synt" == true ]];
 then
-    echo "$passedSynt passed out of $totalSynt for the parser"
+    blink "$passedSynt passed out of $totalSynt for the parser"
 fi
 if [[ "$context" == true ]];
 then
-    echo "$passedContext passed out of $totalContext for the context"
+    blink "$passedContext passed out of $totalContext for the context"
 fi
 if [[ "$codegen" == true ]];
 then
-    echo "$passedCodegen passed out of $totalCodegen for the codegen"
+    blink "$passedCodegen passed out of $totalCodegen for the codegen"
 fi
-
-echo "check toFix.log in your current directory for more details about the failed tests"
+if [[ "$writeIssues" == true ]];
+then
+    echo "check toFix.log in your current directory for more details about the failed tests"
+fi
 
 exit 0
