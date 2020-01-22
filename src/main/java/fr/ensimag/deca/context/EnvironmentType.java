@@ -37,6 +37,10 @@ public class EnvironmentType extends Environment{
 	    		
 	    		s = this.createSymbol("null");
 	    		this.declare(s, new TypeDefinition(new NullType(s), Location.BUILTIN));
+	    		
+	    		s = this.createSymbol("Object");
+	    		ClassType objectClassType = new ClassType(s, Location.BUILTIN, null);
+	    		this.declare(s, objectClassType.getDefinition());
     		} catch (DoubleDefException e) { // this should never happens
     			e.printStackTrace(); // since we inherits all of this
     		} // unless parentEnvironment == null
