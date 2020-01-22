@@ -85,8 +85,8 @@ public class DeclClass extends AbstractDeclClass {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
     	this.className.prettyPrint(s, prefix, false);
     	this.superClassName.prettyPrint(s, prefix, false);
-    	this.fields.prettyPrintChildren(s, prefix);
-    	this.methods.prettyPrintChildren(s, prefix);
+    	this.fields.prettyPrint(s, prefix, false);
+    	this.methods.prettyPrint(s, prefix, true);
     	
     }
 
