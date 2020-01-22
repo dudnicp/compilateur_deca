@@ -81,14 +81,18 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		// TODO Auto-generated method stub
-
+		s.print(visibility.toString() + " ");
+		type.prettyPrint(s, prefix, false);
+		fieldName.prettyPrint(s, prefix, false);
+		initialization.prettyPrint(s, prefix, true);
+		
 	}
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		type.iter(f);
+		fieldName.iter(f);
+		initialization.iter(f);
 	}
 	
 	 @Override

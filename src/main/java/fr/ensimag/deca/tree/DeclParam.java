@@ -28,14 +28,13 @@ public class DeclParam extends AbstractDeclParam {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		paramType.iter(f);
+		paramName.iter(f);
 	}
 	
 	public Type verifyDeclParam(DecacCompiler compiler) throws ContextualError {

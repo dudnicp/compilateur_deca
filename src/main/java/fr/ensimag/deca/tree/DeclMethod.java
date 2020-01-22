@@ -45,20 +45,24 @@ public class DeclMethod extends Tree {
 	
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
-
+		type.decompile(s);
+		s.print(" ");
+		methodName.decompile(s);
+		s.print("(TODO decompile param) {}");
 	}
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		// TODO Auto-generated method stub
-
+		type.prettyPrint(s, prefix, false);
+		methodName.prettyPrint(s, prefix, false);
+		listDeclParam.prettyPrintChildren(s, prefix);
 	}
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		type.iter(f);
+		methodName.iter(f);
+		listDeclParam.iterChildren(f);
 	}
 
 }
