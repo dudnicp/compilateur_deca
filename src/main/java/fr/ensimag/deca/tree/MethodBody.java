@@ -7,7 +7,14 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public class MethodBody extends AbstractMethodBody {
-
+	private ListDeclVar listDeclVar;
+	private ListInst listInst;
+	
+	public MethodBody(ListDeclVar listDeclVar, ListInst listDeclInst) {
+		this.listDeclVar = listDeclVar;
+		this.listInst = listDeclInst;
+		
+	}
 	@Override
 	public void decompile(IndentPrintStream s) {
 		// TODO Auto-generated method stub

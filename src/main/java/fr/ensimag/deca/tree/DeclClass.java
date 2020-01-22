@@ -36,15 +36,18 @@ public class DeclClass extends AbstractDeclClass {
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
     	/*
     	EnvironmentType envTypes = compiler.getEnvTypes();
+    	if (supperClassName == null) {
+    	System.out.println("DeclClass.java : superCLass null");
+    	} else if (envTypes.getDefinitionFromName(this.superClasseName.getName().toString()) == null) {
+    		throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
+    			superClassName.getLocation())
+    	}
     	try {
-    		this.classSymbol = envTypes.createSymbol(name);
-    		if (envTypes.getDefinitionFromName(superclass) == null) {
-    			throw new ContextualError("Superclass " + superclass + " is not defined", this.getLocation());
-    		}
+    		this.classSymbol = envTypes.createSymbol(className);
     		ClassType classType = new ClassType(this.classSymbol, name.getLocation(), superclass);
     		envTypes.declare(this.classSymbol, classType.getDefinition());
     	} catch (DoubleDefException e) {
-    		throw new ContextualError("Class " + name + " is already defined", this.getLocation());
+    		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
     	*/
     }
