@@ -86,6 +86,7 @@ public class DeclClass extends AbstractDeclClass {
     	}
         className.setType(classType);
         className.setDefinition(classType.getDefinition());
+
         LOG.debug("verifyClass end");
     }
 
