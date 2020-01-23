@@ -403,8 +403,10 @@ select_expr returns[AbstractExpr tree]
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            $tree = new Selection($e1.tree, $i.tree);
+            setLocation($tree, $DOT);
+            setLocation($e1.tree, $e1.start);
+            setLocation($i.tree, $i.start);
         }
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
@@ -414,8 +416,6 @@ select_expr returns[AbstractExpr tree]
         }
         | /* epsilon */ {
             // we matched "e.i"
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
         }
         )
     ;
@@ -424,6 +424,7 @@ primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
             $tree = $ident.tree;
+            setLocation($tree, $ident.start);
         }
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
@@ -446,8 +447,9 @@ primary_expr returns[AbstractExpr tree]
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            $tree = new New($ident.tree);
+            setLocation($tree, $NEW);
+            setLocation($ident.tree, $ident.start);
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
@@ -497,12 +499,12 @@ literal returns[AbstractExpr tree]
         $tree = new BooleanLiteral(false);
         }
     | THIS {
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+        $tree = new This();
+        setLocation($tree, $THIS);
         }
     | NULL {
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+        $tree = new Null();
+        setLocation($tree, $NULL);
         }
     ;
 
@@ -532,7 +534,7 @@ class_decl returns [DeclClass tree]
             assert($class_body.decls_fields != null);
             assert($class_body.decls_methods != null);
             $tree = new DeclClass($name.tree, $superclass.tree, $class_body.decls_fields, $class_body.decls_methods);
-            setLocation($tree, $class_body.start);
+            setLocation($tree, $CLASS);
         }
     ;
 
@@ -544,7 +546,7 @@ class_extension returns[AbstractIdentifier tree]
         }
     | /* epsilon */ {
             // A FAIRE : Gestion pour object ? (cf env_type_predef p9 poly papier)
-    		$tree = new Identifier(tableSymbol.create("0"));
+    		$tree = new Identifier(tableSymbol.create("Object"));
         }
     ;
 

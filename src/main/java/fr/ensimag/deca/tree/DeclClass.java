@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
@@ -51,21 +52,22 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
+        /*
     	EnvironmentType envTypes = compiler.getEnvTypes();
-    	if (superClassName.getName().toString() == "0") { 
-    	} else if (envTypes.getDefinitionFromName(className.getName().toString()) == null) {
+    		
+ 	    if (envTypes.getDefinitionFromName(className.getName().toString()) == null) {
     		throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
     				superClassName.getLocation());
     	}
-    	/*
     	try {
     		this.classSymbol = envTypes.createSymbol(className.getName().toString());
+    		ClassDefinition superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("0");
     		ClassType classType = new ClassType(this.classSymbol, className.getLocation(), null);
     		envTypes.declare(this.classSymbol, classType.getDefinition());
     	} catch (DoubleDefException e) {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
-    	*/
+        */
     }
 
     @Override
