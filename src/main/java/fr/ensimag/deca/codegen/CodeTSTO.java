@@ -5,7 +5,7 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
-public class CodeTSTO {
+public abstract class CodeTSTO {
 	private static int maxStackSize = 0;
 	private static int currentStackSize = 0;
 	private static int nLocalVariables = 0;

@@ -26,8 +26,11 @@ import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -261,30 +264,33 @@ public class Identifier extends AbstractIdentifier {
     }
     
     protected DAddr daddr() {
-    	if (definition.isExpression()) {
 			return getExpDefinition().getOperand();
-		}
-    	return null;
 	}
     
     
     @Override
     protected void codeExpr(DecacCompiler compiler, int n) {
     	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+    	if (getType().isClassOrNull()) {
+			codeCMP(compiler, n);
+			compiler.addInstruction(new BEQ(Label.NULLOBJECT));
+		}
     }
     
     @Override
     protected void codeCMP(DecacCompiler compiler, int n) {
-    	if (getDefinition().getType().isFloat()) {
+    	if (getType().isFloat()) {
 			compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
-		} else {
+		} else if (getType().isClassOrNull()) {
+			compiler.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
+		}{
 			compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
 		}
     }
     
     @Override
     protected void codeGenPrintInstruction(DecacCompiler compiler) {
-    	Type type = definition.getType();
+    	Type type = getType();
     	if (type.isInt() || type.isBoolean()) {
 			compiler.addInstruction(new WINT());
 		}

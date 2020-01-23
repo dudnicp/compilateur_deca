@@ -1,6 +1,10 @@
 package fr.ensimag.ima.pseudocode;
 
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
  * Representation of a label in IMA code. The same structure is used for label
@@ -15,6 +19,7 @@ public class Label extends Operand {
 	public static final Label DIVBYZERO = new Label("div_by_zero");
 	public static final Label INVALIDINPUT = new Label("invalid_input");
 	public static final Label OVERFLOW = new Label("overflow");
+	public static final Label NULLOBJECT = new Label("null_object");	
 	
 	private static int endAndLabelCounter = 0;
 	private static int endOrLabelCounter = 0;
@@ -22,6 +27,10 @@ public class Label extends Operand {
 	private static int elseIfLabelCounter = 0;
 	private static int beginWhileLabelCounter = 0;
 	private static int whileCondLabelCounter = 0;
+	
+	public static Label getMethodLabel(String className, String methodName) {
+		return new Label("code." + className + "." + methodName);
+	}
 	
 	public static Label newEndAndLabel() {
 		int temp = endAndLabelCounter;

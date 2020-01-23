@@ -42,6 +42,10 @@ public class DeclMethod extends Tree {
 		}
 	}
 	
+	public AbstractIdentifier getMethodName() {
+		return methodName;
+	}
+	
 	
 	@Override
 	public void decompile(IndentPrintStream s) {

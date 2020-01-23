@@ -100,6 +100,9 @@ public class Main extends AbstractMain {
         compiler.addLabel(Label.INVALIDINPUT);
         compiler.addInstruction(new WSTR(new ImmediateString("Error: Invalid input")));
         compiler.addInstruction(new ERROR());
+        compiler.addLabel(Label.NULLOBJECT);
+        compiler.addInstruction(new WSTR(new ImmediateString("Error: Cannot acces null object")));
+        compiler.addInstruction(new ERROR());
     }
     
     @Override

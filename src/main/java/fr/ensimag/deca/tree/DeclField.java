@@ -98,8 +98,9 @@ public class DeclField extends AbstractDeclField {
 		initialization.iter(f);
 	}
 	
-	 @Override
-	    protected void codeGenDeclField(DecacCompiler compiler) {
-	 }
+	@Override
+	protected void codeGenDeclField(DecacCompiler compiler) {
+		
+	}
 
 }

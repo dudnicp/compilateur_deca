@@ -68,8 +68,7 @@ public class Initialization extends AbstractInitialization {
     }
     
     @Override
-	public void codeExpr(DecacCompiler compiler, int n, DAddr addr) {
+	public void codeExpr(DecacCompiler compiler, int n) {
     	expression.codeAssign(compiler, n);
-    	compiler.addInstruction(new STORE(Register.getR(n), addr));
     }
 }

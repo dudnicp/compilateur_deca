@@ -1,7 +1,5 @@
 package fr.ensimag.ima.pseudocode;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import fr.ensimag.deca.tree.AbstractIdentifier;
 import fr.ensimag.deca.tree.AbstractLValue;
@@ -17,9 +15,13 @@ public class Register extends DVal {
 	private static final GPRegister[] R = initRegisters();
 		
 	private static int RMAX = 15;
-	private static int nextAddr = 1;
+	private static int nextAddr = 3;
 	
 	public static final int defaultRegisterIndex = 2;
+	
+	public static GPRegister getDefaultRegister( ) {
+		return getR(defaultRegisterIndex);
+	}
 	
 	public static int getRMAX() {
 		return RMAX;

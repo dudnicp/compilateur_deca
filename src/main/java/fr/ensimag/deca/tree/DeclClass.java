@@ -3,13 +3,21 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.codegen.RegisterHandler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -31,6 +39,7 @@ public class DeclClass extends AbstractDeclClass {
 		this.fields = fields;
 		this.methods = methods;
 	}
+	
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class ");
@@ -101,5 +110,36 @@ public class DeclClass extends AbstractDeclClass {
     	fields.iterChildren(f);
     	methods.iterChildren(f);
     }
+    
+    @Override
+    public void codeGenMethodTable(DecacCompiler compiler) {
+    	
+    	String classString = className.getName().getName();
 
+    	// adding class to the table of methods, generating an address for the origin of the table
+		MethodTable.addClass(classString, 
+				superClassName.getName().getName(), 
+				className.getClassDefinition().getNumberOfMethods());
+		
+		// creating method table for the class
+		for (DeclMethod declMethod : methods.getList()) {
+			String methodString = declMethod.getMethodName().getName().getName();
+			MethodTable.putMethod(classString, Label.getMethodLabel(classString, methodString), 
+					declMethod.getMethodName().getMethodDefinition().getIndex());
+		}
+		
+		// generating code for the method table
+		compiler.addInstruction(new LEA(MethodTable.getClassAddr(superClassName.getName().getName()), Register.R0));
+		compiler.addInstruction(new STORE(Register.R0, MethodTable.getClassAddr(classString)));
+		for (Label methodLabel : MethodTable.getMethods(classString)) {
+			compiler.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
+			compiler.addInstruction(new STORE(Register.R0, RegisterHandler.MAINREGISTERHANDLER.getNewAdress()));
+		}
+		
+	}
+    
+    @Override
+    protected void codeGenDecl(DecacCompiler compiler) {
+    	//TODO
+    }
 }

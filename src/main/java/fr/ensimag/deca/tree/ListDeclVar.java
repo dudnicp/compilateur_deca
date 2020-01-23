@@ -45,7 +45,7 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
     	for (AbstractDeclVar declVar : getList()) {
     		String declComment = declVar.decompile();
     		compiler.addComment(declComment);
-    		declVar.codeGenDecl(compiler);
+    		declVar.codeGenDeclVar(compiler);
     	}
 	}
 }

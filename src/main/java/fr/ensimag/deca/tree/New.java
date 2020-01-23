@@ -38,5 +38,10 @@ public class New extends AbstractExpr {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	protected void codeGenInst(DecacCompiler compiler) {
+		// TODO
+	}
 
 }
