@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
@@ -75,6 +76,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassDef = (ClassDefinition)envTypes.get(superClassName.getName());
         }
         superClassName.setType(superClassDef.getType());
+        superClassName.setDefinition(superClassDef);
         ClassType classType;
     	try {
     		classType = new ClassType(className.getName(), Location.BUILTIN, superClassDef);
@@ -83,7 +85,7 @@ public class DeclClass extends AbstractDeclClass {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
         className.setType(classType);
-
+        className.setDefinition(classType.getDefinition());
         LOG.debug("verifyClass end");
     }
 
@@ -94,6 +96,11 @@ public class DeclClass extends AbstractDeclClass {
             throws ContextualError {
     	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
     	methods.verifyListDeclMethod(compiler, this.className.getName());
+        ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
+        EnvironmentExp env = classDef.getMembers();
+        for (Symbol s: env.getDefinitionMap().keySet()) {
+            System.out.println("member " + s + " --> " + env.get(s));
+        }
     }
 
     @Override

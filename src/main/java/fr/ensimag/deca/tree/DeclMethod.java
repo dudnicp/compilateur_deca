@@ -32,7 +32,6 @@ public class DeclMethod extends Tree {
         System.out.println("verify declmethod start");
         // TODO: dont throw exception when type is void
 		Type verifiedType = type.verifyType(compiler);
-        // TODO declare arguments as variable in method environment
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
 		// TODO verifier la redifinition d'une methode
 		// ie meme returnType et signature
@@ -41,10 +40,9 @@ public class DeclMethod extends Tree {
         }
         System.out.println("symbol currentClass: " + currentClass);
 		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-		Symbol methodSymbol = classDef.getMembers().createSymbol(methodName.toString());
         Definition methodDef = new MethodDefinition(verifiedType, this.getLocation(), sig, 0);
 		try {
-            classDef.getMembers().declare(methodSymbol, methodDef);
+            classDef.getMembers().declare(methodName.getName(), methodDef);
 		} catch (DoubleDefException e) {
 			e.printStackTrace();
 		}
