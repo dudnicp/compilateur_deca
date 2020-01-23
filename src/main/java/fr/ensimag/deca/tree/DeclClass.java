@@ -97,16 +97,21 @@ public class DeclClass extends AbstractDeclClass {
             throws ContextualError {
     	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
     	methods.verifyListDeclMethod(compiler, this.className.getName());
+    	/*
         ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
         EnvironmentExp env = classDef.getMembers();
         for (Symbol s: env.getDefinitionMap().keySet()) {
             System.out.println("member " + s + " --> " + env.get(s));
         }
+        */
     }
 
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    	ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(
+    			this.className.getName());
+    	EnvironmentExp parent = classDef.getMembers();
+    	methods.verifyClassBodyListMethod(compiler, parent, className.getName());
     }
 
 

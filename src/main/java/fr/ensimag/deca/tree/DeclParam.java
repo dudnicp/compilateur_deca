@@ -6,6 +6,9 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Environment.DoubleDefException;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
@@ -42,7 +45,20 @@ public class DeclParam extends AbstractDeclParam {
         System.out.println("verifyDeclParam start");
 		Type verifiedType = paramType.verifyType(compiler);
         System.out.println("verifyDeclParam end");
+        
 		return verifiedType;
+	}
+	
+	public void verifyClassBodyDeclParam(DecacCompiler compiler,
+			EnvironmentExp envExpParam) throws ContextualError {
+		ParamDefinition paramDef = new ParamDefinition(paramType.getType(), paramName.getLocation());
+        paramName.setDefinition(paramDef);
+		try {
+			envExpParam.declare(paramName.getName(), paramName.getDefinition());
+		} catch (DoubleDefException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

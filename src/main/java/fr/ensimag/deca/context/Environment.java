@@ -81,4 +81,25 @@ public abstract class Environment {
      */
     public abstract void declare(Symbol name, Definition def) throws DoubleDefException;
     
+    /**
+     * Look for a symbol in this environment then call in all of its parents
+     * meaning it goes up in the linked environment scheme
+     * 
+     * @param name
+     * @throws DoubleDefException
+     * 			if the symbol is already defined in any environment linked to this one
+     */
+    public void isDefined(Symbol name) throws DoubleDefException{
+    	if (this.get(name) == null) {
+    		if (parent != null) {
+    			parent.isDefined(name); // look up parent environment
+    		} else {
+    			return; // stop here - no previous definition of symbol "name"
+    		}
+    	} else {
+    		throw new DoubleDefException();
+    	}
+    	
+    }
+    
 }

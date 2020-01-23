@@ -7,6 +7,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
@@ -29,25 +30,29 @@ public class DeclMethod extends Tree {
 	
 	public void verifyDeclMethod(DecacCompiler compiler,
 			Symbol currentClass) throws ContextualError {
-        System.out.println("verify declmethod start");
         // TODO: dont throw exception when type is void
 		Type verifiedType = type.verifyType(compiler);
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
 		// TODO verifier la redifinition d'une methode
 		// ie meme returnType et signature
-        for (Symbol s: compiler.getEnvTypes().getDefinitionMap().keySet()) {
-            System.out.println("symbol " + s + " -->  " + compiler.getEnvTypes().get(s));
-        }
-        System.out.println("symbol currentClass: " + currentClass);
 		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-        Definition methodDef = new MethodDefinition(verifiedType, this.getLocation(), sig, 0);
+		// TODO increment number of methods
+        Definition methodDef = new MethodDefinition(verifiedType,
+        		this.getLocation(), sig, 0);
 		try {
             classDef.getMembers().declare(methodName.getName(), methodDef);
 		} catch (DoubleDefException e) {
 			e.printStackTrace();
 		}
         this.methodName.setDefinition(methodDef);
-        System.out.println("verify declmethod end");
+	}
+	
+	public void verifyClassBodyMethod(DecacCompiler compiler, 
+			EnvironmentExp parent, Symbol currentClass) throws ContextualError {
+		EnvironmentExp envExpParam = new EnvironmentExp(parent);
+		listDeclParam.verifyClassBodyListDeclParam(compiler,
+				envExpParam);
+		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getType());
 	}
 	
 	
