@@ -75,6 +75,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassDef = (ClassDefinition)envTypes.get(superClassName.getName());
         }
         superClassName.setType(superClassDef.getType());
+        superClassName.setDefinition(superClassDef);
         ClassType classType;
     	try {
     		classType = new ClassType(className.getName(), Location.BUILTIN, superClassDef);
@@ -83,6 +84,7 @@ public class DeclClass extends AbstractDeclClass {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
         className.setType(classType);
+        className.setDefinition(classType.getDefinition());
 
         LOG.debug("verifyClass end");
     }
