@@ -42,7 +42,7 @@ prog returns[AbstractProgram tree]
             assert($list_classes.tree != null);
             assert($main.tree != null);
             $tree = new Program($list_classes.tree, $main.tree);
-            setLocation($tree, $main.start);
+            setLocation($tree, $list_classes.start);
         }
     ;
 
@@ -532,6 +532,7 @@ class_decl returns [DeclClass tree]
             assert($class_body.decls_fields != null);
             assert($class_body.decls_methods != null);
             $tree = new DeclClass($name.tree, $superclass.tree, $class_body.decls_fields, $class_body.decls_methods);
+            setLocation($name.tree, $name.start);
             setLocation($tree, $class_body.start);
         }
     ;
@@ -544,7 +545,7 @@ class_extension returns[AbstractIdentifier tree]
         }
     | /* epsilon */ {
             // A FAIRE : Gestion pour object ? (cf env_type_predef p9 poly papier)
-    		$tree = new Identifier(tableSymbol.create("0"));
+    		$tree = new Identifier(tableSymbol.create("Object"));
         }
     ;
 
