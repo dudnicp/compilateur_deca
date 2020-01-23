@@ -13,6 +13,7 @@ import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.tree.ListDeclMethod;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -111,7 +112,7 @@ public class DeclClass extends AbstractDeclClass {
     	ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(
     			this.className.getName());
     	EnvironmentExp parent = classDef.getMembers();
-    	methods.verifyClassBodyListMethod(compiler, parent, className.getName());
+    	this.methods.verifyClassBodyListMethod(compiler, parent, className.getName());
     }
 
 
