@@ -1,7 +1,7 @@
 /*
     Description: Declaration d'une methode au sein d'une methode
 
-    Résultat : erreur syntaxique deca:8:8
+    Résultat : erreur syntaxique deca:8:14
 */
 class A{
     void x(){
@@ -9,4 +9,4 @@ class A{
         }
     }
 }
-// @expected_output deca:8:8
+// @expected_output deca:8:14: missing ';' at '('
