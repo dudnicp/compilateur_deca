@@ -29,17 +29,27 @@ public class DeclMethod extends Tree {
 	
 	public void verifyDeclMethod(DecacCompiler compiler,
 			Symbol currentClass) throws ContextualError {
+        System.out.println("verify declmethod start");
+        // TODO: dont throw exception when type is void
 		Type verifiedType = type.verifyType(compiler);
+        // TODO declare arguments as variable in method environment
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
 		// TODO verifier la redifinition d'une methode
 		// ie meme returnType et signature
+        for (Symbol s: compiler.getEnvTypes().getDefinitionMap().keySet()) {
+            System.out.println("symbol " + s + " -->  " + compiler.getEnvTypes().get(s));
+        }
+        System.out.println("symbol currentClass: " + currentClass);
 		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 		Symbol methodSymbol = classDef.getMembers().createSymbol(methodName.toString());
+        Definition methodDef = new MethodDefinition(verifiedType, this.getLocation(), sig, 0);
 		try {
-		classDef.getMembers().declare(methodSymbol, new MethodDefinition(verifiedType, this.getLocation(), sig, 0));
+            classDef.getMembers().declare(methodSymbol, methodDef);
 		} catch (DoubleDefException e) {
 			e.printStackTrace();
 		}
+        this.methodName.setDefinition(methodDef);
+        System.out.println("verify declmethod end");
 	}
 	
 	

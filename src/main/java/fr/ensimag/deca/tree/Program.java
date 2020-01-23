@@ -40,7 +40,7 @@ public class Program extends AbstractProgram {
     	// after the first pass (2.1)
         classes.verifyListClass(compiler);
         // second pass
-        //classes.verifyListClassMembers(compiler);
+        classes.verifyListClassMembers(compiler);
         // third pass
         //classes.verifyListClassBody(compiler);
         main.verifyMain(compiler);

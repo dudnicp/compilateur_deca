@@ -77,7 +77,6 @@ public class DeclClass extends AbstractDeclClass {
         superClassName.setType(superClassDef.getType());
         ClassType classType;
     	try {
-            LOG.debug("classSymbol: " + className.getName());
     		classType = new ClassType(className.getName(), Location.BUILTIN, superClassDef);
     		envTypes.declare(className.getName(), classType.getDefinition());
     	} catch (DoubleDefException e) {
@@ -93,10 +92,10 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-    	fields.verifyListDeclField(compiler, this.classSymbol, this.superClassSymbol);
-    	//methods.verifyListDeclMethod(compiler, this.classSymbol);
+    	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
+    	methods.verifyListDeclMethod(compiler, this.className.getName());
     }
-    
+
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
@@ -105,12 +104,13 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
+        this.className.prettyPrintNode();
     	this.className.prettyPrint(s, prefix, false);
         this.className.prettyPrintType(s, prefix);
     	this.superClassName.prettyPrint(s, prefix, false);
+        this.superClassName.prettyPrintType(s, prefix);
     	this.fields.prettyPrint(s, prefix, false);
     	this.methods.prettyPrint(s, prefix, true);
-    	
     }
 
     @Override

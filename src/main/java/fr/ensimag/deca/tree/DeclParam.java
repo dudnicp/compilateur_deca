@@ -39,7 +39,9 @@ public class DeclParam extends AbstractDeclParam {
 	}
 	
 	public Type verifyDeclParam(DecacCompiler compiler) throws ContextualError {
+        System.out.println("verifyDeclParam start");
 		Type verifiedType = paramType.verifyType(compiler);
+        System.out.println("verifyDeclParam end");
 		return verifiedType;
 	}
 

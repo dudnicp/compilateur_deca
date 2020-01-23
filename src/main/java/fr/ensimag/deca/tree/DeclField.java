@@ -47,6 +47,7 @@ public class DeclField extends AbstractDeclField {
 	protected void verifyDeclField(DecacCompiler compiler, 
 			Symbol currentClass, Symbol superClass)
 			throws ContextualError {
+        LOG.debug("verifyField start");
 		Type typeVerified = type.verifyType(compiler);
 		if (typeVerified.isVoid()) {
 			throw new ContextualError("Field type cannot be void (2.5)",
@@ -67,6 +68,10 @@ public class DeclField extends AbstractDeclField {
 		}
 		initialization.verifyInitialization(compiler, typeVerified, currDef.getMembers(),
 				currDef);
+        for (Symbol s: currDef.getMembers().getDefinitionMap().keySet()) {
+            System.out.println("symbol: " + s);
+        }
+        LOG.debug("verifyField end");
 		
 	}
 	
