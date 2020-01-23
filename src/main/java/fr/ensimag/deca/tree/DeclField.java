@@ -47,25 +47,26 @@ public class DeclField extends AbstractDeclField {
 	protected void verifyDeclField(DecacCompiler compiler, 
 			Symbol currentClass, Symbol superClass)
 			throws ContextualError {
-		/*
 		Type typeVerified = type.verifyType(compiler);
 		if (typeVerified.isVoid()) {
 			throw new ContextualError("Field type cannot be void (2.5)",
 				type.getLocation());
 		}
 		fieldName.setType(typeVerified);
+		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
+		ClassDefinition superDef = (ClassDefinition)compiler.getEnvTypes().get(superClass);
+
 		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
-				visibility, currentClass, 0));
+				visibility, currDef, 0));
 		// TODO handle field already defined in superclass (2.5)
 		try {
-			currentClass.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
+			currDef.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
 		} catch (DoubleDefException e) {
 			throw new ContextualError("Field " + fieldName.getName() + " already defined",
 				 fieldName.getLocation());
 		}
-		initialization.verifyInitialization(compiler, typeVerified, currentClass.getMembers(),
-				currentClass);
-				*/
+		initialization.verifyInitialization(compiler, typeVerified, currDef.getMembers(),
+				currDef);
 		
 	}
 	
