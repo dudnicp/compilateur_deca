@@ -28,4 +28,11 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 	    	}
 	    }
 	 
+    public void verifyClassBodyListField(DecacCompiler compiler,
+            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+ 		for (AbstractDeclField f: this.getList()) {
+             f.verifyClassBodyField(compiler, localEnv, currentClass);
+         }
+     }
+	 
 }

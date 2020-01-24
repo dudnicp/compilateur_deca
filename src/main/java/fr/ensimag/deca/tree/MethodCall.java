@@ -3,8 +3,11 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -44,14 +47,32 @@ public class MethodCall extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");        
+    	ClassType objectType = treeExpr.verifyExpr(compiler, localEnv, currentClass).asClassType("not a classtype", treeExpr.getLocation());
+    	MethodDefinition methodDef = currentClass.getMembers().get(methodName.getName()).asMethodDefinition("not a method defintion", this.getLocation());
+    	// verify that the object's class is the same as the method's class
+    	if (!objectType.equals(methodDef.getType().asClassType("not a class type", methodDef.getLocation()))) {
+    		throw new ContextualError("Object of class " + objectType + " cannot call method defined in class " +
+    				methodDef.getType().asClassType("not a class type", methodDef.getLocation()), methodName.getLocation());
+    	}
+    	Signature sig = methodDef.getSignature();
+    	Signature sig2 = new Signature();
+    	arguments.verifySignature(compiler, localEnv, currentClass, sig2);
+    	// verify that signatures match
+    	if (!sig.equals(sig2)) {
+    		throw new ContextualError("Signature of called method " + methodName.getName() + " does not match its definition (3.71)",
+    				methodName.getLocation());
+    	}
+    	// returnType of the method called
+    	return methodDef.getType();
     }
 
 
     @Override
     public void decompile(IndentPrintStream s){
         // A FAIRE : gérer plus proprement ça, dans les autres classes (de base) c'est pas comme ça
-        throw new UnsupportedOperationException("not yet implemented"); 
+    	treeExpr.decompile(s);
+    	methodName.decompile(s);
+    	arguments.decompile(s);
     }
 
     @Override

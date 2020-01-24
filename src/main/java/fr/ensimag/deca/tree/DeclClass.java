@@ -111,8 +111,9 @@ public class DeclClass extends AbstractDeclClass {
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
     	ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(
     			this.className.getName());
-    	EnvironmentExp parent = classDef.getMembers();
-    	this.methods.verifyClassBodyListMethod(compiler, parent, className.getName());
+    	EnvironmentExp localEnv = new EnvironmentExp(classDef.getMembers());
+    	this.fields.verifyClassBodyListField(compiler, localEnv, className.getName());
+    	this.methods.verifyClassBodyListMethod(compiler, localEnv, className.getName());
     }
 
 

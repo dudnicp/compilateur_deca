@@ -48,8 +48,8 @@ public class DeclMethod extends Tree {
 	}
 	
 	public void verifyClassBodyMethod(DecacCompiler compiler, 
-			EnvironmentExp parent, Symbol currentClass) throws ContextualError {
-		EnvironmentExp envExpParam = new EnvironmentExp(parent);
+			EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+		EnvironmentExp envExpParam = new EnvironmentExp(localEnv);
 		listDeclParam.verifyClassBodyListDeclParam(compiler,
 				envExpParam);
 		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getType());

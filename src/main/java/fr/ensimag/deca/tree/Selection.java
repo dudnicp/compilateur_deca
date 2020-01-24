@@ -11,11 +11,11 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 
 public class Selection extends AbstractLValue {
-	private AbstractExpr objetName;
+	private AbstractExpr objectName;
 	private AbstractIdentifier fieldName;
 	
 	public Selection(AbstractExpr objetName, AbstractIdentifier fieldName) {
-		this.objetName = objetName;
+		this.objectName = objectName;
 		this.fieldName = fieldName; 
 	}
 	

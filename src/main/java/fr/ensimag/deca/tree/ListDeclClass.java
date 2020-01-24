@@ -42,7 +42,7 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
      */
     public void verifyListClassBody(DecacCompiler compiler) throws ContextualError {
     	for (AbstractDeclClass c: getList()) {
-    		c.verifyClassMembers(compiler);
+    		c.verifyClassBody(compiler);
     	}
     }
 

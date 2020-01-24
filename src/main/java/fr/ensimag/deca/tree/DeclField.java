@@ -74,7 +74,14 @@ public class DeclField extends AbstractDeclField {
         LOG.debug("verifyField end");
 		
 	}
-	
+
+	@Override
+	protected void verifyClassBodyField(DecacCompiler compiler,
+            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+		this.initialization.verifyInitialization(compiler, type.getType(), localEnv, (ClassDefinition)compiler.getEnvTypes().get(currentClass));
+	   
+     }
+   
 	@Override
     String prettyPrintNode() {
 		return "[visibility=" + visibility + "] " 

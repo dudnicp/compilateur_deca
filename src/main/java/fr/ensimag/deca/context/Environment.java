@@ -27,11 +27,7 @@ public abstract class Environment {
 	public Environment(Environment parent) {
 		this.parent = parent;
 		this.symbolMap = new SymbolTable();
-		if (parent == null) {
-			this.definitionMap = new HashMap<Symbol, Definition>();
-		} else { 
-			this.definitionMap = new HashMap<Symbol, Definition>(parent.getDefinitionMap());
-		}
+		this.definitionMap = new HashMap<Symbol, Definition>();
 	}
 	
 	public Symbol getSymbolFromMap(String name) {

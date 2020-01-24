@@ -14,26 +14,25 @@ public class This extends AbstractExpr {
 	@Override
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
-		// TODO Auto-generated method stub
-		return null;
+		if (currentClass == null) {
+			throw new ContextualError("This cannot be used in main (3.43)", this.getLocation());
+		}
+		return currentClass.getType();
 	}
 
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
-
+		s.print("this");
 	}
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		// TODO Auto-generated method stub
-
+		s.println(prefix + " This");
 	}
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		// leaf node -- nothing to do
 	}
 
 }
