@@ -413,8 +413,8 @@ select_expr returns[AbstractExpr tree]
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
+            setLocation($args.tree, $args.start);
         }
         | /* epsilon */ {
             // we matched "e.i"
@@ -431,11 +431,12 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
-            // A FAIRE: enrichissement pour permettre le passage du test "method_call_with_parameters.deca"
-            // pas urgent car porte pas sur la partie sans objet
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
-            //$tree = new MethodCall(null, $m.tree, $args.tree);
+            AbstractExpr this_expr = new This();
+            $tree = new MethodCall(this_expr, $m.tree, $args.tree);
+            setLocation($tree, $OPARENT);
+            setLocation(this_expr, $m.start);
+            setLocation($m.tree, $m.start);
+            setLocation($args.tree, $args.start);
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
