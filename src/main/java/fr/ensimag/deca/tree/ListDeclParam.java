@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -22,6 +23,13 @@ public class ListDeclParam extends TreeList<DeclParam> {
 			sig.add(paramType);
 		}
 		return sig;
+	}
+	
+	public void verifyClassBodyListDeclParam(DecacCompiler compiler,
+			EnvironmentExp envExpParam) throws ContextualError {
+		for (DeclParam p: this.getList()) {
+			p.verifyClassBodyDeclParam(compiler, envExpParam);
+		}
 	}
 
 }

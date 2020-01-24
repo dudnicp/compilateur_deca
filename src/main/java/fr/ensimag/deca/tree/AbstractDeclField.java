@@ -35,4 +35,7 @@ public abstract class AbstractDeclField extends Tree {
     protected abstract void codeGenProperInit(IMAProgram program, GPRegister register, RegisterManager registerManager);
     
     protected abstract void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager);
+    protected abstract void verifyClassBodyField(DecacCompiler compiler,
+            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError;
+    
 }

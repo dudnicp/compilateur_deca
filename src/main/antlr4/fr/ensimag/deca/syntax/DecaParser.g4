@@ -42,7 +42,8 @@ prog returns[AbstractProgram tree]
             assert($list_classes.tree != null);
             assert($main.tree != null);
             $tree = new Program($list_classes.tree, $main.tree);
-            setLocation($tree, $main.start);
+            setLocation($tree, $list_classes.start);
+            setLocation($main.tree, $main.start);
         }
     ;
 
@@ -166,8 +167,9 @@ inst returns[AbstractInst tree]
         }
     | RETURN expr SEMI {
             assert($expr.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            $tree = new Return($expr.tree);
+            setLocation($expr.tree, $expr.start);
+            setLocation($tree, $RETURN);
         }
     ;
 
@@ -411,8 +413,8 @@ select_expr returns[AbstractExpr tree]
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+            $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
+            setLocation($args.tree, $args.start);
         }
         | /* epsilon */ {
             // we matched "e.i"
@@ -429,11 +431,12 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
-            // A FAIRE: enrichissement pour permettre le passage du test "method_call_with_parameters.deca"
-            // pas urgent car porte pas sur la partie sans objet
-            if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
-            //$tree = new MethodCall(null, $m.tree, $args.tree);
+            AbstractExpr this_expr = new This();
+            $tree = new MethodCall(this_expr, $m.tree, $args.tree);
+            setLocation($tree, $OPARENT);
+            setLocation(this_expr, $m.start);
+            setLocation($m.tree, $m.start);
+            setLocation($args.tree, $args.start);
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
@@ -535,6 +538,8 @@ class_decl returns [DeclClass tree]
             assert($class_body.decls_methods != null);
             $tree = new DeclClass($name.tree, $superclass.tree, $class_body.decls_fields, $class_body.decls_methods);
             setLocation($tree, $CLASS);
+            setLocation($name.tree, $name.start);
+            setLocation($superclass.tree, $superclass.start);
         }
     ;
 
@@ -623,7 +628,11 @@ decl_field[AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
 
 decl_method returns[DeclMethod tree]
 @init {
-
+        MethodBody method_body;
+        MethodAsmBody method_asm_body;
+        StringLiteral asm_body_text;
+        Identifier asm_type;
+        Identifier asm_method_name;
 }
     : type ident OPARENT params=list_params CPARENT (block {
             // A FAIRE: Remplacer $ block par quelque chose en MethodBody ?
@@ -632,19 +641,29 @@ decl_method returns[DeclMethod tree]
             assert($params.tree != null);
             assert($block.decls != null);
             assert($block.insts != null);
-            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, new MethodBody($block.decls, $block.insts));
+            method_body = new MethodBody($block.decls, $block.insts);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, method_body);
+            setLocation(method_body, $block.start);
             setLocation($tree, $type.start);
             setLocation($type.tree, $type.start);
             setLocation($ident.tree, $ident.start);
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
-            // A FAIRE: Remplacer $ code par quelque chose en MethodAsmBody ?
-            // A FAIRE: Les 2 assert ci dessous sont peut être inutiles ?
+
+            // A FAIRE: La gestion ci dessous semble assez incorrecte
+
             assert($code.location != null);
             assert($code.text != null);
-            $tree = new DeclMethod(new Identifier(tableSymbol.create("asm_type")), new Identifier(tableSymbol.create("asm_method_name")), new ListDeclParam(), new MethodAsmBody(new StringLiteral($code.text)));
+            asm_body_text = new StringLiteral($code.text);
+            method_asm_body = new MethodAsmBody(asm_body_text);
+            asm_type = new Identifier(tableSymbol.create("asm_type"));
+            asm_method_name = new Identifier(tableSymbol.create("asm_method_name"));
+            $tree = new DeclMethod(asm_type, asm_method_name, new ListDeclParam(), method_asm_body);
             setLocation($tree, $ASM);
-            // A FAIRE: $ code returns un attribute Location, donc peut être pas besoin de setLocation dessus ??
+            setLocation(asm_body_text, $code.start);
+            setLocation(method_asm_body, $OPARENT);
+            setLocation(asm_type, $ASM);
+            setLocation(asm_method_name, $ASM);
         }
       ) {
         }
