@@ -27,6 +27,11 @@ public class Return extends AbstractInst {
 	@Override
 	protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
+		Type rType = rvalue.verifyExpr(compiler, localEnv, currentClass);
+		if (rType != null && !rType.sameType(returnType)) {
+			throw new ContextualError("Expected return of type " + returnType.getName() + ", got " + rType.getName(),
+					rvalue.getLocation());
+		}
 		if (returnType.isVoid()) {
 			throw new ContextualError("Return value cannot be of type void (3.24)",
 					this.getLocation());

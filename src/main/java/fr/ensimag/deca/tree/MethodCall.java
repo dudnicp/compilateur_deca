@@ -63,12 +63,10 @@ public class MethodCall extends AbstractExpr {
     	Signature sig2 = new Signature();
     	arguments.verifySignature(compiler, localEnv, currentClass, sig2);
     	// verify that signatures match
-    	System.out.println(sig.toString());
-    	System.out.println(sig2.toString());
     	if (!sig.equals(sig2)) {
     		throw new ContextualError("Signature of called method " + methodName.getName() + " does not match its definition (3.71)",
     				methodName.getLocation());
-    	} else System.out.println("OK signature");
+    	}
     	// returnType of the method called
     	this.setType(methodDef.getType());
     	methodName.setDefinition(methodDef);

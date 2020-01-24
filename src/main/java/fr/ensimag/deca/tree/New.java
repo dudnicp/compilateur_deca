@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -19,9 +20,10 @@ public class New extends AbstractExpr {
 	@Override
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
-		ClassType newType = compiler.getEnvTypes().get(newName.getName()).getType().asClassType("not a class type", newName.getLocation());
+		Type nType = newName.verifyType(compiler);
+		ClassType newType = nType.asClassType("not a class type", newName.getLocation());
 		this.setType(newType);
-		newName.setDefinition(compiler.getEnvTypes().get(newName.getName()));
+		newName.setDefinition(newType.getDefinition());
 		return newType;
 	}
 

@@ -49,7 +49,11 @@ public abstract class Environment {
      * symbol is undefined.
      */
 	public Definition get(Symbol key) {
-		return definitionMap.get(key);
+		Definition def  = definitionMap.get(key);
+		if (definitionMap.get(key) == null) {
+			if (parent == null) return null;
+			else return parent.get(key);
+		} else return def;
 	}
 	
 	public Definition getDefinitionFromName(String name) {
@@ -85,17 +89,27 @@ public abstract class Environment {
      * @throws DoubleDefException
      * 			if the symbol is already defined in any environment linked to this one
      */
-    public void isDefined(Symbol name) throws DoubleDefException{
+    public boolean isDefined(Symbol name) {
     	if (this.get(name) == null) {
     		if (parent != null) {
     			parent.isDefined(name); // look up parent environment
     		} else {
-    			return; // stop here - no previous definition of symbol "name"
+    			return false; // stop here - no previous definition of symbol "name"
     		}
-    	} else {
-    		throw new DoubleDefException();
     	}
+    	return true;
     	
+    }
+    
+    @Override
+    public String toString() {
+    	String str = "";
+    	for (Symbol s: definitionMap.keySet()) {
+    		str = str + " ||| symbol: " + s + " --> " + definitionMap.get(s); 
+    	}
+    	if (parent != null) {
+    		return str + parent.toString();
+    	} else return str;
     }
     
 }
