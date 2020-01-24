@@ -38,11 +38,15 @@ public class ListInst extends TreeList<AbstractInst> {
         	i.verifyInst(compiler, localEnv, currentClass, returnType);
         }
     }
+    
+    public void codeGenListInstInMethod(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+		for (AbstractInst i : getList()) {
+			i.codeGenInstInMethod(program, registerManager, className, methodName);
+		}
+	}
 
     public void codeGenListInst(IMAProgram program, RegisterManager registerManager) {
         for (AbstractInst i : getList()) {
-//        	String commentLine = i.decompile();
-//        	compiler.addComment(commentLine);
             i.codeGenInst(program, registerManager);
         }
     }

@@ -12,6 +12,9 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 
 public class Return extends AbstractInst {
 	
@@ -41,9 +44,9 @@ public class Return extends AbstractInst {
 	}
 
 	@Override
-	protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
-		// TODO Auto-generated method stub
-
+	protected void codeGenInstInMethod(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+		rvalue.codeExpr(program, 1, registerManager);
+		program.addInstruction(new BRA(Label.getMethodEndLabel(className, methodName)));
 	}
 
 	@Override

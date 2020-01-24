@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -15,6 +16,13 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.ListDeclParam;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.ERROR;
+import fr.ensimag.ima.pseudocode.instructions.WNL;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class DeclMethod extends Tree {
 	private AbstractIdentifier type;
@@ -94,5 +102,41 @@ public class DeclMethod extends Tree {
 		methodName.iter(f);
 		listDeclParam.iterChildren(f);
 	}
-
+	
+	public void codeGen(IMAProgram program, String className) {
+		RegisterManager registerManager = new RegisterManager(Register.LB);
+		
+		IMAProgram startLabelCode = new IMAProgram();
+		IMAProgram tstoCode = new IMAProgram();
+		IMAProgram saveRegisterCode = new IMAProgram();
+		IMAProgram bodyCode = new IMAProgram(); 
+		IMAProgram returnErrorCode = new IMAProgram();
+		IMAProgram endLabelCode = new IMAProgram();
+		IMAProgram restoreRegistersCode = new IMAProgram();
+		
+		startLabelCode.addLabel(Label.getMethodStartLabel(className, methodName.getName().getName()));
+		endLabelCode.addLabel(Label.getMethodEndLabel(className, methodName.getName().getName()));
+		
+		methodBody.codeGen(bodyCode, registerManager, className, methodName.getName().getName());
+		
+		if (!type.getType().isVoid()) {
+			returnErrorCode.addInstruction(new WSTR(new ImmediateString("Error : exiting function " + 
+							className + "." + methodName.getName().getName() + " without return instruction")));
+			returnErrorCode.addInstruction(new WNL());
+			returnErrorCode.addInstruction(new ERROR());
+		}
+		
+		registerManager.saveGPRegisters(saveRegisterCode);
+		registerManager.restoreGPRegisters(restoreRegistersCode);
+		
+		registerManager.codeTSTO(tstoCode);
+		
+		program.append(startLabelCode);
+		program.append(tstoCode);
+		program.append(saveRegisterCode);
+		program.append(bodyCode);
+		program.append(returnErrorCode);
+		program.append(endLabelCode);
+		program.append(restoreRegistersCode);
+	}
 }

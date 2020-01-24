@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 
 /**
  *
@@ -46,5 +47,15 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
     	}
     }
 
-
+    public void codeGenMethod(IMAProgram program) {
+		for (AbstractDeclClass declClass : getList()) {
+			declClass.codeGenMethod(program);
+		}
+	}
+    
+    public void createMethodTable(IMAProgram program) {
+		for (AbstractDeclClass declClass : getList()) {
+			declClass.createMethodTable(program);
+		}
+	}
 }

@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
@@ -11,7 +12,20 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
+import fr.ensimag.ima.pseudocode.instructions.NEW;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class New extends AbstractExpr {
 	private AbstractIdentifier newName;
@@ -46,8 +60,20 @@ public class New extends AbstractExpr {
 	}
 	
 	@Override
-	protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
-		// TODO
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+		int d = newName.getClassDefinition().getNumberOfFields() + 1;
+		program.addInstruction(new NEW(new ImmediateInteger(d), Register.getR(n)));
+		program.addInstruction(new BOV(Label.HEAPOVERFLOW));
+		DAddr addr = MethodTable.getClassAddr(newName.getName().getName());
+		program.addInstruction(new LEA(addr, Register.R0));
+		program.addInstruction(new STORE(Register.R0, new RegisterOffset(0, Register.getR(n))));
+		program.addInstruction(new PUSH(Register.getR(n)));
+		registerManager.incCurrentNumberOfMethodParams(1);
+		program.addInstruction(new BSR(Label.getInitLabel(newName.getName().getName())));
+		registerManager.incCurrentNumberOfMethodParams(2);
+		registerManager.decCurrentNumberOfMethodParams(2);
+		program.addInstruction(new POP(Register.getR(n)));
+		registerManager.decCurrentNumberOfMethodParams(1);
 	}
 
 }

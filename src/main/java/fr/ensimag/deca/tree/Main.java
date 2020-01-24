@@ -77,7 +77,7 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) {
+    protected void codeGenMain(IMAProgram program) {
     	
     	IMAProgram mainProgram = new IMAProgram();
     	mainProgram.addComment("Beginning of main instructions:");
@@ -89,26 +89,6 @@ public class Main extends AbstractMain {
         mainProgram.addFirst(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
         mainProgram.addFirst(new BOV(Label.STACKOVERFLOW));
         RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(mainProgram);
-        
-        // coding errors
-        mainProgram.addLabel(Label.STACKOVERFLOW);
-        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Stack overflow")));
-        mainProgram.addInstruction(new ERROR());
-        mainProgram.addLabel(Label.DIVBYZERO);
-        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Division by zero")));
-        mainProgram.addInstruction(new ERROR());
-        mainProgram.addLabel(Label.OVERFLOW);
-        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Overflow during arithmetic operation")));
-        mainProgram.addInstruction(new ERROR());
-        mainProgram.addLabel(Label.INVALIDINPUT);
-        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Invalid input")));
-        mainProgram.addInstruction(new ERROR());
-        mainProgram.addLabel(Label.NULLOBJECT);
-        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Cannot acces null object")));
-        mainProgram.addInstruction(new ERROR());
-        mainProgram.addLabel(Label.IMPOSSIBLECONVFLOAT);
-        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Impossible converion to float")));
-        mainProgram.addInstruction(new ERROR());
     }
     
     @Override

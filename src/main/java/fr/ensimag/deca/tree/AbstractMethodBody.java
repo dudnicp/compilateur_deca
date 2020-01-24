@@ -3,11 +3,13 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 
 public abstract class AbstractMethodBody extends Tree {
 
@@ -40,4 +42,5 @@ public abstract class AbstractMethodBody extends Tree {
 	protected abstract void verifyMethodBody(DecacCompiler compiler,
 			Symbol currentClass);
 
+	public abstract void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName);
 }
