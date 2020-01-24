@@ -103,8 +103,8 @@ public abstract class AbstractExpr extends AbstractInst {
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);
     		return convFloat;
-    	}
-    	else if (!type2.sameType(expectedType)) {
+    	} else if (expectedType.isClass() && type2.isClassOrNull()) {
+    	} else if (!type2.sameType(expectedType)) {
     		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
     		+ expectedType + " (3.28)", this.getLocation());
     	}

@@ -9,6 +9,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.CodeTSTO;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.FieldDefinition;
@@ -54,16 +55,17 @@ public class DeclField extends AbstractDeclField {
 		}
 		fieldName.setType(typeVerified);
 		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-		ClassDefinition superDef = (ClassDefinition)compiler.getEnvTypes().get(superClass);
 
 		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
 				visibility, currDef, 0));
-		// TODO handle field already defined in superclass (2.5)
 		try {
 			currDef.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
 		} catch (DoubleDefException e) {
-			throw new ContextualError("Field " + fieldName.getName() + " already defined",
-				 fieldName.getLocation());
+			Definition doubleDef = currDef.getMembers().get(fieldName.getName());
+			if (doubleDef == null) System.out.println("HERE");
+			FieldDefinition field = doubleDef.asFieldDefinition("Field " + fieldName.getName()
+			+ " should redefine another field", fieldName.getLocation());
+			currDef.getMembers().getDefinitionMap().put(fieldName.getName(), fieldName.getDefinition());
 		}
 	}
 

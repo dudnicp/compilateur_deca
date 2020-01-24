@@ -31,8 +31,8 @@ public class EnvironmentExp extends Environment{
     
     @Override
     public void declare(Symbol name, Definition def) throws DoubleDefException {
-    	if (this.get(name) != null) { // already exists in this
-    		throw new DoubleDefException(); // environment
+    	if (this.get(name) != null) {
+    		throw new DoubleDefException(); 
     	} else { // else we add it to the map
     		this.getDefinitionMap().put(name, def);
     	}

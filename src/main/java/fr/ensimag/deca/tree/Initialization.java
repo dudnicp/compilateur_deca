@@ -42,10 +42,13 @@ public class Initialization extends AbstractInitialization {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
     	expression = expression.verifyRValue(compiler, localEnv, currentClass, t);
-    	if (!expression.getType().sameType(t)) {
+    	if (expression.getType().isClassOrNull() && t.isClass()) {}
+    	else if (!expression.getType().sameType(t) ||
+    			(expression.getType().isClass() && t.isClass() && !expression.getType().getName().equals(t.getName()))) {
     		throw new ContextualError("Initialization of type " + expression.getType()
     			+ " to variable of type " + t, expression.getLocation());
     	}
+    	System.out.println(expression.getType().getName() + " --- " + t.getName());
     	this.setLocation(expression.getLocation());
     }
 
