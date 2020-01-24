@@ -8,11 +8,13 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.tree.ListDeclParam;
 
 public class DeclMethod extends Tree {
 	private AbstractIdentifier type;
@@ -30,8 +32,18 @@ public class DeclMethod extends Tree {
 	
 	public void verifyDeclMethod(DecacCompiler compiler,
 			Symbol currentClass) throws ContextualError {
-        // TODO: dont throw exception when type is void
-		Type verifiedType = type.verifyType(compiler);
+    	EnvironmentType envTypes = compiler.getEnvTypes();
+    	Definition def = envTypes.getDefinitionFromName(type.getName().toString()); // predefined types
+    	Type verifiedType;
+    	if (def == null) def = envTypes.get(type.getName()); // classes type
+    	if (def == null) {
+    		throw new ContextualError("Type " + type.getName() + " is not defined (0.2)",
+    				this.getLocation());
+    	} else {
+        	verifiedType = def.getType();
+        	type.setDefinition(def);
+    		type.setType(verifiedType);
+    	}
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
 		// TODO verifier la redifinition d'une methode
 		// ie meme returnType et signature

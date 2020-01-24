@@ -16,14 +16,12 @@ public class ListDeclParam extends TreeList<DeclParam> {
 	}
 	
 	public Signature verifyListDeclParam(DecacCompiler compiler) throws ContextualError {
-        System.out.println("verify listdeclparam start");
 		Signature sig = new Signature();
 		Type paramType;
 		for (DeclParam p: this.getList()) {
 			paramType = p.verifyDeclParam(compiler);
 			sig.add(paramType);
 		}
-        System.out.println("verify listdeclparam end");
 		return sig;
 	}
 	

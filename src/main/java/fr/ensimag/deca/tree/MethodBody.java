@@ -22,12 +22,10 @@ public class MethodBody extends AbstractMethodBody {
 	public void verifyClassMethodBody(DecacCompiler compiler,
 			EnvironmentExp envExpParam, Symbol currentClass,
 			Type returnType) throws ContextualError {
-		System.out.println("verifyMethodBody: start");
 		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 		listDeclVar.verifyListDeclVariable(compiler, envExpParam,
 				classDef);
 		listInst.verifyListInst(compiler, envExpParam, classDef, returnType);
-		System.out.println("verifyMethodBody: start");
 
 	}
 	

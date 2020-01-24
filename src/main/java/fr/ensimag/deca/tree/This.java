@@ -17,6 +17,7 @@ public class This extends AbstractExpr {
 		if (currentClass == null) {
 			throw new ContextualError("This cannot be used in main (3.43)", this.getLocation());
 		}
+		this.setType(currentClass.getType());
 		return currentClass.getType();
 	}
 
@@ -27,7 +28,7 @@ public class This extends AbstractExpr {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		s.println(prefix + " This");
+		// leaf node -- nothing to do
 	}
 
 	@Override

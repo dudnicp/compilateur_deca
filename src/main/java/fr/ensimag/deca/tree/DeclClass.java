@@ -57,17 +57,9 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        LOG.debug("verifyClass start");
-        /*
-        LOG.debug("className: " + className.getName());
-        LOG.debug("superClassName: " + superClassName.getName());
-        for (Symbol s: envTypes.getDefinitionMap().keySet()) {
-            LOG.debug(s.toString() + envTypes.get(s));
-        }
-        */
     	EnvironmentType envTypes = compiler.getEnvTypes();
         ClassDefinition superClassDef;
- 	    if (superClassName.getName().toString() == "Object") {
+ 	    if (superClassName.getName().toString().equals("Object")){
             superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("Object");
             superClassName.setLocation(superClassDef.getLocation());
         } else if (envTypes.get(superClassName.getName()) == null) {
@@ -80,15 +72,13 @@ public class DeclClass extends AbstractDeclClass {
         superClassName.setDefinition(superClassDef);
         ClassType classType;
     	try {
-    		classType = new ClassType(className.getName(), Location.BUILTIN, superClassDef);
+    		classType = new ClassType(className.getName(), className.getLocation(), superClassDef);
     		envTypes.declare(className.getName(), classType.getDefinition());
     	} catch (DoubleDefException e) {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
         className.setType(classType);
         className.setDefinition(classType.getDefinition());
-
-        LOG.debug("verifyClass end");
     }
 
 
@@ -98,13 +88,6 @@ public class DeclClass extends AbstractDeclClass {
             throws ContextualError {
     	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
     	methods.verifyListDeclMethod(compiler, this.className.getName());
-    	/*
-        ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
-        EnvironmentExp env = classDef.getMembers();
-        for (Symbol s: env.getDefinitionMap().keySet()) {
-            System.out.println("member " + s + " --> " + env.get(s));
-        }
-        */
     }
 
     @Override
