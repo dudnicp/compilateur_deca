@@ -1,0 +1,17 @@
+// @result 5.4
+/*
+    Description : Test sur l'initialisation d'un float en tenant compte de la superclasse (cf p211 4.3)
+
+    Résultat: OK (cf poly p212 4.3)
+
+*/
+class A{
+    float x = 5.4;
+}
+class C extends A{
+    float x; // x DOIT VALOIR 5.4
+}
+{
+    C p = new C();
+    println(p.x);
+}
