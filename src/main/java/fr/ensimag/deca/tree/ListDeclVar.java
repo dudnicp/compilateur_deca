@@ -1,10 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 
 /**
  * List of declarations (e.g. int x; float y,z).
@@ -41,11 +43,11 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
     	}
     }
     
-    protected void codeGenDecl(DecacCompiler compiler) {
+    protected void codeGenDecl(IMAProgram program, RegisterManager registerManager) {
     	for (AbstractDeclVar declVar : getList()) {
     		String declComment = declVar.decompile();
-    		compiler.addComment(declComment);
-    		declVar.codeGenDeclVar(compiler);
+    		program.addComment(declComment);
+    		declVar.codeGenDeclVar(program, registerManager);
     	}
 	}
 }

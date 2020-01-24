@@ -20,6 +20,8 @@ public class Label extends Operand {
 	public static final Label INVALIDINPUT = new Label("invalid_input");
 	public static final Label OVERFLOW = new Label("overflow");
 	public static final Label NULLOBJECT = new Label("null_object");	
+	public static final Label IMPOSSIBLECONVFLOAT = new Label("impossible_conv_float");
+	
 	
 	private static int endAndLabelCounter = 0;
 	private static int endOrLabelCounter = 0;
@@ -27,6 +29,10 @@ public class Label extends Operand {
 	private static int elseIfLabelCounter = 0;
 	private static int beginWhileLabelCounter = 0;
 	private static int whileCondLabelCounter = 0;
+	
+	public static Label getInitLabel(String className) {
+		return new Label("init." + className);
+	}
 	
 	public static Label getMethodLabel(String className, String methodName) {
 		return new Label("code." + className + "." + methodName);

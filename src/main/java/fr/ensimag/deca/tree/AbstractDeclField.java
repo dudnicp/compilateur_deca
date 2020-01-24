@@ -3,11 +3,15 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Register;
 
 public abstract class AbstractDeclField extends Tree {
 
@@ -28,7 +32,7 @@ public abstract class AbstractDeclField extends Tree {
             throws ContextualError {
 	}
     
-    protected abstract void codeGenDeclField(DecacCompiler compiler);
+    protected abstract void codeGenProperInit(IMAProgram program, GPRegister register, RegisterManager registerManager);
     
-    
+    protected abstract void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager);
 }

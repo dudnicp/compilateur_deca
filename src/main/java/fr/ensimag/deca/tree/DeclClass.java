@@ -6,17 +6,23 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.codegen.RegisterHandler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -133,13 +139,63 @@ public class DeclClass extends AbstractDeclClass {
 		compiler.addInstruction(new STORE(Register.R0, MethodTable.getClassAddr(classString)));
 		for (Label methodLabel : MethodTable.getMethods(classString)) {
 			compiler.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
-			compiler.addInstruction(new STORE(Register.R0, RegisterHandler.MAINREGISTERHANDLER.getNewAdress()));
+			compiler.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
 		}
 		
 	}
     
+    protected void codeGenInit(DecacCompiler compiler) {
+    	RegisterManager registerManager = new RegisterManager(Register.LB);
+    	
+    	IMAProgram labelInstruction = new IMAProgram();
+    	IMAProgram tstoInstruction = new IMAProgram();
+    	IMAProgram saveRegisters = new IMAProgram();
+    	IMAProgram classInit = new IMAProgram();
+    	IMAProgram restoreRegisters = new IMAProgram();
+    	
+    	/* Coding init label */
+    	labelInstruction.addLabel(Label.getInitLabel(className.getName().getName()));
+    	
+    	/* Coding initialisation */
+    	classInit.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+    	fields.codeGenDefaultInit(classInit, Register.R1, registerManager);
+    	
+    	// super class initialisation
+		if (!superClassName.getName().getName().equals("Object")) {
+			classInit.addInstruction(new PUSH(Register.R1));
+			registerManager.incCurrentNumberOfMethodParams(1);
+			classInit.addInstruction(new BSR(Label.getInitLabel(superClassName.getName().getName())));
+			registerManager.incCurrentNumberOfMethodParams(2);
+			registerManager.decCurrentNumberOfMethodParams(2);
+			classInit.addInstruction(new POP(Register.R1));
+			registerManager.decCurrentNumberOfMethodParams(1);
+		}
+		
+		fields.codeGenProperInit(classInit, Register.R1, registerManager);
+		classInit.addInstruction(new RTS());
+		
+		/* coding registers save */
+		registerManager.saveGPRegisters(saveRegisters);
+		
+		/* coding registers restoration */
+		registerManager.restoreGPRegisters(restoreRegisters);
+		
+		/* coding tsto instrunction */
+		registerManager.codeTSTO(tstoInstruction);
+		
+		
+		/* class initialisation final structure */
+		compiler.append(labelInstruction);
+		compiler.append(tstoInstruction);
+		compiler.append(saveRegisters);
+		compiler.append(classInit);
+		compiler.append(restoreRegisters);
+		compiler.addInstruction(new RTS());
+	}
+    
     @Override
     protected void codeGenDecl(DecacCompiler compiler) {
-    	//TODO
+    	codeGenInit(compiler);
+    	
     }
 }

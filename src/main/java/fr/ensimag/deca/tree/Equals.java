@@ -1,8 +1,10 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
@@ -27,19 +29,19 @@ public class Equals extends AbstractOpExactCmp {
     }
 	
 	@Override
-	protected void codeBranch(DecacCompiler compiler, boolean b, Label label) {
+	protected void codeBranch(IMAProgram program, boolean b, Label label) {
 		if (b) {
-			compiler.addInstruction(new BEQ(label));
+			program.addInstruction(new BEQ(label));
 		}
 		else {
-			compiler.addInstruction(new BNE(label));
+			program.addInstruction(new BNE(label));
 		}
 	}
 
 	
 	@Override
-	protected void codeAssign(DecacCompiler compiler, int n) {
-		codeExpr(compiler, n);
-		compiler.addInstruction(new SEQ(Register.getR(n)));		
+	protected void codeAssign(IMAProgram program, int n, RegisterManager registerManager) {
+		codeExpr(program, n, registerManager);
+		program.addInstruction(new SEQ(Register.getR(n)));		
 	}
 }

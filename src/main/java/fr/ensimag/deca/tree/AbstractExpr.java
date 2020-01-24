@@ -2,6 +2,7 @@
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -10,6 +11,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
@@ -142,57 +144,57 @@ public abstract class AbstractExpr extends AbstractInst {
     /**
      * Generate code to print the expression
      *
-     * @param compiler
+     * @param program
      */
-    protected void codeGenPrint(DecacCompiler compiler) {
-    	codeGenInst(compiler);
-    	compiler.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
-    	codeGenPrintInstruction(compiler);
+    protected void codeGenPrint(IMAProgram program, RegisterManager registerManager) {
+    	codeGenInst(program, registerManager);
+    	program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
+    	codeGenPrintInstruction(program);
     }
     
-    protected void codeGenPrintHex(DecacCompiler compiler) {
-    	codeGenInst(compiler);
-    	compiler.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
-    	compiler.addInstruction(new WFLOATX());
+    protected void codeGenPrintHex(IMAProgram program, RegisterManager registerManager) {
+    	codeGenInst(program, registerManager);
+    	program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
+    	program.addInstruction(new WFLOATX());
 	}
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
-        codeExpr(compiler, Register.defaultRegisterIndex);
+    protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
+        codeExpr(program, Register.defaultRegisterIndex, registerManager);
     }
     
-    protected void codeGenPrintInstruction(DecacCompiler compiler) {
-    	compiler.addInstruction(new WINT());
+    protected void codeGenPrintInstruction(IMAProgram program) {
+    	program.addInstruction(new WINT());
     }
     
-    protected void codeExpr(DecacCompiler compiler, int n) {
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
     
-    protected void codeCMP(DecacCompiler compiler, int n) {
+    protected void codeCMP(IMAProgram program, int n) {
     	throw new UnsupportedOperationException("not yet implemented");
 	}
     
-    protected void codeAssign(DecacCompiler compiler, int n) {
-		codeExpr(compiler, n);
+    protected void codeAssign(IMAProgram program, int n, RegisterManager registerManager) {
+		codeExpr(program, n, registerManager);
 	}
     
-    protected void codeBranch(DecacCompiler compiler, boolean b, Label label) {
+    protected void codeBranch(IMAProgram program, boolean b, Label label) {
     	if (b) {
-			compiler.addInstruction(new BNE(label));
+			program.addInstruction(new BNE(label));
 		} else {
-			compiler.addInstruction(new BEQ(label));
+			program.addInstruction(new BEQ(label));
 		}
 	}
     
-    protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
-    	codeExpr(compiler, n);
-    	codeCMP(compiler, n);
-    	codeBranch(compiler, b, label);
+    protected void codeCondExpr(IMAProgram program, boolean b, Label label, int n, RegisterManager registerManager) {
+    	codeExpr(program, n, registerManager);
+    	codeCMP(program, n);
+    	codeBranch(program, b, label);
     }
     
-    protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
-    	codeCondExpr(compiler, b, label, 2);
+    protected void codeCond(IMAProgram program, boolean b, Label label, RegisterManager registerManager) {
+    	codeCondExpr(program, b, label, 2, registerManager);
 	}
     
     protected DVal dval() {

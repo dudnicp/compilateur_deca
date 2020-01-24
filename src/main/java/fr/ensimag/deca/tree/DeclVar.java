@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.NullOperand;
@@ -11,7 +12,7 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.CodeTSTO;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -89,20 +90,11 @@ public class DeclVar extends AbstractDeclVar {
     }
     
     @Override
-    protected void codeGenDeclVar(DecacCompiler compiler) {
-    	DAddr addr = Register.getNewAddr();
+    protected void codeGenDeclVar(IMAProgram program, RegisterManager registerManager) {
+    	DAddr addr = registerManager.getNewAddress();
     	varName.getVariableDefinition().setOperand(addr);
-    	CodeTSTO.incLocalVariables();
-    	if (type.getType().isFloat()) {
-    		compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.getDefaultRegister()));
-    		
-		} else if (type.getType().isClassOrNull()) {
-			compiler.addInstruction(new LOAD(new NullOperand(), Register.getDefaultRegister()));
-		} else {
-			compiler.addInstruction(new LOAD(new ImmediateInteger(0), Register.getDefaultRegister()));
-		}
-    	initialization.codeExpr(compiler, Register.defaultRegisterIndex);
-    	compiler.addInstruction(new STORE(Register.getDefaultRegister(), addr));
+    	initialization.codeExpr(program, Register.defaultRegisterIndex, registerManager);
+    	program.addInstruction(new STORE(Register.getDefaultRegister(), addr));
     }
     
 }

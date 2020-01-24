@@ -1,8 +1,12 @@
 package fr.ensimag.ima.pseudocode;
 
 
+import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractIdentifier;
 import fr.ensimag.deca.tree.AbstractLValue;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 /**
  * Register operand (including special registers like SP).
@@ -19,7 +23,7 @@ public class Register extends DVal {
 	
 	public static final int defaultRegisterIndex = 2;
 	
-	public static GPRegister getDefaultRegister( ) {
+	public static GPRegister getDefaultRegister() {
 		return getR(defaultRegisterIndex);
 	}
 	
@@ -28,14 +32,8 @@ public class Register extends DVal {
 	}
 	
 	public static void setRMAX(int n) {
-		assert(n > 1 && n < 16);
+		Validate.isTrue(n > 1 && n < 16);
 		RMAX = n;
-	}
-	
-	public static DAddr getNewAddr() {
-		DAddr retAddr = new RegisterOffset(nextAddr, GB); // variante sans objet;
-		nextAddr++;
-		return retAddr;
 	}
 	
     private String name;

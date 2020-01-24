@@ -8,6 +8,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -24,6 +25,7 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
@@ -269,33 +271,34 @@ public class Identifier extends AbstractIdentifier {
     
     
     @Override
-    protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	program.addInstruction(new LOAD(this.dval(), Register.getR(n)));
     	if (getType().isClassOrNull()) {
-			codeCMP(compiler, n);
-			compiler.addInstruction(new BEQ(Label.NULLOBJECT));
+			codeCMP(program, n);
+			program.addInstruction(new BEQ(Label.NULLOBJECT));
 		}
     }
     
     @Override
-    protected void codeCMP(DecacCompiler compiler, int n) {
+    protected void codeCMP(IMAProgram program, int n) {
     	if (getType().isFloat()) {
-			compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+    		program.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
 		} else if (getType().isClassOrNull()) {
-			compiler.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
-		}{
-			compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+			program.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
+		} else {
+			program.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
 		}
     }
     
     @Override
-    protected void codeGenPrintInstruction(DecacCompiler compiler) {
+    protected void codeGenPrintInstruction(IMAProgram program) {
     	Type type = getType();
     	if (type.isInt() || type.isBoolean()) {
-			compiler.addInstruction(new WINT());
+			program.addInstruction(new WINT());
 		}
     	else if (type.isFloat()) {
-			compiler.addInstruction(new WFLOAT());
+			program.addInstruction(new WFLOAT());
 		}
     }
 }

@@ -13,7 +13,7 @@ public abstract class MethodTable {
 	public static void addClass(String name, int nMethods) {
 		Validate.isTrue(nMethods >= 0);
 		methodTable.put(name, new Label[nMethods]);
-		tablesAdress.put(name, RegisterHandler.MAINREGISTERHANDLER.getNewAdress());
+		tablesAdress.put(name, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress());
 	}
 	
 	public static DAddr getClassAddr(String classeName) {

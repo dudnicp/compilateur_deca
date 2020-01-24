@@ -2,7 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.MethodTable;
-import fr.ensimag.deca.codegen.RegisterHandler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
@@ -57,13 +57,13 @@ public class Program extends AbstractProgram {
     	// creating method table for the super-class Object
     	MethodTable.addClass("Object", 1);
     	Label objectEqualsLabel = Label.getMethodLabel("Object", "equals");
-    	MethodTable.putMethod("Object", objectEqualsLabel, 1);
+    	MethodTable.putMethod("Object", objectEqualsLabel, 0);
     	
     	// generating code for the method table of the super class Object
     	compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
-    	compiler.addInstruction(new STORE(Register.R0, RegisterHandler.MAINREGISTERHANDLER.getNewAdress()));
+    	compiler.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
     	compiler.addInstruction(new LOAD(new LabelOperand(objectEqualsLabel), Register.R0));
-    	compiler.addInstruction(new STORE(Register.R0, RegisterHandler.MAINREGISTERHANDLER.getNewAdress()));
+    	compiler.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
     	
     	for (AbstractDeclClass c : classes.getList()) {
     		c.codeGenMethodTable(compiler);
