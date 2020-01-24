@@ -65,9 +65,6 @@ public class DeclField extends AbstractDeclField {
 			throw new ContextualError("Field " + fieldName.getName() + " already defined",
 				 fieldName.getLocation());
 		}
-		initialization.verifyInitialization(compiler, typeVerified, currDef.getMembers(),
-				currDef);
-		
 	}
 
 	@Override
