@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
@@ -25,18 +26,18 @@ public class Divide extends AbstractOpArith {
     }
 
     @Override
-	protected void mnemo(DecacCompiler compiler, DVal op,
+	protected void mnemo(IMAProgram program, DVal op,
 			GPRegister register) {
     	if (getLeftOperand().getType().isInt()) {
-			compiler.addInstruction(new QUO(op, register));
+    		program.addInstruction(new QUO(op, register));
 		}
     	else if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
-    		compiler.addInstruction(new DIV(op, register));
+    		program.addInstruction(new DIV(op, register));
         	if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
-    			compiler.addInstruction(new BOV(Label.OVERFLOW));
+        		program.addInstruction(new BOV(Label.OVERFLOW));
     		}
 		}
-    	compiler.addInstruction(new BOV(Label.DIVBYZERO));
+    	program.addInstruction(new BOV(Label.DIVBYZERO));
     }
     
 }

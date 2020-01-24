@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 
@@ -52,7 +53,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     }
     
     @Override
-    protected void codeCMP(DecacCompiler compiler, int n) {
-    	getLeftOperand().codeCMP(compiler, n);
+    protected void codeCMP(IMAProgram program, int n) {
+    	getLeftOperand().codeCMP(program, n);
     }
 }

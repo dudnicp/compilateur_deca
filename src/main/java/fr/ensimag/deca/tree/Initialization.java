@@ -2,12 +2,14 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
@@ -71,8 +73,7 @@ public class Initialization extends AbstractInitialization {
     }
     
     @Override
-	public void codeExpr(DecacCompiler compiler, int n, DAddr addr) {
-    	expression.codeAssign(compiler, n);
-    	compiler.addInstruction(new STORE(Register.getR(n), addr));
+	public void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	expression.codeAssign(program, n, registerManager);
     }
 }

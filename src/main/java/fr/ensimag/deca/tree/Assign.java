@@ -4,6 +4,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
@@ -11,6 +12,7 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -54,9 +56,9 @@ public class Assign extends AbstractBinaryExpr {
     }
      
     @Override
-    protected void codeExpr(DecacCompiler compiler, int n) {
-    	getRightOperand().codeAssign(compiler, n);
-    	compiler.addInstruction(new STORE(Register.getR(n), getLeftOperand().daddr()));
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	getRightOperand().codeAssign(program, n, registerManager);
+    	program.addInstruction(new STORE(Register.getR(n), getLeftOperand().daddr()));
     }
     
 }

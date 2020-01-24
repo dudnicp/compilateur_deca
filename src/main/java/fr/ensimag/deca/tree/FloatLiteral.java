@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -10,6 +11,7 @@ import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -51,18 +53,19 @@ public class FloatLiteral extends AbstractExpr {
     }
     
     @Override
-    protected void codeGenPrintInstruction(DecacCompiler compiler) {
-        compiler.addInstruction(new WFLOAT());
+    protected void codeGenPrintInstruction(IMAProgram program) {
+        program.addInstruction(new WFLOAT());
     }
 
     @Override
-	protected void codeExpr(DecacCompiler compiler, int registerIndex) {
-    	compiler.addInstruction(new LOAD(new ImmediateFloat(value), Register.getR(registerIndex)));
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	program.addInstruction(new LOAD(new ImmediateFloat(value), Register.getR(n)));
 	}
     
     @Override
-    protected void codeCMP(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+    protected void codeCMP(IMAProgram program, int n) {
+    	program.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
     }
     
     @Override
