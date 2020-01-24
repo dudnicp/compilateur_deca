@@ -37,7 +37,7 @@ public class New extends AbstractExpr {
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
 		Type nType = newName.verifyType(compiler);
-		ClassType newType = nType.asClassType("not a class type", newName.getLocation());
+		ClassType newType = nType.asClassType(nType + " is not a class type", newName.getLocation());
 		this.setType(newType);
 		newName.setDefinition(newType.getDefinition());
 		return newType;

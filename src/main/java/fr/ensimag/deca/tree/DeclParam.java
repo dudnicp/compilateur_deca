@@ -54,8 +54,8 @@ public class DeclParam extends AbstractDeclParam {
 		try {
 			envExpParam.declare(paramName.getName(), paramName.getDefinition());
 		} catch (DoubleDefException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ContextualError("Two parameters share the same name " + paramName.getName(),
+					paramName.getLocation());
 		}
 	}
 

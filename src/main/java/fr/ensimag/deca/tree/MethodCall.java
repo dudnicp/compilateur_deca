@@ -54,7 +54,7 @@ public class MethodCall extends AbstractExpr {
     	EnvironmentExp e = objectType.getDefinition().getMembers();
     	Definition def = objectType.getDefinition().getMembers().get(methodName.getName());
     	if (def == null) {
-    		throw new ContextualError("Method " + methodName.getName() + "is not defined in class " + objectType.getName(),
+    		throw new ContextualError("Method " + methodName.getName() + " is not defined in class " + objectType.getName(),
     				methodName.getLocation());
     	}
     	MethodDefinition methodDef = def.asMethodDefinition("not a method defintion", this.getLocation());

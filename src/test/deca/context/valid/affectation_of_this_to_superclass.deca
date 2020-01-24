@@ -3,6 +3,7 @@
 
     Résultat: OK
 */
+class A {}
 class B{
-    Object p = this;
+    A p = this;
 }
