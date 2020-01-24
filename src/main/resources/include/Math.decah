@@ -15,7 +15,7 @@ class Math {
     return res;
   }
 
-
+  //Fait le calcul que pour des angles dans [0,pi/2]
   float tan(float f) {
     int k = 0; //definit le plus grand angle courant de rotation possible
     float X = 1.0f; //Abscisse du point Mj courant
@@ -117,13 +117,27 @@ class Math {
 
     }
 
-    float sin(float f) {
+    //CALCUL SQRT AVEC METHODE BABYLONE (7 CHIFFRES APRES LA VIRGULE)
+    float SQRT(float f){
+      if (f < 0)
+        System.out.println("Erreur: nombre négatif ");
+      float x = 0.1f;
+      int i = 0;
+      while (i < 100) {
+        x = (0.5f)*(x + (f/x));
+        i = i+1;
+      }
 
-      return tan(f)/(Puiss(1+tan(f)*tan(f), 1/2));
+      return x;
+    }
+
+    float sin(float f) {
+      return tan(f)/SQRT(1+tan(f)*tan(f));
         // println("sin(f) not yet implemented");
     }
+
     float cos(float f) {
-      return 1/(Puiss(1+tan(f)*tan(f),1/2));
+      return 1/SQRT(1+tan(f)*tan(f));
         // println("cos(f) not yet implemented");
     }
 
@@ -133,20 +147,24 @@ class Math {
       //on se limite a la puissance 9 dans
       //le Developpement en serie entière de asin
       //asin = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
-
+      if ((f < -1) || (f > 1)) {
+        println("L'arcsin n'est définit que sur [-1,1]");
+        return 9999999;
+      }
       //initialiser les coeff sous forme de float
-      float a = 0.030381944f;
-      float b = 0.044642857f;
-      float c = 0.075000000f;
-      float d = 0.166666666f;
-      float e = 1.000000000f;
-
+      float a = 0.022372159f;
+      float b = 0.030381944f;
+      float c = 0.044642857f;
+      float d = 0.075000000f;
+      float e = 0.166666666f;
+      float g = 1.000000000f;
 
       //On utilise la méthode de Horner
-      return ((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f;
+      return (((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f*f+g)*f;
         // println("asin(f) not yet implemented");
     }
 
+    //atan METHODE HORNER
     //calcul pour |f| <=1
     float atan(float f) {
       //on se limite a la puissance 9 dans
@@ -154,19 +172,60 @@ class Math {
       //atan = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
 
       //initialiser les coeff sous forme de float
-      float a = 0.1111111111f;
-      float b = -0.142857142f;
-      float c = 0.20000000f;
-      float d = -0.3333333333f;
-      float e = 1.00000f;
+      float a = -0.09090909f;
+      float b = 0.1111111111f;
+      float c = -0.142857142f;
+      float d = 0.20000000f;
+      float e = -0.3333333333f;
+      float g = 1.00000f;
 
       //On utilise la méthode de Horner
       //Pareil avec asin mais just les coeff differents
-      return ((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f;
+      return (((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f*f+g)*f;
 
 
         // println("atan(f) not yet implemented");
     }
+ 
+    //Calcul valeur absolu d'un float
+    float abs(float f) {
+      if (f > 0) return f;
+      else return (-f);
+    }
+
+    //atan METHODE DICHOTOMIQUE
+    //IL FAUT QUE f(a) ET f(b) soient de signes opposés
+    //VOIR COMMENT AMELIORER LA PRECISION
+    //VALABLE QUE SUR 0 ET PI/2
+
+    float atan1(float f) {
+      float a = 0.0f;
+      float b = 1.141592653589793f;
+    //epsilone pour la precision
+      float epsilone = Puiss(1/10f,7);
+      float m = 0.0f;
+      while ((b-a) > epsilone) {
+        m = (a+b)/2;
+        // System.out.println(m);
+        //if (f(a)*f(m)<=0)
+        if (((tan(a)-f) * (tan(m)-f)) <= 0)
+         b = m;
+        else a = m;
+      }
+      return m;
+    }
+
+
+    //asin METHODE DICHOTOMIQUE a partir de atan
+    float asin1(float f) {
+      if ((f < -1) || (f > 1)) {
+        System.out.println("L'arcsin n'est définit que sur [-1,1]");
+        return 9999999;
+      }
+
+      return 2*atan1(f/(1+SQRT(1-f*f)));
+    }
+
 
     //calcul de la puissance 2 du float
     int log2f (float f) {
@@ -189,8 +248,11 @@ class Math {
     }
 
     float ulp(float f) {
+       if (log2f(f)<0)
+        return Puiss(1/2f, -log2f(f)) * Puiss(1/2f,23);
 
-      return Puiss(2, log2f(f)) * Puiss(1/2f,23);
+      else
+       return Puiss(2, log2f(f)) * Puiss(1/2f,23);
 
         // println("ulp(f) not yet implemented");
     }
