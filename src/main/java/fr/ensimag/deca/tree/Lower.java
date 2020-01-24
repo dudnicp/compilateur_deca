@@ -1,8 +1,10 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BGE;
@@ -28,18 +30,18 @@ public class Lower extends AbstractOpIneq {
 
 	
 	@Override
-	protected void codeBranch(DecacCompiler compiler, boolean b, Label label) {
+	protected void codeBranch(IMAProgram program, boolean b, Label label) {
 		if (b) {
-			compiler.addInstruction(new BLT(label));
+			program.addInstruction(new BLT(label));
 		} else {
-			compiler.addInstruction(new BGE(label));
+			program.addInstruction(new BGE(label));
 		}
 	}
 	
 	@Override
-	protected void codeAssign(DecacCompiler compiler, int n) {
-		codeExpr(compiler, n);
-		compiler.addInstruction(new SLT(Register.getR(n)));		
+	protected void codeAssign(IMAProgram program, int n, RegisterManager registerManager) {
+		codeExpr(program, n, registerManager);
+		program.addInstruction(new SLT(Register.getR(n)));		
 	}
 	
 }

@@ -1,7 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.CodeTSTO;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
@@ -12,6 +12,7 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.VoidType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.ADDSP;
@@ -77,29 +78,37 @@ public class Main extends AbstractMain {
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
-        compiler.addComment("Beginning of main instructions:");
-        declVariables.codeGenDecl(compiler);
-        insts.codeGenListInst(compiler);
-        compiler.addInstruction(new HALT());
+    	
+    	IMAProgram mainProgram = new IMAProgram();
+    	mainProgram.addComment("Beginning of main instructions:");
+        declVariables.codeGenDecl(mainProgram, RegisterManager.GLOBAL_REGISTER_MANAGER);
+        insts.codeGenListInst(mainProgram, RegisterManager.GLOBAL_REGISTER_MANAGER);
+        mainProgram.addInstruction(new HALT());
         
         // checking stack size for stack overflow
-        compiler.addFirst(new ADDSP(CodeTSTO.getNLocalVariables()));
-        compiler.addFirst(new BOV(Label.STACKOVERFLOW));
-        compiler.addFirst(new TSTO(CodeTSTO.getMaxStackSize()));
+        mainProgram.addFirst(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
+        mainProgram.addFirst(new BOV(Label.STACKOVERFLOW));
+        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(mainProgram);
         
         // coding errors
-        compiler.addLabel(Label.STACKOVERFLOW);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: Stack overflow")));
-        compiler.addInstruction(new ERROR());
-        compiler.addLabel(Label.DIVBYZERO);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: Division by zero")));
-        compiler.addInstruction(new ERROR());
-        compiler.addLabel(Label.OVERFLOW);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: Overflow during arithmetic operation")));
-        compiler.addInstruction(new ERROR());
-        compiler.addLabel(Label.INVALIDINPUT);
-        compiler.addInstruction(new WSTR(new ImmediateString("Error: Invalid input")));
-        compiler.addInstruction(new ERROR());
+        mainProgram.addLabel(Label.STACKOVERFLOW);
+        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Stack overflow")));
+        mainProgram.addInstruction(new ERROR());
+        mainProgram.addLabel(Label.DIVBYZERO);
+        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Division by zero")));
+        mainProgram.addInstruction(new ERROR());
+        mainProgram.addLabel(Label.OVERFLOW);
+        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Overflow during arithmetic operation")));
+        mainProgram.addInstruction(new ERROR());
+        mainProgram.addLabel(Label.INVALIDINPUT);
+        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Invalid input")));
+        mainProgram.addInstruction(new ERROR());
+        mainProgram.addLabel(Label.NULLOBJECT);
+        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Cannot acces null object")));
+        mainProgram.addInstruction(new ERROR());
+        mainProgram.addLabel(Label.IMPOSSIBLECONVFLOAT);
+        mainProgram.addInstruction(new WSTR(new ImmediateString("Error: Impossible converion to float")));
+        mainProgram.addInstruction(new ERROR());
     }
     
     @Override

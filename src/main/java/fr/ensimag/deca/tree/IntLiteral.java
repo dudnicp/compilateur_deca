@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -9,6 +10,7 @@ import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
@@ -44,13 +46,14 @@ public class IntLiteral extends AbstractExpr {
     }
     
     @Override
-	protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	program.addInstruction(new LOAD(this.dval(), Register.getR(n)));
 	}
     
     @Override
-    protected void codeCMP(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+    protected void codeCMP(IMAProgram program, int n) {
+    	program.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
     }
     
     @Override

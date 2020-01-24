@@ -6,7 +6,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.CodeTSTO;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -16,7 +16,15 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * 
@@ -103,8 +111,22 @@ public class DeclField extends AbstractDeclField {
 		initialization.iter(f);
 	}
 	
-	 @Override
-	    protected void codeGenDeclField(DecacCompiler compiler) {
-	 }
-
+	@Override
+	protected void codeGenProperInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+    	initialization.codeExpr(program, Register.defaultRegisterIndex, registerManager);
+    	int index = fieldName.getFieldDefinition().getIndex();
+    	program.addInstruction(new STORE(Register.getDefaultRegister(), new RegisterOffset(index, register)));
+	}
+	
+	@Override
+	protected void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+    	if (type.getType().isFloat()) {
+    		program.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.getDefaultRegister()));
+    		
+		} else if (type.getType().isClassOrNull()) {
+			program.addInstruction(new LOAD(new NullOperand(), Register.getDefaultRegister()));
+		} else {
+			program.addInstruction(new LOAD(new ImmediateInteger(0), Register.getDefaultRegister()));
+		}
+	}
 }

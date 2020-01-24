@@ -67,6 +67,10 @@ public class DeclMethod extends Tree {
 		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getType());
 	}
 	
+	public AbstractIdentifier getMethodName() {
+		return methodName;
+	}
+	
 	
 	@Override
 	public void decompile(IndentPrintStream s) {

@@ -1,10 +1,10 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.CodeTSTO;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -70,38 +70,39 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     
-    protected void mnemo(DecacCompiler compiler, DVal op, 
+    protected void mnemo(IMAProgram program, DVal op, 
     		GPRegister register) {
     	throw new UnsupportedOperationException("not yet implemented");
     }
     
     @Override
-	protected void codeExpr(DecacCompiler compiler, int n) {
-    	leftOperand.codeExpr(compiler, n);
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	leftOperand.codeExpr(program, n, registerManager);
     	DVal rightDVal = rightOperand.dval();
     	if (rightDVal != null) {
-    		mnemo(compiler, rightOperand.dval(), Register.getR(n));
+    		mnemo(program, rightOperand.dval(), Register.getR(n));
 		}
     	else {
 			if (n < Register.getRMAX()) {
-				rightOperand.codeExpr(compiler, n + 1);
-				mnemo(compiler, Register.getR(n + 1), Register.getR(n));
+				rightOperand.codeExpr(program, n + 1, registerManager);
+				mnemo(program, Register.getR(n + 1), Register.getR(n));
 			}
 			else {
-				compiler.addInstruction(new PUSH(Register.getR(n)));
-				CodeTSTO.incCurrentStackSize();
-				rightOperand.codeExpr(compiler, n);
-				compiler.addInstruction(new LOAD(Register.getR(n), Register.R0));
-				compiler.addInstruction(new POP(Register.getR(n)));;
-				CodeTSTO.decCurrentStackSize();
-				mnemo(compiler, Register.R0, Register.getR(n));
+				program.addInstruction(new PUSH(Register.getR(n)));
+				registerManager.incCurrentNumberOfTemps();
+				rightOperand.codeExpr(program, n, registerManager);
+				program.addInstruction(new LOAD(Register.getR(n), Register.R0));
+				program.addInstruction(new POP(Register.getR(n)));;
+				registerManager.decCurrentNumberOfTemps();
+				mnemo(program, Register.R0, Register.getR(n));
 			}
 		}
 	}
     	
     @Override
-	protected void codeGenPrintInstruction(DecacCompiler compiler) {
-		leftOperand.codeGenPrintInstruction(compiler);
+	protected void codeGenPrintInstruction(IMAProgram program) {
+		leftOperand.codeGenPrintInstruction(program);
 	}
     
     

@@ -2,10 +2,12 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 
@@ -44,19 +46,19 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
     	Label elseLabel = Label.newElseIfLabel();
     	Label endIfLabel = Label.newEndIfLabel();
-    	condition.codeCond(compiler, false, elseLabel);
+    	condition.codeCond(program, false, elseLabel, registerManager);
     	for (AbstractInst inst : thenBranch.getList()) {
-			inst.codeGenInst(compiler);
-			compiler.addInstruction(new BRA(endIfLabel));
+			inst.codeGenInst(program, registerManager);
+			program.addInstruction(new BRA(endIfLabel));
 		}
-    	compiler.addLabel(elseLabel);
+    	program.addLabel(elseLabel);
     	for (AbstractInst inst : elseBranch.getList()) {
-			inst.codeGenInst(compiler);
+			inst.codeGenInst(program, registerManager);
 		}
-    	compiler.addLabel(endIfLabel);
+    	program.addLabel(endIfLabel);
     }
 
     @Override
