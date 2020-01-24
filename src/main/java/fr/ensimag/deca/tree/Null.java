@@ -14,8 +14,8 @@ public class Null extends AbstractExpr {
 	@Override
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
-		// TODO Auto-generated method stub
-		return null;
+		this.setType(compiler.getEnvTypes().getDefinitionFromName("null").getType());
+		return this.getType();
 	}
 
 	@Override

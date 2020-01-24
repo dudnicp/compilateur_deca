@@ -49,12 +49,19 @@ public class DeclMethod extends Tree {
 		// ie meme returnType et signature
 		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 		// TODO increment number of methods
-        Definition methodDef = new MethodDefinition(verifiedType,
+        MethodDefinition methodDef = new MethodDefinition(verifiedType,
         		this.getLocation(), sig, 0);
 		try {
             classDef.getMembers().declare(methodName.getName(), methodDef);
 		} catch (DoubleDefException e) {
-			e.printStackTrace();
+			Definition mDef = classDef.getMembers().get(methodName.getName());
+			MethodDefinition methodDefinition = mDef.asMethodDefinition("Not a method definition", mDef.getLocation());
+			if (!methodDef.getSignature().equals(methodDefinition.getSignature())) {
+				throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
+						methodDefinition.getLocation());
+			} else {
+				classDef.getMembers().getDefinitionMap().put(methodName.getName(), methodDef);
+			}
 		}
         this.methodName.setDefinition(methodDef);
 	}
