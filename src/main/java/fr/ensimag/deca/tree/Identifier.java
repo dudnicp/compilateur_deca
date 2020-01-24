@@ -203,8 +203,8 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
     	// Rule (3.17)
     	EnvironmentType envTypes = compiler.getEnvTypes();
-    	Definition def = envTypes.getDefinitionFromName(this.getName().toString());
-        if (def == null) def = envTypes.get(this.getName());
+    	Definition def = envTypes.getDefinitionFromName(this.getName().toString()); // predefined types
+    	if (def == null) def = envTypes.get(this.getName()); // classes type
     	if (def == null) {
     		throw new ContextualError("Type " + this.getName() + " is not defined (0.2)",
     				this.getLocation());

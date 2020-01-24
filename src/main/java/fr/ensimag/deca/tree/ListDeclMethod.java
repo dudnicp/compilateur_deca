@@ -20,7 +20,6 @@ public class ListDeclMethod extends TreeList<DeclMethod>{
 	public void verifyListDeclMethod(DecacCompiler compiler,
 			Symbol currentClass) throws ContextualError{
 		for (DeclMethod m: this.getList()) {
-            System.out.println("list declmethod");
 			m.verifyDeclMethod(compiler, currentClass);
 		}
 	}

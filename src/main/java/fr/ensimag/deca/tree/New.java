@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
@@ -18,13 +19,16 @@ public class New extends AbstractExpr {
 	@Override
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
-		return null;
+		ClassType newType = compiler.getEnvTypes().get(newName.getName()).getType().asClassType("not a class type", newName.getLocation());
+		this.setType(newType);
+		newName.setDefinition(compiler.getEnvTypes().get(newName.getName()));
+		return newType;
 	}
 
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
-
+		s.print("new ");
+		newName.decompile(s);
 	}
 
 	@Override
@@ -34,8 +38,7 @@ public class New extends AbstractExpr {
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		newName.iterChildren(f);
 	}
 
 }
