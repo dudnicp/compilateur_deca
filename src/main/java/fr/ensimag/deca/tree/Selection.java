@@ -40,7 +40,7 @@ public class Selection extends AbstractLValue {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		objetName.prettyPrint(s, prefix, false);
+		objectName.prettyPrint(s, prefix, false);
         fieldName.prettyPrint(s, prefix, true);
 
 	}
