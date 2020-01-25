@@ -1,28 +1,40 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
-
+/**
+ * Dictionary associating identifier's ExpDefinition to their names.
+ * 
+ * This is actually a linked list of dictionaries: each EnvironmentExp has a
+ * pointer to a parentEnvironment, corresponding to superblock (eg superclass).
+ * 
+ * The dictionary at the head of this list thus corresponds to the "current" 
+ * block (eg class).
+ * 
+ * Searching a definition (through method get) is done in the "current" 
+ * dictionary and in the parentEnvironment if it fails. 
+ * 
+ * Insertion (through method declare) is always done in the "current" dictionary.
+ * 
+ * @author gl28
+ * @date 01/01/2020
+ */
 public abstract class Environment {
 	private SymbolTable symbolMap;
 	private Environment parent;
-	private Map<Symbol, Definition> definitionMap;
+	protected Map<Symbol, Definition> definitionMap;
 
-	public SymbolTable getSymbolMap() {
-		return symbolMap;
-	}
 
 	public Environment getParent() {
 		return parent;
 	}
 	
-	public Map<Symbol, Definition> getDefinitionMap() {
-		return definitionMap;
-	}
+	
 
 	public Environment(Environment parent) {
 		this.parent = parent;
@@ -30,9 +42,6 @@ public abstract class Environment {
 		this.definitionMap = new HashMap<Symbol, Definition>();
 	}
 	
-	public Symbol getSymbolFromMap(String name) {
-		return symbolMap.get(name);
-	}
 	
 	/**
      * Create or reuse a symbol.
@@ -45,20 +54,33 @@ public abstract class Environment {
 	}
 	
 	/**
-     * Return the definition of the symbol in the environment, or null if the
-     * symbol is undefined.
+     * Get method for map field DefinitionMap
+     *
+     * @param key
+     * 			Name of the symbol to search for
+     * @return 
+     * 			Return the definition of the symbol or null if the symbol is undefined.
+     * 			If not in this environment , return the definition of the symbol in its parent environment. This goes on until 
+     * 			a null parent is reached - in this case it returns null - or a definition is found and returned.
      */
 	public Definition get(Symbol key) {
-		Definition def  = definitionMap.get(key);
-		if (definitionMap.get(key) == null) {
-			if (parent == null) return null;
-			else return parent.get(key);
-		} else return def;
+		return definitionMap.get(key);
 	}
 	
-	public Definition getDefinitionFromName(String name) {
-		return this.get(this.createSymbol(name));
-	}
+	/**
+	 * Get method for linked dictionaries (from current dictionary to the tail)
+	 * 
+	 * @param key
+	 * @return
+	 * 			Return first occurrence of symbol key, null otherwise
+	 */
+	public Definition getAny(Symbol key) {
+		if (this.get(key) == null) {
+			if (parent == null) return null;
+			else return parent.getAny(key);
+		} else return this.get(key);
+	}	
+
 	
 	public static class DoubleDefException extends Exception {
         private static final long serialVersionUID = -2733379901827316441L;
@@ -79,27 +101,15 @@ public abstract class Environment {
      *             if the symbol is already defined at the "current" dictionary
      *
      */
-    public abstract void declare(Symbol name, Definition def) throws DoubleDefException;
-    
-    /**
-     * Look for a symbol in this environment then call in all of its parents
-     * meaning it goes up in the linked environment scheme
-     * 
-     * @param name
-     * @throws DoubleDefException
-     * 			if the symbol is already defined in any environment linked to this one
-     */
-    public boolean isDefined(Symbol name) {
+    public void declare(Symbol name, Definition def) throws DoubleDefException {
     	if (this.get(name) == null) {
-    		if (parent != null) {
-    			parent.isDefined(name); // look up parent environment
-    		} else {
-    			return false; // stop here - no previous definition of symbol "name"
-    		}
-    	}
-    	return true;
-    	
+			this.definitionMap.put(name, def);
+		} else {
+			throw new DoubleDefException();
+		}
     }
+    
+
     
     @Override
     public String toString() {

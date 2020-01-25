@@ -53,23 +53,6 @@ public class Main extends AbstractMain {
         //Class 0
         Type voidType = compiler.getEnvTypes().getDefinitionFromName("void").getType();
         
-        /* TODO: test if the parser init actually works
-        //Symbol trueBoolean = envExpObject.createSymbol("true");
-        //Symbol falseBoolean = envExpObject.createSymbol("false");
-
-        try {
-            envExpObject.declare(trueBoolean, new VariableDefinition(
-                    new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")),
-                    Location.BUILTIN));
-            envExpObject.declare(falseBoolean, new VariableDefinition(
-                    new BooleanType(compiler.getEnvTypes().getSymbolFromMap("boolean")),
-                    Location.BUILTIN));
-        } catch (DoubleDefException e) {
-            // this won't happen since we initialize the env_expr
-            e.printStackTrace();
-        }
-        */
-        
         declVariables.verifyListDeclVariable(compiler, envExp , null);
         
         // we need to assign a returnType to the list of instructions

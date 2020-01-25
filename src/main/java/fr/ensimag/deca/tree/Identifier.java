@@ -189,14 +189,13 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	if (localEnv.get(this.getName()) == null) {
+    	if (localEnv.getAny(this.getName()) == null) {
     		throw new ContextualError("Undefined identifier " + this.getName() + " (0.1)",
     				this.getLocation());
     	} else {
-    		Type definedType = localEnv.get(this.getName()).getType();
-    		this.setDefinition(localEnv.get(this.getName()));
-    		this.setType(definedType);
-    		return definedType;
+    		this.setDefinition(localEnv.getAny(this.getName()));
+    		// TODO: optional type decoration (removed here)
+    		return this.getDefinition().getType();
     	}
     }
 
@@ -216,13 +215,13 @@ public class Identifier extends AbstractIdentifier {
     	} else {
         	Type type = def.getType();
         	this.setDefinition(def);
-    		this.setType(type);
+    		this.setType(type); // TODO: optional
     	}
     	if (this.getType().isVoid()) {
     		throw new ContextualError("Type cannot be of type void (3.17)",
     				this.getLocation());
     	} else {
-    		return this.getType();
+    		return this.getDefinition().getType();
     	}
     }
     

@@ -52,7 +52,7 @@ public class MethodCall extends AbstractExpr {
             ClassDefinition currentClass) throws ContextualError {
     	ClassType objectType = treeExpr.verifyExpr(compiler, localEnv, currentClass).asClassType("not a classtype", treeExpr.getLocation());
     	EnvironmentExp e = objectType.getDefinition().getMembers();
-    	Definition def = objectType.getDefinition().getMembers().get(methodName.getName());
+    	Definition def = objectType.getDefinition().getMembers().getAny(methodName.getName());
     	if (def == null) {
     		throw new ContextualError("Method " + methodName.getName() + " is not defined in class " + objectType.getName(),
     				methodName.getLocation());

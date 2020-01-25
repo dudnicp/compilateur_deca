@@ -56,31 +56,40 @@ public class DeclField extends AbstractDeclField {
 	protected void verifyDeclField(DecacCompiler compiler, 
 			Symbol currentClass, Symbol superClass)
 			throws ContextualError {
+		// decorate type
 		Type typeVerified = type.verifyType(compiler);
 		if (typeVerified.isVoid()) {
 			throw new ContextualError("Field type cannot be void (2.5)",
 				type.getLocation());
 		}
-		fieldName.setType(typeVerified);
+		
+		// determine whether field is already defined in this class - in one of its parents - or not at all
+		fieldName.setType(typeVerified); // TODO: optional
 		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-
-		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
-				visibility, currDef, currDef.getNumberOfFields()));
+		FieldDefinition incFieldDef;
+		
+		if (currDef.getMembers().get(fieldName.getName()) != null) {
+			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.getName(),
+					fieldName.getLocation());
+		} else if (currDef.getMembers().getAny(fieldName.getName()) != null) {
+			Definition previousDef = currDef.getSuperClass().getMembers().getAny(fieldName.getName());
+			FieldDefinition previousFieldDef = previousDef.asFieldDefinition("Field " + fieldName.getName()
+			+ " should redefine another field", fieldName.getLocation());
+			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
+					visibility, currDef, previousFieldDef.getIndex());
+		} else {
+			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
+					visibility, currDef, currDef.getNumberOfFields());
+		}
+		// decorate field
+		fieldName.setDefinition(incFieldDef);
 		try {
 			currDef.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
-			currDef.incNumberOfFields();
 		} catch (DoubleDefException e) {
-			Definition doubleDef = currDef.getMembers().getParent().get(fieldName.getName());
-			if (doubleDef == null) {
-				throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in this scope",
-						fieldName.getLocation());
-			}
-			FieldDefinition field = doubleDef.asFieldDefinition("Field " + fieldName.getName()
-			+ " should redefine another field", fieldName.getLocation());
-			fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
-					visibility, currDef, field.getIndex()));
-			currDef.getMembers().getDefinitionMap().put(fieldName.getName(), fieldName.getDefinition());
+			// this never happens since we verified previously
+			e.printStackTrace();
 		}
+		
 	}
 
 	@Override
