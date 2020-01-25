@@ -65,14 +65,20 @@ public class DeclField extends AbstractDeclField {
 		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 
 		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
-				visibility, currDef, 0));
+				visibility, currDef, currDef.getNumberOfFields()));
 		try {
 			currDef.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
+			currDef.incNumberOfFields();
 		} catch (DoubleDefException e) {
-			Definition doubleDef = currDef.getMembers().get(fieldName.getName());
-			if (doubleDef == null) System.out.println("HERE");
+			Definition doubleDef = currDef.getMembers().getParent().get(fieldName.getName());
+			if (doubleDef == null) {
+				throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in this scope",
+						fieldName.getLocation());
+			}
 			FieldDefinition field = doubleDef.asFieldDefinition("Field " + fieldName.getName()
 			+ " should redefine another field", fieldName.getLocation());
+			fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
+					visibility, currDef, field.getIndex()));
 			currDef.getMembers().getDefinitionMap().put(fieldName.getName(), fieldName.getDefinition());
 		}
 	}
