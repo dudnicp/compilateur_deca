@@ -88,7 +88,7 @@ public class DeclClass extends AbstractDeclClass {
         superClassName.setDefinition(superClassDef);
         ClassType classType;
     	try {
-    		classType = new ClassType(className.getName(), className.getLocation(), superClassDef);
+    		classType = new ClassType(className.getName(), this.getLocation(), superClassDef);
     		envTypes.declare(className.getName(), classType.getDefinition());
     	} catch (DoubleDefException e) {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
@@ -102,6 +102,10 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
+		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
+		ClassDefinition superClassDef = (ClassDefinition)classDef.getSuperClass();
+		classDef.setNumberOfFields(superClassDef.getNumberOfFields());
+		classDef.setNumberOfMethods(superClassDef.getNumberOfMethods());
     	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
     	methods.verifyListDeclMethod(compiler, this.className.getName());
     }

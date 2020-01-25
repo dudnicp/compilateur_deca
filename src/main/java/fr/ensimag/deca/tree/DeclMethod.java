@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
@@ -50,28 +51,32 @@ public class DeclMethod extends Tree {
     	} else {
         	verifiedType = def.getType();
         	type.setDefinition(def);
-    		type.setType(verifiedType);
     	}
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
-		// TODO verifier la redifinition d'une methode
-		// ie meme returnType et signature
 		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-		// TODO increment number of methods
         MethodDefinition methodDef = new MethodDefinition(verifiedType,
-        		this.getLocation(), sig, 0);
+        		this.getLocation(), sig, classDef.getNumberOfMethods());
 		try {
             classDef.getMembers().declare(methodName.getName(), methodDef);
+            classDef.incNumberOfMethods();
+            this.methodName.setDefinition(methodDef);
 		} catch (DoubleDefException e) {
-			Definition mDef = classDef.getMembers().get(methodName.getName());
-			MethodDefinition methodDefinition = mDef.asMethodDefinition("Not a method definition", mDef.getLocation());
-			if (!methodDef.getSignature().equals(methodDefinition.getSignature())) {
-				throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
-						methodDefinition.getLocation());
+			Definition mDef = classDef.getMembers().getParent().get(methodName.getName());
+            if (mDef == null) {
+				throw new ContextualError("Method or field " + methodName.getName() + " is already defined in this scope",
+						methodName.getLocation());
+            }
+            MethodDefinition methodDefinition = mDef.asMethodDefinition("Not a method definition", mDef.getLocation());
+            if (!methodDef.getSignature().equals(methodDefinition.getSignature())) {
+                throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
+                        methodDefinition.getLocation());
 			} else {
-				classDef.getMembers().getDefinitionMap().put(methodName.getName(), methodDef);
+				MethodDefinition methodDefRedefinition = new MethodDefinition(verifiedType,
+		        		this.getLocation(), sig, methodDefinition.getIndex());
+				classDef.getMembers().getDefinitionMap().put(methodName.getName(), methodDefRedefinition);
+				this.methodName.setDefinition(methodDefRedefinition);
 			}
 		}
-        this.methodName.setDefinition(methodDef);
 	}
 	
 	public void verifyClassBodyMethod(DecacCompiler compiler, 
@@ -79,7 +84,7 @@ public class DeclMethod extends Tree {
 		EnvironmentExp envExpParam = new EnvironmentExp(localEnv);
 		listDeclParam.verifyClassBodyListDeclParam(compiler,
 				envExpParam);
-		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getType());
+		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getDefinition().getType());
 	}
 	
 	public AbstractIdentifier getMethodName() {
