@@ -31,14 +31,15 @@ public class MethodAsmBody extends AbstractMethodBody {
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
+		// leaf node -- nothing to do
 
 	}
 
 	@Override
 	public void verifyClassMethodBody(DecacCompiler compiler, EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
-		// nothing to do - step C will have to handle asm code
-	}
+		asm.verifyExpr(compiler, envExpParam, currentClass);
+			}
+		
 
 }
