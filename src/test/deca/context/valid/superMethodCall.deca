@@ -1,13 +1,11 @@
 class A {
-int x() {
-return 3;
-}
+int x;
 }
 
-class B {
+class B extends A{
 }
 
 {
 B b = new B();
-int x = b.x();
+int x = b.x;
 }

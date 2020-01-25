@@ -15,47 +15,48 @@ import org.apache.commons.lang.Validate;
  */
 public class EnvironmentType extends Environment{
     
-    public EnvironmentType(Environment parentEnvironment) {
-    	super(parentEnvironment);
-    	if (parentEnvironment == null) {
-    		Symbol s;
-    		try {
-    			s = this.createSymbol("void");
-	    		this.declare(s, new TypeDefinition(new VoidType(s), Location.BUILTIN));
-	    		
-	    		s = this.createSymbol("boolean");
-	    		this.declare(s, new TypeDefinition(new BooleanType(s), Location.BUILTIN));
-	
-	    		s = this.createSymbol("float");
-	    		this.declare(s, new TypeDefinition(new FloatType(s), Location.BUILTIN));
-	    		
-	    		s = this.createSymbol("int");
-	    		this.declare(s, new TypeDefinition(new IntType(s), Location.BUILTIN));
-	    		
-	    		s = this.createSymbol("String");
-	    		this.declare(s, new TypeDefinition(new StringType(s), Location.BUILTIN));
-	    		
-	    		s = this.createSymbol("null");
-	    		this.declare(s, new TypeDefinition(new NullType(s), Location.BUILTIN));
-	    		
-	    		s = this.createSymbol("Object");
-	    		ClassType objectClassType = new ClassType(s, Location.BUILTIN, null);
-	    		this.declare(s, objectClassType.getDefinition());
-    		} catch (DoubleDefException e) { // this should never happens
-    			e.printStackTrace(); // since we inherits all of this
-    		} // unless parentEnvironment == null
-    	}
+	/**
+	 * Initialize the predefined types
+	 */
+    public EnvironmentType() {
+    	super(null);
+		Symbol s;
+		try {
+			s = this.createSymbol("void");
+    		this.declare(s, new TypeDefinition(new VoidType(s), Location.BUILTIN));
+    		
+    		s = this.createSymbol("boolean");
+    		this.declare(s, new TypeDefinition(new BooleanType(s), Location.BUILTIN));
+
+    		s = this.createSymbol("float");
+    		this.declare(s, new TypeDefinition(new FloatType(s), Location.BUILTIN));
+    		
+    		s = this.createSymbol("int");
+    		this.declare(s, new TypeDefinition(new IntType(s), Location.BUILTIN));
+    		
+    		s = this.createSymbol("String");
+    		this.declare(s, new TypeDefinition(new StringType(s), Location.BUILTIN));
+    		
+    		s = this.createSymbol("null");
+    		this.declare(s, new TypeDefinition(new NullType(s), Location.BUILTIN));
+    		
+    		s = this.createSymbol("Object");
+    		ClassType objectClassType = new ClassType(s, Location.BUILTIN, null);
+    		this.declare(s, objectClassType.getDefinition());
+		} catch (DoubleDefException e) { // this never happens
+			e.printStackTrace(); // since the map is empty at this point
+		}
     }
 
-	@Override
-	public void declare(Symbol name, Definition def) throws DoubleDefException {
-		if (this.get(name) == null) {
-			this.getDefinitionMap().put(name, def);
-		} else {
-			throw new DoubleDefException();
-		}
+	
+	/**
+	 * get method for predefined types
+	 * 
+	 * @param name The name of the type
+	 * @return Definition of the type, or null if undefined
+	 */
+	public Definition getDefinitionFromName(String name) {
+		return this.get(this.createSymbol(name));
 	}
     
-    
-
 }

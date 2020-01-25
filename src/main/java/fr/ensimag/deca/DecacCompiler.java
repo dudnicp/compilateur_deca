@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
 public class DecacCompiler {
     private static final Logger LOG = Logger.getLogger(DecacCompiler.class);
     
-	private EnvironmentType envTypes = new EnvironmentType(null);
+	private EnvironmentType envTypes = new EnvironmentType();
 	    
     public EnvironmentType getEnvTypes() {
         return envTypes;
