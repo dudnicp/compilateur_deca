@@ -41,7 +41,7 @@ public class RegisterManager {
 	
 	/* Used registers */
 	public void saveGPRegisters(IMAProgram program) {
-		for (int i = GPRegisterUsedMaxIndex; i >= Register.defaultRegisterIndex; i++) {
+		for (int i = GPRegisterUsedMaxIndex; i >= Register.defaultRegisterIndex; i--) {
 			program.addInstruction(new PUSH(Register.getR(i)));
 			nUsedRegisters ++;
 		}

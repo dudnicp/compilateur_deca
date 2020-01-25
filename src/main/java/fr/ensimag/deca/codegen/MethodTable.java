@@ -35,9 +35,10 @@ public abstract class MethodTable {
 	}
 	
 	public static void addClass(String name, String superName, int nMethods) {
-		Validate.isTrue(methodTable.containsKey(name) 
+		Validate.isTrue(methodTable.containsKey(superName) 
 				&& methodTable.containsKey(superName) 
 				&& nMethods >= getMethods(superName).length);
+		addClass(name, nMethods);
 		for (int i = 0; i < getMethods(superName).length; i++) {
 			putMethod(name, getMethodLabel(name, i), i);
 		}

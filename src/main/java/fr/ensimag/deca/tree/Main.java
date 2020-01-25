@@ -80,15 +80,22 @@ public class Main extends AbstractMain {
     protected void codeGenMain(IMAProgram program) {
     	
     	IMAProgram mainProgram = new IMAProgram();
-    	mainProgram.addComment("Beginning of main instructions:");
+    	program.addComment("Beginning of main instructions:");
+    	
         declVariables.codeGenDecl(mainProgram, RegisterManager.GLOBAL_REGISTER_MANAGER);
         insts.codeGenListInst(mainProgram, RegisterManager.GLOBAL_REGISTER_MANAGER);
         mainProgram.addInstruction(new HALT());
         
         // checking stack size for stack overflow
-        mainProgram.addFirst(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
-        mainProgram.addFirst(new BOV(Label.STACKOVERFLOW));
-        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(mainProgram);
+        
+        IMAProgram tstoCode = new IMAProgram();
+        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(tstoCode);
+        tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
+        tstoCode.addInstruction(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
+        
+        // structuring program
+        program.append(tstoCode);
+        program.append(mainProgram);
     }
     
     @Override

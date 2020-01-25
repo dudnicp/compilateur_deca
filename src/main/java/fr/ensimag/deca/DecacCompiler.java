@@ -120,7 +120,7 @@ public class DecacCompiler {
     }
     
     public void append(IMAProgram program) {
-    	program.append(program);
+    	this.program.append(program);
     }
     
     /**

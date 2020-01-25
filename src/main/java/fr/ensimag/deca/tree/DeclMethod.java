@@ -21,7 +21,9 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.ERROR;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.WNL;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
@@ -116,7 +118,15 @@ public class DeclMethod extends Tree {
 	}
 	
 	public void codeGen(IMAProgram program, String className) {
+//		System.out.println(Label.getMethodStartLabel(className, methodName.getName().getName()).toString());
+		
+		
 		RegisterManager registerManager = new RegisterManager(Register.LB);
+		
+		int argIndex = 3;
+		for (DeclParam arg : listDeclParam.getList()) {
+			arg.getParamName().getExpDefinition().setOperand(new RegisterOffset(-argIndex, Register.LB));
+		}
 		
 		IMAProgram startLabelCode = new IMAProgram();
 		IMAProgram tstoCode = new IMAProgram();
@@ -131,7 +141,7 @@ public class DeclMethod extends Tree {
 		
 		methodBody.codeGen(bodyCode, registerManager, className, methodName.getName().getName());
 		
-		if (!type.getType().isVoid()) {
+		if (!type.getDefinition().getType().isVoid()) {
 			returnErrorCode.addInstruction(new WSTR(new ImmediateString("Error : exiting function " + 
 							className + "." + methodName.getName().getName() + " without return instruction")));
 			returnErrorCode.addInstruction(new WNL());
@@ -150,5 +160,6 @@ public class DeclMethod extends Tree {
 		program.append(returnErrorCode);
 		program.append(endLabelCode);
 		program.append(restoreRegistersCode);
+		program.addInstruction(new RTS());
 	}
 }

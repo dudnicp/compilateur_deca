@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
@@ -11,6 +12,19 @@ import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -97,6 +111,44 @@ public class MethodCall extends AbstractExpr {
         treeExpr.prettyPrint(s, prefix, false);
         methodName.prettyPrint(s, prefix, false);
         arguments.prettyPrint(s, prefix, true);
+    }
+    
+    @Override
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	
+    	// reserving place for method args
+    	program.addInstruction(new ADDSP(arguments.size() + 1));
+    	registerManager.incCurrentNumberOfMethodParams(arguments.size() + 1);
+    	
+    	// adding implicit argument to stack
+    	program.addInstruction(new LOAD(treeExpr.dval(), Register.getR(n)));
+    	program.addInstruction(new STORE(Register.getR(n), new RegisterOffset(0, Register.SP)));
+    	
+    	// adding args to stack
+    	int argIndex = 1;
+    	for (AbstractExpr arg : arguments.getList()) {
+			arg.codeExpr(program, n, registerManager);
+			program.addInstruction(new STORE(Register.getR(n), new RegisterOffset(-argIndex, Register.SP)));
+			argIndex ++;
+		}
+    	
+    	// testing for null deref
+    	program.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.getR(n)));
+    	program.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
+    	program.addInstruction(new BEQ(Label.NULLOBJECT));
+    	
+    	// calling method
+    	program.addInstruction(new LOAD(new RegisterOffset(0, Register.getR(n)), Register.getR(n)));
+    	program.addInstruction(new BSR(
+    			new RegisterOffset(methodName.getMethodDefinition().getIndex(), Register.getR(n))));
+    	registerManager.incCurrentNumberOfMethodParams(2);
+    	registerManager.decCurrentNumberOfMethodParams(2);
+    	
+    	program.addInstruction(new SUBSP(arguments.size() + 1));
+    	registerManager.decCurrentNumberOfMethodParams(arguments.size() + 1);
+    	
+    	program.addInstruction(new LOAD(Register.R1, Register.getR(n)));
     }
 
 }

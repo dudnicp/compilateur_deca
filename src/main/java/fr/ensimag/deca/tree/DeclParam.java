@@ -62,5 +62,9 @@ public class DeclParam extends AbstractDeclParam {
 			}
 		}
 	}
+	
+	public AbstractIdentifier getParamName() {
+		return paramName;
+	}
 
 }

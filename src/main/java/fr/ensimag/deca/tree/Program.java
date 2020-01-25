@@ -11,6 +11,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -62,6 +63,7 @@ public class Program extends AbstractProgram {
     	IMAProgram classMethodCode = new IMAProgram();
     	
     	createMethodTable(methodTableCode);
+    	codeGenObjectEquals(classMethodCode);
     	classes.codeGenMethod(classMethodCode);
     	main.codeGenMain(mainCode);
     	codeGenErrors(errorsCode);
@@ -91,13 +93,27 @@ public class Program extends AbstractProgram {
 	}
     
     
+    protected void codeGenObjectEquals(IMAProgram program) {
+    	program.addLabel(Label.getMethodStartLabel("Object", "equals"));
+    	program.addInstruction(new TSTO(1));
+    	program.addInstruction(new BOV(Label.STACKOVERFLOW));
+    	program.addInstruction(new PUSH(Register.R2));
+		program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R2));
+		program.addInstruction(new CMP(new RegisterOffset(-3, Register.LB), Register.R2));
+		program.addInstruction(new SEQ(Register.R1));
+		program.addLabel(Label.getMethodEndLabel("Object", "equals"));
+		program.addInstruction(new POP(Register.R2));
+		program.addInstruction(new RTS());
+	}
+    
+    
     protected void codeGenErrors(IMAProgram program) {
     	program.addLabel(Label.STACKOVERFLOW);
     	program.addInstruction(new WSTR(new ImmediateString("Error: Stack overflow")));
     	program.addInstruction(new WNL());
     	program.addInstruction(new ERROR());
     	program.addLabel(Label.HEAPOVERFLOW);
-    	program.addInstruction(new WSTR(new ImmediateString("Error: Heap overflow")));
+    	program.addInstruction(new WSTR(new ImmediateString("Error: Impossible allocation : heap overflow")));
     	program.addInstruction(new WNL());
     	program.addInstruction(new ERROR());
     	program.addLabel(Label.DIVBYZERO);

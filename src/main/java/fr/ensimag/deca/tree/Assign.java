@@ -7,6 +7,8 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import org.apache.log4j.Logger;
@@ -56,8 +58,26 @@ public class Assign extends AbstractBinaryExpr {
      
     @Override
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
-    	getRightOperand().codeAssign(program, n, registerManager);
-    	program.addInstruction(new STORE(Register.getR(n), getLeftOperand().daddr()));
+    	if (getLeftOperand().daddr() == null) {
+    		getLeftOperand().codeExpr(program, n, registerManager);
+			if (n < Register.getRMAX()) {
+				getRightOperand().codeExpr(program, n + 1, registerManager);
+				program.addInstruction(new STORE(Register.getR(n+1), getLeftOperand().daddr()));
+			}
+			else {
+				program.addInstruction(new PUSH(Register.getR(n)));
+				registerManager.incCurrentNumberOfTemps();
+				getRightOperand().codeExpr(program, n, registerManager);
+				program.addInstruction(new LOAD(Register.getR(n), Register.R0));
+				program.addInstruction(new POP(Register.getR(n)));;
+				registerManager.decCurrentNumberOfTemps();
+				program.addInstruction(new STORE(Register.R0, getLeftOperand().daddr()));
+			}
+		}
+    	else {
+    		getRightOperand().codeAssign(program, n, registerManager);
+    		program.addInstruction(new STORE(Register.getR(n), getLeftOperand().daddr()));
+		}
     }
     
 }

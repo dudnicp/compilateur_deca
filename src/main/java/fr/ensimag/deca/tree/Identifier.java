@@ -267,13 +267,17 @@ public class Identifier extends AbstractIdentifier {
     }
     
     protected DAddr daddr() {
-			return getExpDefinition().getOperand();
+    	return getExpDefinition().getOperand();
 	}
     
     
     @Override
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	registerManager.tryMaxRegisterIndex(n);
+    	if (getDefinition().isField()) {
+			program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.getR(n)));
+			getFieldDefinition().setOperand(new RegisterOffset(getFieldDefinition().getIndex(), Register.getR(n)));
+		}
     	program.addInstruction(new LOAD(this.dval(), Register.getR(n)));
     	if (getType().isClassOrNull()) {
 			codeCMP(program, n);
