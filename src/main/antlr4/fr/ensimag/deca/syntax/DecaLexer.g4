@@ -61,8 +61,8 @@ AND: '&&';
 OR: '||';
 
 // Include
-fragment FILENAME: (LETTER | DIGIT  | '.' | | '-' | '_')+;
-INCLUDE: '#include' (' ')* '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"' {
+fragment FILENAME: (LETTER | DIGIT  | '.' | '-' | '_')+;
+INCLUDE: '#include' (' ')* '"' FILENAME '"' {
     doInclude(getText());
     };
 
