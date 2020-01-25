@@ -69,7 +69,6 @@ public class DeclMethod extends Tree {
 				this.methodName.setDefinition(methodDefRedefinition);
 			}
 		}
-		System.out.println(methodName.getName() + " -- > " + methodName.getDefinition().asMethodDefinition("", methodName.getLocation()).getIndex());
 	}
 	
 	public void verifyClassBodyMethod(DecacCompiler compiler, 
@@ -77,7 +76,7 @@ public class DeclMethod extends Tree {
 		EnvironmentExp envExpParam = new EnvironmentExp(localEnv);
 		listDeclParam.verifyClassBodyListDeclParam(compiler,
 				envExpParam);
-		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getType());
+		methodBody.verifyClassMethodBody(compiler, envExpParam, currentClass, type.getDefinition().getType());
 	}
 	
 	public AbstractIdentifier getMethodName() {

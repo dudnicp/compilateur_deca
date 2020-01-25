@@ -49,13 +49,17 @@ public class DeclParam extends AbstractDeclParam {
 	
 	public void verifyClassBodyDeclParam(DecacCompiler compiler,
 			EnvironmentExp envExpParam) throws ContextualError {
-		ParamDefinition paramDef = new ParamDefinition(paramType.getType(), paramName.getLocation());
+		ParamDefinition paramDef = new ParamDefinition(paramType.getType(), this.getLocation());
         paramName.setDefinition(paramDef);
 		try {
 			envExpParam.declare(paramName.getName(), paramName.getDefinition());
 		} catch (DoubleDefException e) {
-			throw new ContextualError("Two parameters share the same name " + paramName.getName(),
-					paramName.getLocation());
+			if (envExpParam.getParent().get(paramName.getName()) == null) {
+				throw new ContextualError("Two parameters share the same name " + paramName.getName(),
+						paramName.getLocation());
+			} else {
+				envExpParam.getDefinitionMap().put(paramName.getName(), paramDef);
+			}
 		}
 	}
 
