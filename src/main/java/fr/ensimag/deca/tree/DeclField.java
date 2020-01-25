@@ -54,7 +54,7 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	protected void verifyDeclField(DecacCompiler compiler, 
-			Symbol currentClass, Symbol superClass)
+			ClassDefinition currentClass)
 			throws ContextualError {
 		// decorate type
 		Type typeVerified = type.verifyType(compiler);
@@ -64,27 +64,25 @@ public class DeclField extends AbstractDeclField {
 		}
 		
 		// determine whether field is already defined in this class - in one of its parents - or not at all
-		fieldName.setType(typeVerified); // TODO: optional
-		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 		FieldDefinition incFieldDef;
-		
-		if (currDef.getMembers().get(fieldName.getName()) != null) {
-			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.getName(),
+		if (currentClass.getMembers().get(fieldName.getName()) != null) {
+			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.toString(),
 					fieldName.getLocation());
-		} else if (currDef.getMembers().getAny(fieldName.getName()) != null) {
-			Definition previousDef = currDef.getSuperClass().getMembers().getAny(fieldName.getName());
+		} else if (currentClass.getMembers().getAny(fieldName.getName()) != null) {
+			Definition previousDef = currentClass.getSuperClass().getMembers().getAny(fieldName.getName());
 			FieldDefinition previousFieldDef = previousDef.asFieldDefinition("Field " + fieldName.getName()
 			+ " should redefine another field", fieldName.getLocation());
 			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
-					visibility, currDef, previousFieldDef.getIndex());
+					visibility, currentClass, previousFieldDef.getIndex());
 		} else {
 			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
-					visibility, currDef, currDef.getNumberOfFields());
+					visibility, currentClass, currentClass.getNumberOfFields());
 		}
 		// decorate field
 		fieldName.setDefinition(incFieldDef);
+		fieldName.setType(typeVerified);
 		try {
-			currDef.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
+			currentClass.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
 		} catch (DoubleDefException e) {
 			// this never happens since we verified previously
 			e.printStackTrace();
@@ -94,9 +92,8 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	protected void verifyClassBodyField(DecacCompiler compiler,
-            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
-		this.initialization.verifyInitialization(compiler, type.getType(), localEnv, (ClassDefinition)compiler.getEnvTypes().get(currentClass));
-	   
+            EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+		this.initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
      }
    
 	@Override

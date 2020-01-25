@@ -42,7 +42,6 @@ public class DeclClass extends AbstractDeclClass {
 	private AbstractIdentifier superClassName;
 	private ListDeclField fields;
 	private ListDeclMethod methods;
-	private Symbol classSymbol;
 	public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName,
 			ListDeclField fields, ListDeclMethod methods) {
 		this.className = className;
@@ -107,22 +106,21 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
-		ClassDefinition superClassDef = (ClassDefinition)classDef.getSuperClass();
+		ClassDefinition currentClass = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
+		ClassDefinition superClass= (ClassDefinition)currentClass.getSuperClass();
 		// set the offset of methods and fields indexes 
-		classDef.setNumberOfFields(superClassDef.getNumberOfFields());
-		classDef.setNumberOfMethods(superClassDef.getNumberOfMethods());
-    	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
-    	methods.verifyListDeclMethod(compiler, this.className.getName());
+		currentClass.setNumberOfFields(superClass.getNumberOfFields());
+		currentClass.setNumberOfMethods(superClass.getNumberOfMethods());
+    	fields.verifyListDeclField(compiler, currentClass);
+    	methods.verifyListDeclMethod(compiler, currentClass);
     }
 
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-    	ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(
-    			this.className.getName());
-    	EnvironmentExp localEnv = new EnvironmentExp(classDef.getMembers());
-    	this.fields.verifyClassBodyListField(compiler, localEnv, className.getName());
-    	this.methods.verifyClassBodyListMethod(compiler, localEnv, className.getName());
+    	ClassDefinition currentClass = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
+    	EnvironmentExp localEnv = new EnvironmentExp(currentClass.getMembers());
+    	this.fields.verifyClassBodyListField(compiler, localEnv, currentClass);
+    	this.methods.verifyClassBodyListMethod(compiler, localEnv, currentClass);
     }
 
 

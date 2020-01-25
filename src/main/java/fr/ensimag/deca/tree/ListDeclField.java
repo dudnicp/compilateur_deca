@@ -24,10 +24,9 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     	}
 	}
 	
-	 public void verifyListDeclField(DecacCompiler compiler, Symbol currentClass,
-	            Symbol superClass) throws ContextualError {
+	 public void verifyListDeclField(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
 	    	for (AbstractDeclField f: this.getList()) {
-	    		f.verifyDeclField(compiler, currentClass, superClass);
+	    		f.verifyDeclField(compiler, currentClass);
 	    	}
 	    }
 	 
@@ -44,7 +43,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 	}
 	 
     public void verifyClassBodyListField(DecacCompiler compiler,
-            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+            EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
  		for (AbstractDeclField f: this.getList()) {
              f.verifyClassBodyField(compiler, localEnv, currentClass);
          }

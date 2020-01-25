@@ -33,7 +33,7 @@ public class DeclMethod extends Tree {
 	}
 	
 	public void verifyDeclMethod(DecacCompiler compiler,
-			Symbol currentClass) throws ContextualError {
+			ClassDefinition currentClass) throws ContextualError {
     	// return type decoration 
 		EnvironmentType envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(type.getName().toString()); // predefined types
@@ -47,15 +47,14 @@ public class DeclMethod extends Tree {
         	type.setDefinition(def);
     	}
     	// determine whether field is already defined in this class - in one of its parents - or not at all
-		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
 		MethodDefinition incMethodDef;
 		
-		if (currDef.getMembers().get(methodName.getName()) != null) {
-			throw new ContextualError("Field or method " + methodName.getName() + " is already defined in class " + currentClass.getName(),
+		if (currentClass.getMembers().get(methodName.getName()) != null) {
+			throw new ContextualError("Field or method " + methodName.getName() + " is already defined in class " + currentClass.toString(),
 					methodName.getLocation());
-		} else if (currDef.getMembers().getAny(methodName.getName()) != null) {
-			Definition previousDef = currDef.getSuperClass().getMembers().getAny(methodName.getName());
+		} else if (currentClass.getMembers().getAny(methodName.getName()) != null) {
+			Definition previousDef = currentClass.getSuperClass().getMembers().getAny(methodName.getName());
 			MethodDefinition previousMethodDef = previousDef.asMethodDefinition("Method " + methodName.getName()
 			+ " should redefine another method", methodName.getLocation());
 			if (!sig.equals(previousMethodDef.getSignature())) {
@@ -67,12 +66,12 @@ public class DeclMethod extends Tree {
 			}
 		} else {
 			incMethodDef = new MethodDefinition(verifiedType, methodName.getLocation(),
-					sig, currDef.getNumberOfFields());
+					sig, currentClass.getNumberOfFields());
 		}
 		// decorate method
 		methodName.setDefinition(incMethodDef);
 		try {
-			currDef.getMembers().declare(methodName.getName(), methodName.getDefinition());
+			currentClass.getMembers().declare(methodName.getName(), methodName.getDefinition());
 		} catch (DoubleDefException e) {
 			// this never happens since we verified previously
 			e.printStackTrace();
@@ -82,7 +81,7 @@ public class DeclMethod extends Tree {
     }
 	
 	public void verifyClassBodyMethod(DecacCompiler compiler, 
-			EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+			EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
 		EnvironmentExp envExpParam = new EnvironmentExp(localEnv);
 		listDeclParam.verifyClassBodyListDeclParam(compiler,
 				envExpParam);

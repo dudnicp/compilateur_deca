@@ -194,7 +194,10 @@ public class Identifier extends AbstractIdentifier {
     				this.getLocation());
     	} else {
     		this.setDefinition(localEnv.getAny(this.getName()));
-    		// TODO: optional type decoration (removed here)
+    		if (this.getDefinition().isMethod()) {
+    			throw new ContextualError(this.getName() + " is a method, please use a method call",
+    					this.getLocation());}
+    		this.setType(this.getDefinition().getType());
     		return this.getDefinition().getType();
     	}
     }

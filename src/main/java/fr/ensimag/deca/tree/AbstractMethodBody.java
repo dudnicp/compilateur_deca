@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
@@ -16,7 +17,7 @@ public abstract class AbstractMethodBody extends Tree {
 	}
 	
 	public abstract void verifyClassMethodBody(DecacCompiler compiler,
-			EnvironmentExp envExpParam, Symbol currentClass,
+			EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError;
 
 	@Override
