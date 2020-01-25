@@ -1,7 +1,0 @@
-; start main program
-	LOAD #null, R0
-	STORE R0, 2(GB)
-	LOAD code.Object.equals, R0
-	STORE R0, 3(GB)
-; Main program
-; end main program
