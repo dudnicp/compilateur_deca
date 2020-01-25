@@ -24,7 +24,7 @@ public class MethodAsmBody extends AbstractMethodBody {
 
 	@Override
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
-		// TODO Auto-generated method stub
+		asm.prettyPrint(s, prefix, true);
 
 	}
 

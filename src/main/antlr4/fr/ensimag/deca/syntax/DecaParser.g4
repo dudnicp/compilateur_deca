@@ -631,8 +631,6 @@ decl_method returns[DeclMethod tree]
         MethodBody method_body;
         MethodAsmBody method_asm_body;
         StringLiteral asm_body_text;
-        Identifier asm_type;
-        Identifier asm_method_name;
 }
     : type ident OPARENT params=list_params CPARENT (block {
             // A FAIRE: Remplacer $ block par quelque chose en MethodBody ?
@@ -656,14 +654,10 @@ decl_method returns[DeclMethod tree]
             assert($code.text != null);
             asm_body_text = new StringLiteral($code.text);
             method_asm_body = new MethodAsmBody(asm_body_text);
-            asm_type = new Identifier(tableSymbol.create("asm_type"));
-            asm_method_name = new Identifier(tableSymbol.create("asm_method_name"));
-            $tree = new DeclMethod(asm_type, asm_method_name, new ListDeclParam(), method_asm_body);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, method_asm_body);
             setLocation($tree, $ASM);
             setLocation(asm_body_text, $code.start);
             setLocation(method_asm_body, $OPARENT);
-            setLocation(asm_type, $ASM);
-            setLocation(asm_method_name, $ASM);
         }
       ) {
         }
