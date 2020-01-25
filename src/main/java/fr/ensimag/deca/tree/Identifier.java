@@ -17,6 +17,7 @@ import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -168,7 +169,18 @@ public class Identifier extends AbstractIdentifier {
                             + " is not a Exp identifier, you can't call getExpDefinition on it");
         }
     }
-
+    
+	@Override
+	public ParamDefinition getParamDefinition() {
+	  try {
+            return (ParamDefinition) definition;
+        } catch (ClassCastException e) {
+            throw new DecacInternalError(
+                    "Identifier "
+                            + getName()
+                            + " is not a Param identifier, you can't call getParamDefinition on it");
+        }
+    }
     @Override
     public void setDefinition(Definition definition) {
         this.definition = definition;
@@ -304,4 +316,6 @@ public class Identifier extends AbstractIdentifier {
 			program.addInstruction(new WFLOAT());
 		}
     }
+
+
 }

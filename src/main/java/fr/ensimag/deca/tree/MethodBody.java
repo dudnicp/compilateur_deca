@@ -18,7 +18,7 @@ public class MethodBody extends AbstractMethodBody {
 		this.listDeclVar = listDeclVar;
 		this.listInst = listDeclInst;
 	}
-	
+	@Override
 	public void verifyClassMethodBody(DecacCompiler compiler,
 			EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
@@ -45,12 +45,6 @@ public class MethodBody extends AbstractMethodBody {
 	protected void iterChildren(TreeFunction f) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	protected void verifyMethodBody(DecacCompiler compiler, Symbol currentClass) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

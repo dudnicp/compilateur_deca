@@ -36,16 +36,9 @@ public class MethodAsmBody extends AbstractMethodBody {
 	}
 
 	@Override
-	protected void verifyMethodBody(DecacCompiler compiler, Symbol currentClass) {
-		// TODO verify asm
-		
-	}
-
-	@Override
 	public void verifyClassMethodBody(DecacCompiler compiler, EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
-		// TODO Auto-generated method stub
-		
+		// nothing to do - step C will have to handle asm code
 	}
 
 }

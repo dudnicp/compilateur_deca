@@ -13,7 +13,6 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 public abstract class AbstractMethodBody extends Tree {
 
 	public AbstractMethodBody() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public abstract void verifyClassMethodBody(DecacCompiler compiler,
@@ -38,7 +37,4 @@ public abstract class AbstractMethodBody extends Tree {
 
 	}
 	
-	protected abstract void verifyMethodBody(DecacCompiler compiler,
-			Symbol currentClass);
-
 }

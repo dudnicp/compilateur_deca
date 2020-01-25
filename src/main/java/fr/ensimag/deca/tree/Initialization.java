@@ -4,6 +4,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentType;
@@ -44,12 +45,6 @@ public class Initialization extends AbstractInitialization {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
     	expression = expression.verifyRValue(compiler, localEnv, currentClass, t);
-    	if (expression.getType().isNull() && t.isClass()) { /* null is subtype of class */ }
-    	else if (!expression.getType().sameType(t) ||
-    			(expression.getType().isClass() && t.isClass() && !expression.getType().getName().equals(t.getName()))) {
-    		throw new ContextualError("Initialization of type " + expression.getType()
-    			+ " to variable of type " + t, expression.getLocation());
-    	}
     	this.setLocation(expression.getLocation());
     }
 

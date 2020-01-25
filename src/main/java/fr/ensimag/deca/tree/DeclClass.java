@@ -90,6 +90,10 @@ public class DeclClass extends AbstractDeclClass {
         
         // build the current class definition
         ClassType classType;
+        if (compiler.getEnvTypes().getDefinitionFromName(className.getName().toString()) != null) {
+        	throw new ContextualError(className.getName() + " is a predefined type",
+        			className.getLocation());
+        }
     	try {
     		classType = new ClassType(className.getName(), this.getLocation(), superClassDef);
     		envTypes.declare(className.getName(), classType.getDefinition());
