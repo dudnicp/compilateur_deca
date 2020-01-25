@@ -141,51 +141,29 @@ class Math {
         // println("cos(f) not yet implemented");
     }
 
-    //calcul pour |f| <=1
-    float asin(float f) {
-
-      //on se limite a la puissance 9 dans
-      //le Developpement en serie entière de asin
-      //asin = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
-      if ((f < -1) || (f > 1)) {
-        println("L'arcsin n'est définit que sur [-1,1]");
-        return 9999999;
-      }
-      //initialiser les coeff sous forme de float
-      float a = 0.022372159f;
-      float b = 0.030381944f;
-      float c = 0.044642857f;
-      float d = 0.075000000f;
-      float e = 0.166666666f;
-      float g = 1.000000000f;
-
-      //On utilise la méthode de Horner
-      return (((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f*f+g)*f;
-        // println("asin(f) not yet implemented");
-    }
 
     //atan METHODE HORNER
-    //calcul pour |f| <=1
-    float atan(float f) {
-      //on se limite a la puissance 9 dans
-      //le Developpement en serie entière de atan
-      //atan = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
+    //PRECIS QUE DANS UNE PLAGE DE VALEUR
+  float atan_HORNER(float f) {
+    //on se limite a la puissance 9 dans
+    //le Developpement en serie entière de atan
+    //atan = a*f^9 + b*f^7 + c*f^5 + d*f^3 + e*f
 
-      //initialiser les coeff sous forme de float
-      float a = -0.09090909f;
-      float b = 0.1111111111f;
-      float c = -0.142857142f;
-      float d = 0.20000000f;
-      float e = -0.3333333333f;
-      float g = 1.00000f;
+    //initialiser les coeff sous forme de float
+    float a = -0.09090909f;
+    float b = 0.1111111111f;
+    float c = -0.142857142f;
+    float d = 0.20000000f;
+    float e = -0.3333333333f;
+    float g = 1.00000f;
 
-      //On utilise la méthode de Horner
-      //Pareil avec asin mais just les coeff differents
-      return (((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f*f+g)*f;
+    //On utilise la méthode de Horner
+    //Pareil avec asin mais just les coeff differents
+    return (((((a*f*f+b)*f*f+c)*f*f+d)*f*f+e)*f*f+g)*f;
 
 
-        // println("atan(f) not yet implemented");
-    }
+      // println("atan(f) not yet implemented");
+  }
  
     //Calcul valeur absolu d'un float
     float abs(float f) {
@@ -198,10 +176,10 @@ class Math {
     //VOIR COMMENT AMELIORER LA PRECISION
     //VALABLE QUE SUR 0 ET PI/2
 
-    float atan1(float f) {
+    float atan_aux(float f) {
       float a = 0.0f;
-      float b = 1.141592653589793f;
-    //epsilone pour la precision
+      float b = 1.0f;
+      //epsilone pour la precision
       float epsilone = Puiss(1/10f,7);
       float m = 0.0f;
       while ((b-a) > epsilone) {
@@ -215,15 +193,32 @@ class Math {
       return m;
     }
 
+   float atan(float f) {
+      float pi_sur_2 = 1.5707963267948966f;
+      if ((f >= -0.625452f) && (f <= 0.625452f))
+       return atan_HORNER(f);
+      else if ((f >= 0.625452f) && (f <= 1.0f)){
+        return atan_aux(f);
+      }
+      else if ((f < -0.625452f) && (f >= -1)) {
+        //ATAN IMPAIRE
+        return -atan_aux(-f);
+      }
+      //Utilisation des equations fonctionnelles
+      else if (f > 1.0f) return pi_sur_2 - atan_aux(1.0f/f);
+      else return -pi_sur_2 + atan_aux(-1.0f/f);
+
+    }
+
 
     //asin METHODE DICHOTOMIQUE a partir de atan
-    float asin1(float f) {
+    float asin(float f) {
       if ((f < -1) || (f > 1)) {
-        System.out.println("L'arcsin n'est définit que sur [-1,1]");
+        println("L'arcsin n'est définit que sur [-1,1]");
         return 9999999;
       }
 
-      return 2*atan1(f/(1+SQRT(1-f*f)));
+      return 2*atan(f/(1+SQRT(1-f*f)));
     }
 
 
