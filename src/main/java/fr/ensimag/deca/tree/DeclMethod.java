@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
@@ -32,8 +33,9 @@ public class DeclMethod extends Tree {
 	}
 	
 	public void verifyDeclMethod(DecacCompiler compiler,
-			Symbol currentClass) throws ContextualError {
-    	EnvironmentType envTypes = compiler.getEnvTypes();
+			ClassDefinition currentClass) throws ContextualError {
+    	// return type decoration 
+		EnvironmentType envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(type.getName().toString()); // predefined types
     	Type verifiedType;
     	if (def == null) def = envTypes.get(type.getName()); // classes type
@@ -44,35 +46,42 @@ public class DeclMethod extends Tree {
         	verifiedType = def.getType();
         	type.setDefinition(def);
     	}
+    	// determine whether field is already defined in this class - in one of its parents - or not at all
 		Signature sig = listDeclParam.verifyListDeclParam(compiler);
-		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-        MethodDefinition methodDef = new MethodDefinition(verifiedType,
-        		this.getLocation(), sig, classDef.getNumberOfMethods());
-		try {
-            classDef.getMembers().declare(methodName.getName(), methodDef);
-            classDef.incNumberOfMethods();
-            this.methodName.setDefinition(methodDef);
-		} catch (DoubleDefException e) {
-			Definition mDef = classDef.getMembers().getParent().get(methodName.getName());
-            if (mDef == null) {
-				throw new ContextualError("Method or field " + methodName.getName() + " is already defined in this scope",
-						methodName.getLocation());
-            }
-            MethodDefinition methodDefinition = mDef.asMethodDefinition("Not a method definition", mDef.getLocation());
-            if (!methodDef.getSignature().equals(methodDefinition.getSignature())) {
+		MethodDefinition incMethodDef;
+		
+		if (currentClass.getMembers().get(methodName.getName()) != null) {
+			throw new ContextualError("Field or method " + methodName.getName() + " is already defined in class " + currentClass.toString(),
+					methodName.getLocation());
+		} else if (currentClass.getMembers().getAny(methodName.getName()) != null) {
+			Definition previousDef = currentClass.getSuperClass().getMembers().getAny(methodName.getName());
+			MethodDefinition previousMethodDef = previousDef.asMethodDefinition("Method " + methodName.getName()
+			+ " should redefine another method", methodName.getLocation());
+			if (!sig.equals(previousMethodDef.getSignature())) {
                 throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
-                        methodDefinition.getLocation());
+                        methodName.getLocation());
 			} else {
-				MethodDefinition methodDefRedefinition = new MethodDefinition(verifiedType,
-		        		this.getLocation(), sig, methodDefinition.getIndex());
-				classDef.getMembers().getDefinitionMap().put(methodName.getName(), methodDefRedefinition);
-				this.methodName.setDefinition(methodDefRedefinition);
+				incMethodDef = new MethodDefinition(verifiedType,
+		        		this.getLocation(), sig, previousMethodDef.getIndex());
 			}
+		} else {
+			incMethodDef = new MethodDefinition(verifiedType, methodName.getLocation(),
+					sig, currentClass.getNumberOfFields());
 		}
-	}
+		// decorate method
+		methodName.setDefinition(incMethodDef);
+		try {
+			currentClass.getMembers().declare(methodName.getName(), methodName.getDefinition());
+		} catch (DoubleDefException e) {
+			// this never happens since we verified previously
+			e.printStackTrace();
+		}
+    	
+    	
+    }
 	
 	public void verifyClassBodyMethod(DecacCompiler compiler, 
-			EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+			EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
 		EnvironmentExp envExpParam = new EnvironmentExp(localEnv);
 		listDeclParam.verifyClassBodyListDeclParam(compiler,
 				envExpParam);

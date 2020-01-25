@@ -44,7 +44,7 @@ public class Initialization extends AbstractInitialization {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
     	expression = expression.verifyRValue(compiler, localEnv, currentClass, t);
-    	if (expression.getType().isClassOrNull() && t.isClass()) {}
+    	if (expression.getType().isNull() && t.isClass()) { /* null is subtype of class */ }
     	else if (!expression.getType().sameType(t) ||
     			(expression.getType().isClass() && t.isClass() && !expression.getType().getName().equals(t.getName()))) {
     		throw new ContextualError("Initialization of type " + expression.getType()

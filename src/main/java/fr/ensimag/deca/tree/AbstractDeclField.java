@@ -27,8 +27,7 @@ public abstract class AbstractDeclField extends Tree {
      * @param currentClass 
      *          corresponds to the "class" attribute (null in the main bloc).
      */    
-    protected void verifyDeclField(DecacCompiler compiler, Symbol currentClass,
-    		Symbol superClass)
+    protected void verifyDeclField(DecacCompiler compiler, ClassDefinition currentClass)
             throws ContextualError {
 	}
     
@@ -36,6 +35,6 @@ public abstract class AbstractDeclField extends Tree {
     
     protected abstract void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager);
     protected abstract void verifyClassBodyField(DecacCompiler compiler,
-            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError;
+            EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError;
     
 }
