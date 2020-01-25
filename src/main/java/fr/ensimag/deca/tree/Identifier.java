@@ -13,7 +13,6 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
@@ -221,7 +220,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
     	// Rule (3.17)
-    	EnvironmentType envTypes = compiler.getEnvTypes();
+    	EnvironmentExp envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(this.getName().toString()); // predefined types
     	if (def == null) def = envTypes.get(this.getName()); // classes type
     	if (def == null) {

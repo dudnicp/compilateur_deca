@@ -5,14 +5,13 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Environment.DoubleDefException;
-import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.IMAProgram;
@@ -71,7 +70,7 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-    	EnvironmentType envTypes = compiler.getEnvTypes();
+    	EnvironmentExp envTypes = compiler.getEnvTypes();
         
     	// get superclass definition
     	ClassDefinition superClassDef;

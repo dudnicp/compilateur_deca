@@ -7,9 +7,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
-import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
@@ -35,7 +34,7 @@ public class DeclMethod extends Tree {
 	public void verifyDeclMethod(DecacCompiler compiler,
 			ClassDefinition currentClass) throws ContextualError {
     	// return type decoration 
-		EnvironmentType envTypes = compiler.getEnvTypes();
+		EnvironmentExp envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(type.getName().toString()); // predefined types
     	Type verifiedType;
     	if (def == null) def = envTypes.get(type.getName()); // classes type
