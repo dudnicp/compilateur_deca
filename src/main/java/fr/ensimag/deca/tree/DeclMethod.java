@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Environment.DoubleDefException;
@@ -54,11 +55,15 @@ public class DeclMethod extends Tree {
 		try {
             classDef.getMembers().declare(methodName.getName(), methodDef);
 		} catch (DoubleDefException e) {
-			Definition mDef = classDef.getMembers().get(methodName.getName());
-			MethodDefinition methodDefinition = mDef.asMethodDefinition("Not a method definition", mDef.getLocation());
-			if (!methodDef.getSignature().equals(methodDefinition.getSignature())) {
-				throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
-						methodDefinition.getLocation());
+			Definition mDef = classDef.getMembers().getParent().get(methodName.getName());
+            if (mDef == null) {
+				throw new ContextualError("Method " + methodName.getName() + " is already defined in this scope",
+						methodName.getLocation());
+            }
+            MethodDefinition methodDefinition = mDef.asMethodDefinition("Not a method definition", mDef.getLocation());
+            if (!methodDef.getSignature().equals(methodDefinition.getSignature())) {
+                throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
+                        methodDefinition.getLocation());
 			} else {
 				classDef.getMembers().getDefinitionMap().put(methodName.getName(), methodDef);
 			}
