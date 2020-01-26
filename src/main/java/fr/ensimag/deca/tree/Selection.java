@@ -55,7 +55,9 @@ public class Selection extends AbstractLValue {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
+		s.print(objectName.decompile());
+		s.print(".");
+		s.print(fieldName.decompile() + " ");
 
 	}
 
@@ -68,8 +70,8 @@ public class Selection extends AbstractLValue {
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
-
+		objectName.iterChildren(f);
+		fieldName.iterChildren(f);
 	}
 	
 	@Override

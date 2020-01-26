@@ -10,5 +10,5 @@ class C{
 class B{
     C c;
 
-    int x = c.x
+    int x = c.x;
 }

@@ -35,7 +35,11 @@ public class EnvironmentExp {
 		return parent;
 	}
 	
-	
+	/**
+	 * This constructor is used to build the predefined types environment
+	 * We only use this once - in {@link fr.ensimag.deca.DecacCompiler} class
+	 * Afterwards the types environment is a field of the DecacCompiler object
+	 */
 	public EnvironmentExp() {
 		this(null);
 		Symbol s;
@@ -68,7 +72,7 @@ public class EnvironmentExp {
     		Type t = this.getDefinitionFromName("boolean").getType();
     		Signature sig = new Signature();
     		sig.add(objectClassType);
-    		objectClassType.getDefinition().incNumberOfMethods();
+    		objectClassType.getDefinition().incNumberOfMethods(); // method index starts at 1
     		members.declare(s, new MethodDefinition(t, Location.BUILTIN, sig, 
     				objectClassType.getDefinition().getNumberOfMethods()));
     		
@@ -77,6 +81,12 @@ public class EnvironmentExp {
 		}
     }
 
+	/**
+	 * This constructor is used to create an environment of 
+	 * varialbes - methods - fields - parameters
+	 * 
+	 * @param parent
+	 */
 	public EnvironmentExp(EnvironmentExp parent) {
 		this.parent = parent;
 		this.symbolMap = new SymbolTable();
@@ -105,14 +115,12 @@ public class EnvironmentExp {
 	}
 	
 	/**
-     * Get method for map field DefinitionMap
+     * Get method for field definitionMap of type map<Symbol, Definition>
      *
      * @param key
      * 			Name of the symbol to search for
      * @return 
      * 			Return the definition of the symbol or null if the symbol is undefined.
-     * 			If not in this environment , return the definition of the symbol in its parent environment. This goes on until 
-     * 			a null parent is reached - in this case it returns null - or a definition is found and returned.
      */
 	public Definition get(Symbol key) {
 		return definitionMap.get(key);
@@ -142,7 +150,6 @@ public class EnvironmentExp {
      * 
      * Adding a symbol which is already defined in the environment,
      * - throws DoubleDefException if the symbol is in the "current" dictionary 
-     * - or, hides the previous declaration otherwise.
      * 
      * @param name
      *            Name of the symbol to define
@@ -161,7 +168,10 @@ public class EnvironmentExp {
     }
     
 
-    
+    /**
+     * Print the field defintionMap
+     * Useful for debugging
+     */
     @Override
     public String toString() {
     	String str = "";

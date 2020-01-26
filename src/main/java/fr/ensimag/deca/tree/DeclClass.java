@@ -78,6 +78,9 @@ public class DeclClass extends AbstractDeclClass {
         if (superClassName.getName().toString().equals("Object")){ // if "extends Object"
             superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("Object");
             superClassName.setLocation(superClassDef.getLocation());
+        } else if (compiler.getEnvTypes().getDefinitionFromName(superClassName.getName().toString()) != null) {
+        	throw new ContextualError(superClassName.getName() + " is a predefined type",
+        			superClassName.getLocation());
         } else if (envTypes.get(superClassName.getName()) == null) {
             throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
     				superClassName.getLocation());
@@ -85,7 +88,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassDef = (ClassDefinition)envTypes.get(superClassName.getName());
         }
         //decorate the superclass identifier
-        superClassName.setType(superClassDef.getType()); // TODO: optional
+        superClassName.setType(superClassDef.getType());
         superClassName.setDefinition(superClassDef);
         
         // build the current class definition
@@ -101,7 +104,7 @@ public class DeclClass extends AbstractDeclClass {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
     	// decorate the class identifier
-        className.setType(classType); // TODO: optional
+        className.setType(classType);
         className.setDefinition(classType.getDefinition());
     }
 
@@ -112,7 +115,8 @@ public class DeclClass extends AbstractDeclClass {
             throws ContextualError {
 		ClassDefinition currentClass = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
 		ClassDefinition superClass= (ClassDefinition)currentClass.getSuperClass();
-		// set the offset of methods and fields indexes 
+		// set the offset of methods and fields indexes
+		// based on the superclass
 		currentClass.setNumberOfFields(superClass.getNumberOfFields());
 		currentClass.setNumberOfMethods(superClass.getNumberOfMethods());
     	fields.verifyListDeclField(compiler, currentClass);
@@ -130,11 +134,8 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        //this.className.prettyPrintNode();
     	this.className.prettyPrint(s, prefix, false);
-        //this.className.prettyPrintType(s, prefix);
     	this.superClassName.prettyPrint(s, prefix, false);
-        //this.superClassName.prettyPrintType(s, prefix);
     	this.fields.prettyPrint(s, prefix, false);
     	this.methods.prettyPrint(s, prefix, true);
     }

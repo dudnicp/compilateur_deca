@@ -28,6 +28,17 @@ public class ListExpr extends TreeList<AbstractExpr> {
         }
     }
     
+    /**
+     * Verify {@link fr.ensimag.deca.context.Signature} of a methodCall
+     * 
+     * @param compiler
+     * @param localEnv 
+     * @param currentClass
+     * @param sig2
+     * 			in precondition, this is empty
+     * 			in postcondition, this contains the type of the parameters
+     * @throws ContextualError
+     */
     public void verifySignature(DecacCompiler compiler, EnvironmentExp localEnv,
     		ClassDefinition currentClass, Signature sig2) throws ContextualError {
     	for (AbstractExpr exp: this.getList()) {

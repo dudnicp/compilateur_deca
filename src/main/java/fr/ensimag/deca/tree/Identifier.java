@@ -228,7 +228,7 @@ public class Identifier extends AbstractIdentifier {
     	} else {
         	Type type = def.getType();
         	this.setDefinition(def);
-    		this.setType(type); // TODO: optional
+    		this.setType(type);
     	}
     	if (this.getType().isVoid()) {
     		throw new ContextualError("Type cannot be of type void (3.17)",

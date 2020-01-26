@@ -33,7 +33,8 @@ public class MethodBody extends AbstractMethodBody {
 	
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
+		listDeclVar.decompile(s);
+		listInst.decompile(s);
 
 	}
 
@@ -45,7 +46,7 @@ public class MethodBody extends AbstractMethodBody {
 
 	@Override
 	protected void iterChildren(TreeFunction f) {
-		// TODO Auto-generated method stub
+		// nothing to do -- leaf node
 
 	}
 

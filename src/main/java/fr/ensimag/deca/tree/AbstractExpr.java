@@ -106,6 +106,8 @@ public abstract class AbstractExpr extends AbstractInst {
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);
     		return convFloat;
+    	// if (rvalue type is a subclass of expectedtype)
+    	// then it is assign-compatible
     	} else if (expectedType.isClass()) {
     		if (type2.isClassOrNull()) {
     			if (type2.isNull()) {}
@@ -113,7 +115,8 @@ public abstract class AbstractExpr extends AbstractInst {
     				ClassType cType2 = type2.asClassType("this will never happen", this.getLocation());
     				ClassType cExpectedType = expectedType.asClassType("this will never happen", this.getLocation());
     				if (!cType2.isSubClassOf(cExpectedType)) {
-    					throw new ContextualError("Class " + type2.getName() + " is not a subclass of " + expectedType.getName(),
+    					throw new ContextualError("Class " + type2.getName() + " is not a subclass of "
+    				+ expectedType.getName() + " (not assign_compatible)",
     							this.getLocation());
     				}
     			}
@@ -132,7 +135,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-    	Type type = this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
+    	this.verifyExpr(compiler, localEnv, currentClass); // rule (3.20)
     }
 
     /**
