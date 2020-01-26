@@ -38,9 +38,6 @@ public abstract class AbstractMethodBody extends Tree {
 		// TODO Auto-generated method stub
 
 	}
-	
-	protected abstract void verifyMethodBody(DecacCompiler compiler,
-			Symbol currentClass);
 
 	public abstract void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName);
 }

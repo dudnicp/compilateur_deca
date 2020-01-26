@@ -152,7 +152,9 @@ public class DeclClass extends AbstractDeclClass {
     	
     	String classString = className.getName().getName();
     	
-
+    	
+    	System.out.println(superClassName.getName().getName());
+    	
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
 				superClassName.getName().getName(), 
