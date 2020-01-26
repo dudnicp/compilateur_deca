@@ -457,9 +457,8 @@ primary_expr returns[AbstractExpr tree]
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
-            // A FAIRE : cette règle est non gérée dans le cadre du langage sans objet
             if (true)
-                throw new UnsupportedOperationException("Non géré dans le cadre du langage sans objet");
+                throw new UnsupportedOperationException("Non géré dans le cadre du langage objet");
         }
     | literal {
             assert($literal.tree != null);
@@ -658,6 +657,8 @@ decl_method returns[DeclMethod tree]
             setLocation($tree, $ASM);
             setLocation(asm_body_text, $code.start);
             setLocation(method_asm_body, $OPARENT);
+            setLocation($type.tree, $type.start);
+            setLocation($ident.tree, $ident.start);
         }
       ) {
         }
