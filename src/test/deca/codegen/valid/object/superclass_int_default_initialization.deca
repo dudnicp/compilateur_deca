@@ -14,5 +14,5 @@ class C extends A{
 {
     C p = new C();
     
-    println(C.x);
+    println(p.x);
 }
