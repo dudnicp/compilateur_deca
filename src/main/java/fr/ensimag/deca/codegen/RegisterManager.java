@@ -105,9 +105,13 @@ public class RegisterManager {
 	
 	
 	/* Coding TSTO */
-	public void codeTSTO(IMAProgram program) {
+	public void codeTSTOandADDSP(IMAProgram program) {
 		if (nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams != 0) {
 			program.addInstruction(new TSTO(nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams));
+			program.addInstruction(new BOV(Label.STACKOVERFLOW));
+		}
+		if (nLocalVariables != 0) {
+			program.addInstruction(new ADDSP(nLocalVariables));
 		}
 	}
 }

@@ -189,11 +189,11 @@ public class DeclClass extends AbstractDeclClass {
     	labelInstruction.addLabel(Label.getInitLabel(className.getName().getName()));
     	
     	/* Coding initialisation */
-    	classInit.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-    	fields.codeGenDefaultInit(classInit, Register.R1, registerManager);
+    	fields.codeGenDefaultInit(classInit, registerManager);
     	
     	// super class initialisation
 		if (!superClassName.getName().getName().equals("Object")) {
+			classInit.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
 			classInit.addInstruction(new PUSH(Register.R1));
 			registerManager.incCurrentNumberOfMethodParams(1);
 			classInit.addInstruction(new BSR(Label.getInitLabel(superClassName.getName().getName())));
@@ -203,7 +203,7 @@ public class DeclClass extends AbstractDeclClass {
 			registerManager.decCurrentNumberOfMethodParams(1);
 		}
 		
-		fields.codeGenProperInit(classInit, Register.R1, registerManager);
+		fields.codeGenProperInit(classInit, registerManager);
 		
 		/* coding registers save */
 		registerManager.saveGPRegisters(saveRegisters);
@@ -212,7 +212,7 @@ public class DeclClass extends AbstractDeclClass {
 		registerManager.restoreGPRegisters(restoreRegisters);
 		
 		/* coding tsto instrunction */
-		registerManager.codeTSTO(tstoInstruction);
+		registerManager.codeTSTOandADDSP(tstoInstruction);
 		
 		/* class initialisation final structure */
 		program.append(labelInstruction);
