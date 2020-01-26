@@ -49,12 +49,6 @@ public class MethodBody extends AbstractMethodBody {
 
 	}
 
-	@Override
-	protected void verifyMethodBody(DecacCompiler compiler, Symbol currentClass) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 	@Override
 	public void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName) {

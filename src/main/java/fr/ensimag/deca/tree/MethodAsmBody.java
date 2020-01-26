@@ -42,7 +42,6 @@ public class MethodAsmBody extends AbstractMethodBody {
 	public void verifyClassMethodBody(DecacCompiler compiler, EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
 		asm.verifyExpr(compiler, envExpParam, currentClass);
-			}
 		
 	}
 	
