@@ -16,11 +16,13 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 
@@ -166,7 +168,11 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void codeGenPrint(IMAProgram program, RegisterManager registerManager) {
     	codeGenInst(program, registerManager);
     	program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
-    	codeGenPrintInstruction(program);
+    	if (type.isFloat()) {
+    		program.addInstruction(new WFLOAT());
+		} else if (type.isInt() || type.isBoolean()) {
+			program.addInstruction(new WINT());
+		}
     }
     
     protected void codeGenPrintHex(IMAProgram program, RegisterManager registerManager) {
@@ -180,16 +186,19 @@ public abstract class AbstractExpr extends AbstractInst {
         codeExpr(program, Register.defaultRegisterIndex, registerManager);
     }
     
-    protected void codeGenPrintInstruction(IMAProgram program) {
-    	program.addInstruction(new WINT());
-    }
     
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
     
     protected void codeCMP(IMAProgram program, int n) {
-    	throw new UnsupportedOperationException("not yet implemented");
+    	if (getType().isFloat()) {
+    		program.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
+		} else if (getType().isClassOrNull()) {
+			program.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
+		} else {
+			program.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
+		}
 	}
     
     protected void codeAssign(IMAProgram program, int n, RegisterManager registerManager) {

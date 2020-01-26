@@ -51,9 +51,4 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     	}
     	return this.getType();
     }
-    
-    @Override
-    protected void codeCMP(IMAProgram program, int n) {
-    	getLeftOperand().codeCMP(program, n);
-    }
 }

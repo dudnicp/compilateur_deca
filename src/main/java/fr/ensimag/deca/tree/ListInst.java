@@ -38,9 +38,9 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
     
-    public void codeGenListInstInMethod(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+    public void codeGenListInstInMethod(IMAProgram program, RegisterManager registerManager) {
 		for (AbstractInst i : getList()) {
-			i.codeGenInstInMethod(program, registerManager, className, methodName);
+			i.codeGenInst(program, registerManager);
 		}
 	}
 

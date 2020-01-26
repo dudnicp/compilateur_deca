@@ -50,7 +50,7 @@ public class MethodAsmBody extends AbstractMethodBody {
 
 	
 	@Override
-	public void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+	public void codeGen(IMAProgram program, RegisterManager registerManager) {
 		program.add(new InlinePortion(asm.getValue()));
 	}
 

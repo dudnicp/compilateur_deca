@@ -51,22 +51,13 @@ public class FloatLiteral extends AbstractExpr {
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("float").getType());
     	return this.getType();
     }
-    
-    @Override
-    protected void codeGenPrintInstruction(IMAProgram program) {
-        program.addInstruction(new WFLOAT());
-    }
+ 
 
     @Override
 	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	registerManager.tryMaxRegisterIndex(n);
     	program.addInstruction(new LOAD(new ImmediateFloat(value), Register.getR(n)));
 	}
-    
-    @Override
-    protected void codeCMP(IMAProgram program, int n) {
-    	program.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
-    }
     
     @Override
     protected DVal dval() {

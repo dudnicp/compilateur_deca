@@ -48,14 +48,4 @@ public class ConvFloat extends AbstractUnaryExpr {
     	program.addInstruction(new FLOAT(Register.getR(n), Register.getR(n)));
     	program.addInstruction(new BOV(Label.IMPOSSIBLECONVFLOAT));
 	}
-    
-    @Override
-    protected void codeGenPrintInstruction(IMAProgram program) {
-    	program.addInstruction(new WFLOAT());
-    }
-    
-     @Override
-    protected void codeCMP(IMAProgram program, int n) {
-    	 program.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
-    }
 }

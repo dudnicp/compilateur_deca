@@ -49,7 +49,7 @@ public class StringLiteral extends AbstractStringLiteral {
     }
 
     @Override
-    protected void codeGenPrintInstruction(IMAProgram program) {
+    protected void codeGenPrint(IMAProgram program, RegisterManager registerManager) {
         program.addInstruction(new WSTR(new ImmediateString(value)));
     }
 

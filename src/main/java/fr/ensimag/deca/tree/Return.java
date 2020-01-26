@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -46,10 +47,10 @@ public class Return extends AbstractInst {
 	}
 
 	@Override
-	protected void codeGenInstInMethod(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+	protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
 		rvalue.codeExpr(program, Register.defaultRegisterIndex, registerManager);
 		program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
-		program.addInstruction(new BRA(Label.getMethodEndLabel(className, methodName)));
+		program.addInstruction(new BRA(Label.getMethodEndLabel(MethodTable.getCurrentClass(), MethodTable.getCurrentMethod())));
 	}
 
 	@Override

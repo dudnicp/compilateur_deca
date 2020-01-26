@@ -19,5 +19,5 @@ public abstract class AbstractMethodBody extends Tree {
 			Type returnType) throws ContextualError;
 
 
-	public abstract void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName);
+	public abstract void codeGen(IMAProgram program, RegisterManager registerManager);
 }

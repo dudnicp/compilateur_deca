@@ -52,11 +52,6 @@ public class IntLiteral extends AbstractExpr {
 	}
     
     @Override
-    protected void codeCMP(IMAProgram program, int n) {
-    	program.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
-    }
-    
-    @Override
 	protected DVal dval() {
     	return new ImmediateInteger(value);
 	}

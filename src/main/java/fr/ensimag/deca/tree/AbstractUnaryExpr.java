@@ -41,10 +41,5 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         operand.prettyPrint(s, prefix, true);
     }
-    
-    @Override
-	protected void codeGenPrintInstruction(IMAProgram program) {
-    	operand.codeGenPrintInstruction(program);
-	}
 
 }

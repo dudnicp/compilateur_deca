@@ -149,9 +149,12 @@ public class DeclClass extends AbstractDeclClass {
     }
     
     @Override
-    public void createMethodTable(IMAProgram program) {
+    public void createMethodTable(IMAProgram program) throws ContextualError{
     	
     	String classString = className.getName().getName();
+    	if (classString.indexOf('$') >= 0) {
+			throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+		}
     	    	
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
@@ -162,6 +165,9 @@ public class DeclClass extends AbstractDeclClass {
 		// creating method table for the class
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
+			if (methodString.indexOf('$') >= 0) {
+				throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+			}
 			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
 					declMethod.getMethodName().getMethodDefinition().getIndex()-1);
 		}
@@ -226,9 +232,11 @@ public class DeclClass extends AbstractDeclClass {
     
     @Override
     protected void codeGenMethod(IMAProgram program) {
+    	MethodTable.setCurrentClass(className.getName().getName());
+    	
     	codeGenInit(program);
     	for (DeclMethod method : methods.getList()) {
-			method.codeGen(program, className.getName().getName());
+			method.codeGen(program);
 		}
     }
 }

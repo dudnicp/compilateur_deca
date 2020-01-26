@@ -55,7 +55,7 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) {
+    public void codeGenProgram(DecacCompiler compiler) throws ContextualError{
     	
     	IMAProgram methodTableCode = new IMAProgram();
     	IMAProgram mainCode = new IMAProgram();
@@ -75,11 +75,12 @@ public class Program extends AbstractProgram {
         compiler.append(tstoCode);
     	compiler.append(methodTableCode);
     	compiler.append(mainCode);
+    	compiler.addInstruction(new HALT());;
     	compiler.append(errorsCode);
     	compiler.append(classMethodCode);
     }
     
-    protected void createMethodTable(IMAProgram program) {
+    protected void createMethodTable(IMAProgram program) throws ContextualError{
     	
     	// creating the method table for the super-class Object
     	MethodTable.addClass("Object", 1);

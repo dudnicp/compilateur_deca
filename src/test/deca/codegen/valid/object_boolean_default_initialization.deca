@@ -7,7 +7,7 @@
 */
 class C{
     boolean x; // vaut false
-    boolean y = x || x; // y DOIT VALOIR false (false && false)
+    boolean y = x || x; // y DOIT VALOIR false (false || false)
 }
 {
     C r = new C();
