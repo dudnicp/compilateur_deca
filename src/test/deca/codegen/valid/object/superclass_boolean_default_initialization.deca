@@ -12,7 +12,9 @@ class C extends A{
     boolean x; // x DOIT VALOIR TRUE
 }
 {
-    if (x){
+
+    C e = new C();
+    if (e.x){
         println("Test reussi");
     }else{
         println("Test echoue");
