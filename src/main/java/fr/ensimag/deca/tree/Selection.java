@@ -74,19 +74,21 @@ public class Selection extends AbstractLValue {
 	
 	@Override
 	protected DAddr daddr() {
-		return fieldName.getFieldDefinition().getOperand();
+		return null;
 	}
 	
 	@Override
-	protected void codeAssign(IMAProgram program, int n, RegisterManager registerManager) {
-		objectName.codeExpr(program, n, registerManager);
-		fieldName.getFieldDefinition().setOperand(new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.getR(n)));
+	protected DAddr tempAddr(IMAProgram program, int n, RegisterManager registerManager) {
+		program.addInstruction(new LOAD(objectName.dval(), Register.getR(n)));
+		registerManager.tryMaxRegisterIndex(n);
+		return new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.getR(n));
 	}
+	
 	
 	@Override
 	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
-		codeAssign(program, n, registerManager);
-		program.addInstruction(new LOAD(daddr(), Register.getR(n)));
+		objectName.codeExpr(program, n, registerManager);
+		program.addInstruction(new LOAD(new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.getR(n)), Register.getR(n)));
 	}
 
 }

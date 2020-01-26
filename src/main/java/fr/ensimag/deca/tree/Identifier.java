@@ -24,7 +24,6 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -280,18 +279,31 @@ public class Identifier extends AbstractIdentifier {
     }
     
     protected DAddr daddr() {
-    	return getExpDefinition().getOperand();
+    	if (getDefinition().isField()) {
+			return null;
+		}
+    	else {
+    		return getExpDefinition().getOperand();
+		}
 	}
+    
+    @Override
+    protected DAddr tempAddr(IMAProgram program, int n, RegisterManager registerManager) {
+    	if (getDefinition().isField()) {
+    		program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.getR(n)));
+    		registerManager.tryMaxRegisterIndex(n);
+			return new RegisterOffset(getFieldDefinition().getIndex(), Register.getR(n));
+		}
+    	else {
+    		return getExpDefinition().getOperand();
+		}
+    }
     
     
     @Override
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	registerManager.tryMaxRegisterIndex(n);
-    	if (getDefinition().isField()) {
-			program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.getR(n)));
-			getFieldDefinition().setOperand(new RegisterOffset(getFieldDefinition().getIndex(), Register.getR(n)));
-		}
-    	program.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+    	program.addInstruction(new LOAD(tempAddr(program, n, registerManager), Register.getR(n)));
     	if (getType().isClassOrNull()) {
 			codeCMP(program, n);
 			program.addInstruction(new BEQ(Label.NULLOBJECT));
@@ -311,7 +323,7 @@ public class Identifier extends AbstractIdentifier {
     
     @Override
     protected void codeGenPrintInstruction(IMAProgram program) {
-    	Type type = getType();
+    	Type type = getDefinition().getType();
     	if (type.isInt() || type.isBoolean()) {
 			program.addInstruction(new WINT());
 		}

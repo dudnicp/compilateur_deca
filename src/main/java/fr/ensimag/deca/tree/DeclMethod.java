@@ -78,7 +78,7 @@ public class DeclMethod extends Tree {
 		} else {
 			currentClass.incNumberOfMethods();
 			incMethodDef = new MethodDefinition(verifiedType, methodName.getLocation(),
-					sig, currentClass.getNumberOfFields());
+					sig, currentClass.getNumberOfMethods());
 		}
 		// decorate method
 		methodName.setDefinition(incMethodDef);

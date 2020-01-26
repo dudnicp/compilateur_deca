@@ -151,10 +151,7 @@ public class DeclClass extends AbstractDeclClass {
     public void createMethodTable(IMAProgram program) {
     	
     	String classString = className.getName().getName();
-    	
-    	
-    	System.out.println(superClassName.getName().getName());
-    	
+    	    	
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
 				superClassName.getName().getName(), 
@@ -165,7 +162,7 @@ public class DeclClass extends AbstractDeclClass {
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
 			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
-					declMethod.getMethodName().getMethodDefinition().getIndex());
+					declMethod.getMethodName().getMethodDefinition().getIndex()-1);
 		}
 		
 		// generating code for the method table

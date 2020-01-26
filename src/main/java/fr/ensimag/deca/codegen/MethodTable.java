@@ -35,17 +35,10 @@ public abstract class MethodTable {
 	}
 	
 	public static void addClass(String name, String superName, int nMethods) {
-		System.out.println(nMethods);
-		System.out.println(getMethods(superName).length);
 		Validate.isTrue(methodTable.containsKey(superName) && nMethods >= getMethods(superName).length);
 		addClass(name, nMethods);
 		for (int i = 0; i < getMethods(superName).length; i++) {
 			putMethod(name, getMethodLabel(superName, i), i);
 		}
-	}
-	
-	
-	public static void codeGen(DecacCompiler compiler) {
-		
 	}
 }
