@@ -1,7 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
-
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.codegen.RegisterManager;
@@ -72,10 +72,24 @@ public class DeclMethod extends Tree {
 			if (!sig.equals(previousMethodDef.getSignature())) {
                 throw new ContextualError("Wrong signature for redifinition of method " + methodName.getName(),
                         methodName.getLocation());
-			} else {
-				incMethodDef = new MethodDefinition(verifiedType,
+			} else { // check for assign_compatible return types
+				if (previousMethodDef.getType().isClass()) {
+					ClassType previousCType = previousMethodDef.getType().asClassType("not a class type", this.getLocation());
+					if (verifiedType.isNull() || (verifiedType.isClass() &&
+							verifiedType.asClassType("not a class type", this.getLocation()).isSubClassOf(previousCType))) {
+						incMethodDef = new MethodDefinition(verifiedType,
+				        		this.getLocation(), sig, previousMethodDef.getIndex());
+					} else throw new ContextualError("Wrong return type for method redefinition: class " + verifiedType.getName() + " is not"
+							+ " a subclass of class " + previousCType.getName(),
+							this.getLocation());
+				} else if ((previousMethodDef.getType().isFloat() && verifiedType.isInt()) ||
+						(previousMethodDef.getType().sameType(verifiedType))) {
+					incMethodDef = new MethodDefinition(verifiedType,
 		        		this.getLocation(), sig, previousMethodDef.getIndex());
+				} else throw new ContextualError("wrong return type for method " + methodName.getName() + " redefinition",
+						methodName.getLocation());
 			}
+
 		} else {
 			currentClass.incNumberOfMethods();
 			incMethodDef = new MethodDefinition(verifiedType, methodName.getLocation(),
