@@ -58,6 +58,7 @@ public class Assign extends AbstractBinaryExpr {
      
     @Override
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	program.addComment(decompile());
     	if (getLeftOperand().daddr() == null) {
     		getLeftOperand().codeExpr(program, n, registerManager);
 			if (n < Register.getRMAX()) {

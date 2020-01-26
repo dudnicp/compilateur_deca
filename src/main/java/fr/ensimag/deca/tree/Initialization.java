@@ -11,6 +11,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
@@ -66,7 +68,11 @@ public class Initialization extends AbstractInitialization {
     }
     
     @Override
-	public void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
-    	expression.codeAssign(program, n, registerManager);
+	public void codeExpr(IMAProgram program, RegisterManager registerManager, boolean isField, DAddr addr) {
+    	expression.codeAssign(program, Register.defaultRegisterIndex, registerManager);
+    	if (isField) {
+			program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+		}
+    	program.addInstruction(new STORE(Register.getDefaultRegister(), addr));
     }
 }

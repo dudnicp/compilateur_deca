@@ -47,6 +47,9 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
+    	
+    	program.addComment("if instruction");
+    	
     	Label elseLabel = Label.newElseIfLabel();
     	Label endIfLabel = Label.newEndIfLabel();
     	condition.codeCond(program, false, elseLabel, registerManager);
