@@ -36,9 +36,13 @@ public abstract class AbstractInst extends Tree {
      * 
      * @param program
      */
-    protected abstract void codeGenInst(IMAProgram program, RegisterManager registerManager);
+    protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
+    	throw new UnsupportedOperationException("not yet implemented");
+    }
     
-
+    protected void codeGenInstInMethod(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+    	codeGenInst(program, registerManager);
+	}
     /**
      * Decompile the tree, considering it as an instruction.
      *

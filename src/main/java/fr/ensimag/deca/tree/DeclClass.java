@@ -26,6 +26,7 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 import fr.ensimag.deca.tree.ListDeclMethod;
 
 /**
@@ -147,33 +148,36 @@ public class DeclClass extends AbstractDeclClass {
     }
     
     @Override
-    public void codeGenMethodTable(DecacCompiler compiler) {
+    public void createMethodTable(IMAProgram program) {
     	
     	String classString = className.getName().getName();
+    	
 
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
 				superClassName.getName().getName(), 
 				className.getClassDefinition().getNumberOfMethods());
 		
+		
 		// creating method table for the class
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
-			MethodTable.putMethod(classString, Label.getMethodLabel(classString, methodString), 
+			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
 					declMethod.getMethodName().getMethodDefinition().getIndex());
 		}
 		
 		// generating code for the method table
-		compiler.addInstruction(new LEA(MethodTable.getClassAddr(superClassName.getName().getName()), Register.R0));
-		compiler.addInstruction(new STORE(Register.R0, MethodTable.getClassAddr(classString)));
+		program.addInstruction(new LEA(MethodTable.getClassAddr(superClassName.getName().getName()), Register.R0));
+		program.addInstruction(new STORE(Register.R0, MethodTable.getClassAddr(classString)));
+		
 		for (Label methodLabel : MethodTable.getMethods(classString)) {
-			compiler.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
-			compiler.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
+			program.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
+			program.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
 		}
 		
 	}
     
-    protected void codeGenInit(DecacCompiler compiler) {
+    protected void codeGenInit(IMAProgram program) {
     	RegisterManager registerManager = new RegisterManager(Register.LB);
     	
     	IMAProgram labelInstruction = new IMAProgram();
@@ -196,12 +200,11 @@ public class DeclClass extends AbstractDeclClass {
 			classInit.addInstruction(new BSR(Label.getInitLabel(superClassName.getName().getName())));
 			registerManager.incCurrentNumberOfMethodParams(2);
 			registerManager.decCurrentNumberOfMethodParams(2);
-			classInit.addInstruction(new POP(Register.R1));
+			classInit.addInstruction(new SUBSP(1));
 			registerManager.decCurrentNumberOfMethodParams(1);
 		}
 		
 		fields.codeGenProperInit(classInit, Register.R1, registerManager);
-		classInit.addInstruction(new RTS());
 		
 		/* coding registers save */
 		registerManager.saveGPRegisters(saveRegisters);
@@ -212,19 +215,20 @@ public class DeclClass extends AbstractDeclClass {
 		/* coding tsto instrunction */
 		registerManager.codeTSTO(tstoInstruction);
 		
-		
 		/* class initialisation final structure */
-		compiler.append(labelInstruction);
-		compiler.append(tstoInstruction);
-		compiler.append(saveRegisters);
-		compiler.append(classInit);
-		compiler.append(restoreRegisters);
-		compiler.addInstruction(new RTS());
+		program.append(labelInstruction);
+		program.append(tstoInstruction);
+		program.append(saveRegisters);
+		program.append(classInit);
+		program.append(restoreRegisters);
+		program.addInstruction(new RTS());
 	}
     
     @Override
-    protected void codeGenDecl(DecacCompiler compiler) {
-    	codeGenInit(compiler);
-    	
+    protected void codeGenMethod(IMAProgram program) {
+    	codeGenInit(program);
+    	for (DeclMethod method : methods.getList()) {
+			method.codeGen(program, className.getName().getName());
+		}
     }
 }

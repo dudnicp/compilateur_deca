@@ -4,11 +4,14 @@ import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.InlinePortion;
 
 public class MethodAsmBody extends AbstractMethodBody {
 	private StringLiteral asm;
@@ -41,5 +44,11 @@ public class MethodAsmBody extends AbstractMethodBody {
 		asm.verifyExpr(compiler, envExpParam, currentClass);
 			}
 		
+	}
+	
+	@Override
+	public void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+		program.add(new InlinePortion(asm.getValue()));
+	}
 
 }

@@ -77,7 +77,6 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     
     @Override
 	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
-    	registerManager.tryMaxRegisterIndex(n);
     	leftOperand.codeExpr(program, n, registerManager);
     	DVal rightDVal = rightOperand.dval();
     	if (rightDVal != null) {

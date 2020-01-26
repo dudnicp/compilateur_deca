@@ -3,11 +3,17 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 public class This extends AbstractExpr {
 
@@ -35,5 +41,15 @@ public class This extends AbstractExpr {
 	protected void iterChildren(TreeFunction f) {
 		// leaf node -- nothing to do
 	}
-
+	
+	@Override
+	protected DVal dval() {
+		return new RegisterOffset(-2, Register.LB);
+	}
+	
+	
+	@Override
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+		program.addInstruction(new LOAD(this.dval(), Register.getR(n)));
+	}
 }

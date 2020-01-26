@@ -19,7 +19,7 @@ public class RegisterManager {
 	public static final RegisterManager GLOBAL_REGISTER_MANAGER = new RegisterManager(Register.GB);
 	
 	private int nUsedRegisters = 0;
-	private int GPRegisterUsedMaxIndex = Register.defaultRegisterIndex;
+	private int GPRegisterUsedMaxIndex = 1;
 	
 	private int nLocalVariables = 0;
 	
@@ -41,14 +41,14 @@ public class RegisterManager {
 	
 	/* Used registers */
 	public void saveGPRegisters(IMAProgram program) {
-		for (int i = GPRegisterUsedMaxIndex; i >= Register.defaultRegisterIndex; i++) {
+		for (int i = GPRegisterUsedMaxIndex; i > 1; i--) {
 			program.addInstruction(new PUSH(Register.getR(i)));
 			nUsedRegisters ++;
 		}
 	}
 	
 	public void restoreGPRegisters(IMAProgram program) {
-		for (int i = Register.defaultRegisterIndex; i < GPRegisterUsedMaxIndex; i++) {
+		for (int i = 2; i <= GPRegisterUsedMaxIndex; i++) {
 			program.addInstruction(new POP(Register.getR(i)));
 		}
 	}
@@ -90,7 +90,7 @@ public class RegisterManager {
 	public void incCurrentNumberOfMethodParams(int n) {
 		currentNumberOfMethodParams += n;
 		if (currentNumberOfMethodParams > maxNumberOfMethodParams) {
-			currentNumberOfMethodParams = maxNumberOfMethodParams;
+			maxNumberOfMethodParams = currentNumberOfMethodParams;
 		}
 	}
 	
@@ -98,10 +98,16 @@ public class RegisterManager {
 		currentNumberOfMethodParams -= n;
 	}
 	
+	public int getMaxNumberOfMethodParams() {
+		return maxNumberOfMethodParams;
+	}
+	
 	
 	
 	/* Coding TSTO */
 	public void codeTSTO(IMAProgram program) {
-		program.addInstruction(new TSTO(nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams));
+		if (nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams != 0) {
+			program.addInstruction(new TSTO(nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams));
+		}
 	}
 }

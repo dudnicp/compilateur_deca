@@ -19,7 +19,6 @@ public class Register extends DVal {
 	private static final GPRegister[] R = initRegisters();
 		
 	private static int RMAX = 15;
-	private static int nextAddr = 3;
 	
 	public static final int defaultRegisterIndex = 2;
 	

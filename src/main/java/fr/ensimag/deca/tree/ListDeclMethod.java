@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 
 public class ListDeclMethod extends TreeList<DeclMethod>{
 
@@ -29,6 +30,12 @@ public class ListDeclMethod extends TreeList<DeclMethod>{
 		for (DeclMethod m: this.getList()) {
             m.verifyClassBodyMethod(compiler, localEnv, currentClass);
         }
+    }
+    
+    public void codeGen(IMAProgram program, String className) {
+    	for (DeclMethod method : getList()) {
+			method.codeGen(program, className);
+		}
     }
 
 }

@@ -58,5 +58,9 @@ public class DeclParam extends AbstractDeclParam {
 						paramName.getLocation());
 		}
 	}
+	
+	public AbstractIdentifier getParamName() {
+		return paramName;
+	}
 
 }
