@@ -36,5 +36,5 @@ public abstract class AbstractDeclClass extends Tree {
     
     protected abstract void codeGenMethod(IMAProgram program);
     
-    protected abstract void createMethodTable(IMAProgram program);
+    protected abstract void createMethodTable(IMAProgram program) throws ContextualError;
 }

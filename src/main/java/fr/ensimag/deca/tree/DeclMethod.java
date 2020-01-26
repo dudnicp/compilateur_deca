@@ -138,10 +138,6 @@ public class DeclMethod extends Tree {
 		String methodString = MethodTable.getCurrentMethod();
 		String classString = MethodTable.getCurrentClass();
 		
-		if (methodString.contains("$")) {
-			throw new UnsupportedOperationException("Assembly code does not support $ character");
-		}
-		
 		RegisterManager registerManager = new RegisterManager(Register.LB);
 		
 		int argIndex = 3;

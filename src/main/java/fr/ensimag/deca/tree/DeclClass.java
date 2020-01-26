@@ -149,11 +149,11 @@ public class DeclClass extends AbstractDeclClass {
     }
     
     @Override
-    public void createMethodTable(IMAProgram program) {
+    public void createMethodTable(IMAProgram program) throws ContextualError{
     	
     	String classString = className.getName().getName();
-    	if (classString.contains("$")) {
-			throw new UnsupportedOperationException("Assembly code does not support $ character");
+    	if (classString.indexOf('$') >= 0) {
+			throw new ContextualError("Assembly code does not support $ character", className.getLocation());
 		}
     	    	
     	// adding class to the table of methods, generating an address for the origin of the table
@@ -165,6 +165,9 @@ public class DeclClass extends AbstractDeclClass {
 		// creating method table for the class
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
+			if (methodString.indexOf('$') >= 0) {
+				throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+			}
 			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
 					declMethod.getMethodName().getMethodDefinition().getIndex()-1);
 		}
