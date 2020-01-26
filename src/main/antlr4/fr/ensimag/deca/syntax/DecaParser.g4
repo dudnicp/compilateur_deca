@@ -177,20 +177,25 @@ if_then_else returns[IfThenElse tree]
 @init {
     IfThenElse temp;
     ListInst list_inst_else = new ListInst();
+    ListInst list_inst_else_tmp;
+    ListInst list_inst_else_if = new ListInst();
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
            $tree = new IfThenElse($condition.tree, $li_if.tree, list_inst_else);
+           list_inst_else_tmp = list_inst_else;
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-           temp = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
+           list_inst_else_if = new ListInst();
+           temp = new IfThenElse($elsif_cond.tree, $elsif_li.tree, list_inst_else_if);
            setLocation(temp, $ELSE);
-           list_inst_else.add(temp);
+           list_inst_else_tmp.add(temp);
+           list_inst_else_tmp = list_inst_else_if;
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
            temp = new IfThenElse($condition.tree, new ListInst(), $li_else.tree);
            setLocation(temp, $ELSE);
-           list_inst_else.add(temp);
+           list_inst_else_tmp.add(temp);
         }
       )?
     ;
