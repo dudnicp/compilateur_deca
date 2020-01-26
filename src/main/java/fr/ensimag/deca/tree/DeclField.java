@@ -63,7 +63,7 @@ public class DeclField extends AbstractDeclField {
 				type.getLocation());
 		}
 		
-		// determine whether field is already defined in this class - in one of its parents - or not at all
+		// determine whether field is already defined in this class - or in one of its parents - or not at all
 		FieldDefinition incFieldDef;
 		if (currentClass.getMembers().get(fieldName.getName()) != null) {
 			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.toString(),
@@ -105,6 +105,7 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
+		s.print(visibility.toString() + " ");
 		type.decompile(s);
 		s.print(" ");
 		fieldName.decompile(s);
@@ -127,14 +128,15 @@ public class DeclField extends AbstractDeclField {
 	}
 	
 	@Override
-	protected void codeGenProperInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+	protected void codeGenProperInit(IMAProgram program, RegisterManager registerManager) {
     	initialization.codeExpr(program, Register.defaultRegisterIndex, registerManager);
-    	int index = fieldName.getFieldDefinition().getIndex();
-    	program.addInstruction(new STORE(Register.getDefaultRegister(), new RegisterOffset(index, register)));
+    	program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+    	program.addInstruction(new STORE(Register.getDefaultRegister(), 
+    			new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.R1)));
 	}
 	
 	@Override
-	protected void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+	protected void codeGenDefaultInit(IMAProgram program, RegisterManager registerManager) {
 		registerManager.tryMaxRegisterIndex(Register.defaultRegisterIndex);
     	if (type.getType().isFloat()) {
     		program.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.getDefaultRegister()));
@@ -144,5 +146,8 @@ public class DeclField extends AbstractDeclField {
 		} else {
 			program.addInstruction(new LOAD(new ImmediateInteger(0), Register.getDefaultRegister()));
 		}
+    	program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+    	program.addInstruction(new STORE(Register.getDefaultRegister(), 
+    			new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.R1)));
 	}
 }

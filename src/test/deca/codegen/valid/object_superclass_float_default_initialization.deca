@@ -9,7 +9,7 @@ class A{
     float x = 5.4;
 }
 class C extends A{
-    float x; // x DOIT VALOIR 5.4
+   // x hérité DOIT VALOIR 5.4
 }
 {
     C p = new C();

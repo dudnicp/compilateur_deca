@@ -63,7 +63,6 @@ public class Main extends AbstractMain {
     	program.addComment("Beginning of main instructions:");
         declVariables.codeGenDecl(program, RegisterManager.GLOBAL_REGISTER_MANAGER);
         insts.codeGenListInst(program, RegisterManager.GLOBAL_REGISTER_MANAGER);
-        program.addInstruction(new HALT());
     }
     
     @Override

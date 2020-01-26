@@ -55,7 +55,7 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) {
+    public void codeGenProgram(DecacCompiler compiler) throws ContextualError{
     	
     	IMAProgram methodTableCode = new IMAProgram();
     	IMAProgram mainCode = new IMAProgram();
@@ -69,20 +69,18 @@ public class Program extends AbstractProgram {
     	main.codeGenMain(mainCode);
     	codeGenErrors(errorsCode);
     	
-        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(tstoCode);
-        tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
-        tstoCode.addInstruction(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
-        
+        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTOandADDSP(tstoCode);
         
         /* structuring program */
         compiler.append(tstoCode);
     	compiler.append(methodTableCode);
     	compiler.append(mainCode);
+    	compiler.addInstruction(new HALT());;
     	compiler.append(errorsCode);
     	compiler.append(classMethodCode);
     }
     
-    protected void createMethodTable(IMAProgram program) {
+    protected void createMethodTable(IMAProgram program) throws ContextualError{
     	
     	// creating the method table for the super-class Object
     	MethodTable.addClass("Object", 1);

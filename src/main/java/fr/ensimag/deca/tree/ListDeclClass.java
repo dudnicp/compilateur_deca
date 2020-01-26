@@ -53,7 +53,7 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
 		}
 	}
     
-    public void createMethodTable(IMAProgram program) {
+    public void createMethodTable(IMAProgram program) throws ContextualError{
 		for (AbstractDeclClass declClass : getList()) {
 			declClass.createMethodTable(program);
 		}

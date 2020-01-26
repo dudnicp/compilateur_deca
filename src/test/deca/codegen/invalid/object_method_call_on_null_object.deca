@@ -1,0 +1,13 @@
+/*
+    Description : Appel de méthode sur un objet null
+
+    Résultat : Erreur à l'exécution
+*/
+class A{
+    void x(){
+    }
+}
+{
+    A i;
+    i.x();
+}

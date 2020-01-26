@@ -9,10 +9,10 @@ class A{
     int x = 5;
 }
 class C extends A{
-    int x; // x DOIT VALOIR 5
+  //  int x; // x DOIT VALOIR 5
 }
 {
     C p = new C();
     
-    println(C.x);
+    println(p.x);
 }

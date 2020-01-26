@@ -78,6 +78,9 @@ public class DeclClass extends AbstractDeclClass {
         if (superClassName.getName().toString().equals("Object")){ // if "extends Object"
             superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("Object");
             superClassName.setLocation(superClassDef.getLocation());
+        } else if (compiler.getEnvTypes().getDefinitionFromName(superClassName.getName().toString()) != null) {
+        	throw new ContextualError(superClassName.getName() + " is a predefined type",
+        			superClassName.getLocation());
         } else if (envTypes.get(superClassName.getName()) == null) {
             throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
     				superClassName.getLocation());
@@ -85,7 +88,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassDef = (ClassDefinition)envTypes.get(superClassName.getName());
         }
         //decorate the superclass identifier
-        superClassName.setType(superClassDef.getType()); // TODO: optional
+        superClassName.setType(superClassDef.getType());
         superClassName.setDefinition(superClassDef);
         
         // build the current class definition
@@ -101,7 +104,7 @@ public class DeclClass extends AbstractDeclClass {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
     	// decorate the class identifier
-        className.setType(classType); // TODO: optional
+        className.setType(classType);
         className.setDefinition(classType.getDefinition());
     }
 
@@ -112,7 +115,8 @@ public class DeclClass extends AbstractDeclClass {
             throws ContextualError {
 		ClassDefinition currentClass = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
 		ClassDefinition superClass= (ClassDefinition)currentClass.getSuperClass();
-		// set the offset of methods and fields indexes 
+		// set the offset of methods and fields indexes
+		// based on the superclass
 		currentClass.setNumberOfFields(superClass.getNumberOfFields());
 		currentClass.setNumberOfMethods(superClass.getNumberOfMethods());
     	fields.verifyListDeclField(compiler, currentClass);
@@ -130,11 +134,8 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        //this.className.prettyPrintNode();
     	this.className.prettyPrint(s, prefix, false);
-        //this.className.prettyPrintType(s, prefix);
     	this.superClassName.prettyPrint(s, prefix, false);
-        //this.superClassName.prettyPrintType(s, prefix);
     	this.fields.prettyPrint(s, prefix, false);
     	this.methods.prettyPrint(s, prefix, true);
     }
@@ -148,13 +149,13 @@ public class DeclClass extends AbstractDeclClass {
     }
     
     @Override
-    public void createMethodTable(IMAProgram program) {
+    public void createMethodTable(IMAProgram program) throws ContextualError{
     	
     	String classString = className.getName().getName();
-    	
-    	
-    	System.out.println(superClassName.getName().getName());
-    	
+    	if (classString.indexOf('$') >= 0) {
+			throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+		}
+    	    	
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
 				superClassName.getName().getName(), 
@@ -164,8 +165,11 @@ public class DeclClass extends AbstractDeclClass {
 		// creating method table for the class
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
+			if (methodString.indexOf('$') >= 0) {
+				throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+			}
 			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
-					declMethod.getMethodName().getMethodDefinition().getIndex());
+					declMethod.getMethodName().getMethodDefinition().getIndex()-1);
 		}
 		
 		// generating code for the method table
@@ -192,11 +196,11 @@ public class DeclClass extends AbstractDeclClass {
     	labelInstruction.addLabel(Label.getInitLabel(className.getName().getName()));
     	
     	/* Coding initialisation */
-    	classInit.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-    	fields.codeGenDefaultInit(classInit, Register.R1, registerManager);
+    	fields.codeGenDefaultInit(classInit, registerManager);
     	
     	// super class initialisation
 		if (!superClassName.getName().getName().equals("Object")) {
+			classInit.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
 			classInit.addInstruction(new PUSH(Register.R1));
 			registerManager.incCurrentNumberOfMethodParams(1);
 			classInit.addInstruction(new BSR(Label.getInitLabel(superClassName.getName().getName())));
@@ -206,7 +210,7 @@ public class DeclClass extends AbstractDeclClass {
 			registerManager.decCurrentNumberOfMethodParams(1);
 		}
 		
-		fields.codeGenProperInit(classInit, Register.R1, registerManager);
+		fields.codeGenProperInit(classInit, registerManager);
 		
 		/* coding registers save */
 		registerManager.saveGPRegisters(saveRegisters);
@@ -215,7 +219,7 @@ public class DeclClass extends AbstractDeclClass {
 		registerManager.restoreGPRegisters(restoreRegisters);
 		
 		/* coding tsto instrunction */
-		registerManager.codeTSTO(tstoInstruction);
+		registerManager.codeTSTOandADDSP(tstoInstruction);
 		
 		/* class initialisation final structure */
 		program.append(labelInstruction);
@@ -228,9 +232,11 @@ public class DeclClass extends AbstractDeclClass {
     
     @Override
     protected void codeGenMethod(IMAProgram program) {
+    	MethodTable.setCurrentClass(className.getName().getName());
+    	
     	codeGenInit(program);
     	for (DeclMethod method : methods.getList()) {
-			method.codeGen(program, className.getName().getName());
+			method.codeGen(program);
 		}
     }
 }

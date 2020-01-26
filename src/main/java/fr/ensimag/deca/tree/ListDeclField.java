@@ -12,10 +12,6 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
 
 public class ListDeclField extends TreeList<AbstractDeclField> {
 
-	public ListDeclField() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void decompile(IndentPrintStream s) {
 		for (AbstractDeclField f: this.getList()) {
@@ -30,15 +26,15 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 	    	}
 	    }
 	 
-	 public void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+	 public void codeGenDefaultInit(IMAProgram program, RegisterManager registerManager) {
 		for (AbstractDeclField field : getList()) {
-			field.codeGenDefaultInit(program, register, registerManager);
+			field.codeGenDefaultInit(program, registerManager);
 		}
 	 }
 	 
-	 public void codeGenProperInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+	 public void codeGenProperInit(IMAProgram program, RegisterManager registerManager) {
 		for (AbstractDeclField field : getList()) {
-				field.codeGenProperInit(program, register, registerManager);
+				field.codeGenProperInit(program, registerManager);
 		}
 	}
 	 

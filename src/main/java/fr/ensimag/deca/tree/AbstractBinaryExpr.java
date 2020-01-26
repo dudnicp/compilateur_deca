@@ -99,10 +99,6 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 		}
 	}
     	
-    @Override
-	protected void codeGenPrintInstruction(IMAProgram program) {
-		leftOperand.codeGenPrintInstruction(program);
-	}
     
     
     @Override

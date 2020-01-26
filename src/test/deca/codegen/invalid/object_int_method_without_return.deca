@@ -1,4 +1,4 @@
-// @result deca:17:
+// @result Error : exiting function A.y without return instruction
 /*
     Description : Méthode int sans return 
 

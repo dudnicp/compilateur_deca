@@ -61,17 +61,17 @@ public class Assign extends AbstractBinaryExpr {
     	if (getLeftOperand().daddr() == null) {
     		getLeftOperand().codeExpr(program, n, registerManager);
 			if (n < Register.getRMAX()) {
-				getRightOperand().codeExpr(program, n + 1, registerManager);
-				program.addInstruction(new STORE(Register.getR(n+1), getLeftOperand().daddr()));
+				getRightOperand().codeAssign(program, n + 1, registerManager);
+				program.addInstruction(new STORE(Register.getR(n+1), getLeftOperand().tempAddr(program, n, registerManager)));
 			}
 			else {
 				program.addInstruction(new PUSH(Register.getR(n)));
 				registerManager.incCurrentNumberOfTemps();
-				getRightOperand().codeExpr(program, n, registerManager);
+				getRightOperand().codeAssign(program, n, registerManager);
 				program.addInstruction(new LOAD(Register.getR(n), Register.R0));
 				program.addInstruction(new POP(Register.getR(n)));;
 				registerManager.decCurrentNumberOfTemps();
-				program.addInstruction(new STORE(Register.R0, getLeftOperand().daddr()));
+				program.addInstruction(new STORE(Register.R0, getLeftOperand().tempAddr(program, n, registerManager)));
 			}
 		}
     	else {
