@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
@@ -14,11 +15,10 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
 public abstract class AbstractMethodBody extends Tree {
 
 	public AbstractMethodBody() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public abstract void verifyClassMethodBody(DecacCompiler compiler,
-			EnvironmentExp envExpParam, Symbol currentClass,
+			EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError;
 
 	@Override

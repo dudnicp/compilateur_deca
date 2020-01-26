@@ -4,5 +4,5 @@
     Résultat : OK
 */
 class A{
-    asm("aaa");
+    void x () asm("aaa");
 }

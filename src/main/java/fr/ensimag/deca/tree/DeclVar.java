@@ -16,6 +16,7 @@ import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
@@ -53,14 +54,17 @@ public class DeclVar extends AbstractDeclVar {
     	Type typeVerified = type.verifyType(compiler);
        	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
-    	try {
-    		// ajout de la variable dans l'environnement;
-			localEnv.declare(varName.getName(), varName.getExpDefinition());
-		} catch (fr.ensimag.deca.context.Environment.DoubleDefException e1) {
-			throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
-					localEnv.get(varName.getName()).getLocation() + " (3.17)",
+    	if (localEnv.getAny(varName.getName()) != null) {
+    		throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
+					localEnv.getAny(varName.getName()).getLocation() + " (3.17)",
 					varName.getLocation());
-		}
+    	} else {
+    		try {
+				localEnv.declare(varName.getName(), varName.getExpDefinition());
+			} catch (DoubleDefException e) {
+				e.printStackTrace();
+			}
+    	}
     	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
     }
 

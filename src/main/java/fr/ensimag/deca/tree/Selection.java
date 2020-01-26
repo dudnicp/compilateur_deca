@@ -37,11 +37,11 @@ public class Selection extends AbstractLValue {
 			throws ContextualError {
 		Type cType = objectName.verifyExpr(compiler, localEnv, currentClass);
 		ClassType classType = cType.asClassType("not a class type", objectName.getLocation());
-		if (classType.getDefinition().getMembers().get(fieldName.getName()) == null) {
+		if (classType.getDefinition().getMembers().getAny(fieldName.getName()) == null) {
 			throw new ContextualError("Field " + fieldName.getName() + " is not defined in class " + classType.getName(),
 					fieldName.getLocation());
 		}
-		Definition field = classType.getDefinition().getMembers().get(fieldName.getName());
+		Definition field = classType.getDefinition().getMembers().getAny(fieldName.getName());
 		FieldDefinition fieldDef = field.asFieldDefinition("not a field definition", fieldName.getLocation());
 		if (fieldDef.getVisibility() == Visibility.PROTECTED && (currentClass == null ||
 				!currentClass.equals(classType.getDefinition()))) {

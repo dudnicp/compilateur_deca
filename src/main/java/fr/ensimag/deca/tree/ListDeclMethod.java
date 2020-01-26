@@ -19,14 +19,14 @@ public class ListDeclMethod extends TreeList<DeclMethod>{
 	}
 	
 	public void verifyListDeclMethod(DecacCompiler compiler,
-			Symbol currentClass) throws ContextualError{
+			ClassDefinition currentClass) throws ContextualError{
 		for (DeclMethod m: this.getList()) {
 			m.verifyDeclMethod(compiler, currentClass);
 		}
 	}
 
     public void verifyClassBodyListMethod(DecacCompiler compiler,
-           EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
+           EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
 		for (DeclMethod m: this.getList()) {
             m.verifyClassBodyMethod(compiler, localEnv, currentClass);
         }

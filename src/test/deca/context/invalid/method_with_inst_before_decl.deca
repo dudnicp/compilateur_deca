@@ -7,3 +7,4 @@ class A{
     void x(){println("Hello");int y;}
 }
 // @expected_output deca:7:30
+

@@ -20,14 +20,13 @@ public class MethodBody extends AbstractMethodBody {
 		this.listDeclVar = listDeclVar;
 		this.listInst = listDeclInst;
 	}
-	
+	@Override
 	public void verifyClassMethodBody(DecacCompiler compiler,
-			EnvironmentExp envExpParam, Symbol currentClass,
+			EnvironmentExp envExpParam, ClassDefinition currentClass,
 			Type returnType) throws ContextualError {
-		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
 		listDeclVar.verifyListDeclVariable(compiler, envExpParam,
-				classDef);
-		listInst.verifyListInst(compiler, envExpParam, classDef, returnType);
+				currentClass);
+		listInst.verifyListInst(compiler, envExpParam, currentClass, returnType);
 
 	}
 	

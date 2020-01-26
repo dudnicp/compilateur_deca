@@ -13,10 +13,10 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -168,7 +168,18 @@ public class Identifier extends AbstractIdentifier {
                             + " is not a Exp identifier, you can't call getExpDefinition on it");
         }
     }
-
+    
+	@Override
+	public ParamDefinition getParamDefinition() {
+	  try {
+            return (ParamDefinition) definition;
+        } catch (ClassCastException e) {
+            throw new DecacInternalError(
+                    "Identifier "
+                            + getName()
+                            + " is not a Param identifier, you can't call getParamDefinition on it");
+        }
+    }
     @Override
     public void setDefinition(Definition definition) {
         this.definition = definition;
@@ -189,14 +200,16 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	if (localEnv.get(this.getName()) == null) {
+    	if (localEnv.getAny(this.getName()) == null) {
     		throw new ContextualError("Undefined identifier " + this.getName() + " (0.1)",
     				this.getLocation());
     	} else {
-    		Type definedType = localEnv.get(this.getName()).getType();
-    		this.setDefinition(localEnv.get(this.getName()));
-    		this.setType(definedType);
-    		return definedType;
+    		this.setDefinition(localEnv.getAny(this.getName()));
+    		if (this.getDefinition().isMethod()) {
+    			throw new ContextualError(this.getName() + " is a method, please use a method call",
+    					this.getLocation());}
+    		this.setType(this.getDefinition().getType());
+    		return this.getDefinition().getType();
     	}
     }
 
@@ -207,7 +220,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
     	// Rule (3.17)
-    	EnvironmentType envTypes = compiler.getEnvTypes();
+    	EnvironmentExp envTypes = compiler.getEnvTypes();
     	Definition def = envTypes.getDefinitionFromName(this.getName().toString()); // predefined types
     	if (def == null) def = envTypes.get(this.getName()); // classes type
     	if (def == null) {
@@ -216,13 +229,13 @@ public class Identifier extends AbstractIdentifier {
     	} else {
         	Type type = def.getType();
         	this.setDefinition(def);
-    		this.setType(type);
+    		this.setType(type); // TODO: optional
     	}
     	if (this.getType().isVoid()) {
     		throw new ContextualError("Type cannot be of type void (3.17)",
     				this.getLocation());
     	} else {
-    		return this.getType();
+    		return this.getDefinition().getType();
     	}
     }
     
@@ -306,4 +319,6 @@ public class Identifier extends AbstractIdentifier {
 			program.addInstruction(new WFLOAT());
 		}
     }
+
+
 }

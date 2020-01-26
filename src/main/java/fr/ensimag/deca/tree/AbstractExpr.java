@@ -4,6 +4,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -105,7 +106,20 @@ public abstract class AbstractExpr extends AbstractInst {
     		ConvFloat convFloat = new ConvFloat(this);
     		convFloat.verifyExpr(compiler, localEnv, currentClass);
     		return convFloat;
-    	} else if (expectedType.isClass() && type2.isClassOrNull()) {
+    	} else if (expectedType.isClass()) {
+    		if (type2.isClassOrNull()) {
+    			if (type2.isNull()) {}
+    			else { // type.isClass()
+    				ClassType cType2 = type2.asClassType("this will never happen", this.getLocation());
+    				ClassType cExpectedType = expectedType.asClassType("this will never happen", this.getLocation());
+    				if (!cType2.isSubClassOf(cExpectedType)) {
+    					throw new ContextualError("Class " + type2.getName() + " is not a subclass of " + expectedType.getName(),
+    							this.getLocation());
+    				}
+    			}
+    		} else throw new ContextualError("Incompatible types " + expectedType.getName() +  " and " + type2.getName(),
+    				this.getLocation());
+
     	} else if (!type2.sameType(expectedType)) {
     		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
     		+ expectedType + " (3.28)", this.getLocation());

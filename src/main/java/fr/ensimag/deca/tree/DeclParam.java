@@ -6,8 +6,8 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Environment.DoubleDefException;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -54,12 +54,8 @@ public class DeclParam extends AbstractDeclParam {
 		try {
 			envExpParam.declare(paramName.getName(), paramName.getDefinition());
 		} catch (DoubleDefException e) {
-			if (envExpParam.getParent().get(paramName.getName()) == null) {
 				throw new ContextualError("Two parameters share the same name " + paramName.getName(),
 						paramName.getLocation());
-			} else {
-				envExpParam.getDefinitionMap().put(paramName.getName(), paramDef);
-			}
 		}
 	}
 	

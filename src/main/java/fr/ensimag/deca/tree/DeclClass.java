@@ -5,14 +5,13 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Environment.DoubleDefException;
-import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.IMAProgram;
@@ -43,7 +42,6 @@ public class DeclClass extends AbstractDeclClass {
 	private AbstractIdentifier superClassName;
 	private ListDeclField fields;
 	private ListDeclMethod methods;
-	private Symbol classSymbol;
 	public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName,
 			ListDeclField fields, ListDeclMethod methods) {
 		this.className = className;
@@ -73,9 +71,11 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-    	EnvironmentType envTypes = compiler.getEnvTypes();
-        ClassDefinition superClassDef;
- 	    if (superClassName.getName().toString().equals("Object")){
+    	EnvironmentExp envTypes = compiler.getEnvTypes();
+        
+    	// get superclass definition
+    	ClassDefinition superClassDef;
+        if (superClassName.getName().toString().equals("Object")){ // if "extends Object"
             superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("Object");
             superClassName.setLocation(superClassDef.getLocation());
         } else if (envTypes.get(superClassName.getName()) == null) {
@@ -84,16 +84,24 @@ public class DeclClass extends AbstractDeclClass {
     	} else {
             superClassDef = (ClassDefinition)envTypes.get(superClassName.getName());
         }
-        superClassName.setType(superClassDef.getType());
+        //decorate the superclass identifier
+        superClassName.setType(superClassDef.getType()); // TODO: optional
         superClassName.setDefinition(superClassDef);
+        
+        // build the current class definition
         ClassType classType;
+        if (compiler.getEnvTypes().getDefinitionFromName(className.getName().toString()) != null) {
+        	throw new ContextualError(className.getName() + " is a predefined type",
+        			className.getLocation());
+        }
     	try {
     		classType = new ClassType(className.getName(), this.getLocation(), superClassDef);
     		envTypes.declare(className.getName(), classType.getDefinition());
     	} catch (DoubleDefException e) {
     		throw new ContextualError("Class " + className.getName() + " is already defined (1.3)", this.getLocation());
     	}
-        className.setType(classType);
+    	// decorate the class identifier
+        className.setType(classType); // TODO: optional
         className.setDefinition(classType.getDefinition());
     }
 
@@ -102,21 +110,21 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-		ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
-		ClassDefinition superClassDef = (ClassDefinition)classDef.getSuperClass();
-		classDef.setNumberOfFields(superClassDef.getNumberOfFields());
-		classDef.setNumberOfMethods(superClassDef.getNumberOfMethods());
-    	fields.verifyListDeclField(compiler, this.className.getName(), this.superClassName.getName());
-    	methods.verifyListDeclMethod(compiler, this.className.getName());
+		ClassDefinition currentClass = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
+		ClassDefinition superClass= (ClassDefinition)currentClass.getSuperClass();
+		// set the offset of methods and fields indexes 
+		currentClass.setNumberOfFields(superClass.getNumberOfFields());
+		currentClass.setNumberOfMethods(superClass.getNumberOfMethods());
+    	fields.verifyListDeclField(compiler, currentClass);
+    	methods.verifyListDeclMethod(compiler, currentClass);
     }
 
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-    	ClassDefinition classDef = (ClassDefinition)compiler.getEnvTypes().get(
-    			this.className.getName());
-    	EnvironmentExp localEnv = new EnvironmentExp(classDef.getMembers());
-    	this.fields.verifyClassBodyListField(compiler, localEnv, className.getName());
-    	this.methods.verifyClassBodyListMethod(compiler, localEnv, className.getName());
+    	ClassDefinition currentClass = (ClassDefinition)compiler.getEnvTypes().get(className.getName());
+    	EnvironmentExp localEnv = new EnvironmentExp(currentClass.getMembers());
+    	this.fields.verifyClassBodyListField(compiler, localEnv, currentClass);
+    	this.methods.verifyClassBodyListMethod(compiler, localEnv, currentClass);
     }
 
 
@@ -134,7 +142,7 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void iterChildren(TreeFunction f) {
     	className.iterChildren(f);
-    	if (superClassName != null) superClassName.iterChildren(f);
+    	superClassName.iterChildren(f);
     	fields.iterChildren(f);
     	methods.iterChildren(f);
     }

@@ -11,7 +11,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.Environment.DoubleDefException;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -54,40 +54,46 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	protected void verifyDeclField(DecacCompiler compiler, 
-			Symbol currentClass, Symbol superClass)
+			ClassDefinition currentClass)
 			throws ContextualError {
+		// decorate type
 		Type typeVerified = type.verifyType(compiler);
 		if (typeVerified.isVoid()) {
 			throw new ContextualError("Field type cannot be void (2.5)",
 				type.getLocation());
 		}
-		fieldName.setType(typeVerified);
-		ClassDefinition currDef = (ClassDefinition)compiler.getEnvTypes().get(currentClass);
-
-		fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
-				visibility, currDef, currDef.getNumberOfFields()));
-		try {
-			currDef.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
-			currDef.incNumberOfFields();
-		} catch (DoubleDefException e) {
-			Definition doubleDef = currDef.getMembers().getParent().get(fieldName.getName());
-			if (doubleDef == null) {
-				throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in this scope",
-						fieldName.getLocation());
-			}
-			FieldDefinition field = doubleDef.asFieldDefinition("Field " + fieldName.getName()
+		
+		// determine whether field is already defined in this class - in one of its parents - or not at all
+		FieldDefinition incFieldDef;
+		if (currentClass.getMembers().get(fieldName.getName()) != null) {
+			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.toString(),
+					fieldName.getLocation());
+		} else if (currentClass.getMembers().getAny(fieldName.getName()) != null) {
+			Definition previousDef = currentClass.getSuperClass().getMembers().getAny(fieldName.getName());
+			FieldDefinition previousFieldDef = previousDef.asFieldDefinition("Field " + fieldName.getName()
 			+ " should redefine another field", fieldName.getLocation());
-			fieldName.setDefinition(new FieldDefinition(typeVerified, fieldName.getLocation(),
-					visibility, currDef, field.getIndex()));
-			currDef.getMembers().getDefinitionMap().put(fieldName.getName(), fieldName.getDefinition());
+			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
+					visibility, currentClass, previousFieldDef.getIndex());
+		} else {
+			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
+					visibility, currentClass, currentClass.getNumberOfFields());
 		}
+		// decorate field
+		fieldName.setDefinition(incFieldDef);
+		fieldName.setType(typeVerified);
+		try {
+			currentClass.getMembers().declare(fieldName.getName(), fieldName.getDefinition());
+		} catch (DoubleDefException e) {
+			// this never happens since we verified previously
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
 	protected void verifyClassBodyField(DecacCompiler compiler,
-            EnvironmentExp localEnv, Symbol currentClass) throws ContextualError {
-		this.initialization.verifyInitialization(compiler, type.getType(), localEnv, (ClassDefinition)compiler.getEnvTypes().get(currentClass));
-	   
+            EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+		this.initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
      }
    
 	@Override
