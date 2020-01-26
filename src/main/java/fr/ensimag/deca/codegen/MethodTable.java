@@ -40,7 +40,7 @@ public abstract class MethodTable {
 				&& nMethods >= getMethods(superName).length);
 		addClass(name, nMethods);
 		for (int i = 0; i < getMethods(superName).length; i++) {
-			putMethod(name, getMethodLabel(name, i), i);
+			putMethod(name, getMethodLabel(superName, i), i);
 		}
 	}
 	

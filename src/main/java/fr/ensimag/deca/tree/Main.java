@@ -78,24 +78,10 @@ public class Main extends AbstractMain {
 
     @Override
     protected void codeGenMain(IMAProgram program) {
-    	
-    	IMAProgram mainProgram = new IMAProgram();
     	program.addComment("Beginning of main instructions:");
-    	
-        declVariables.codeGenDecl(mainProgram, RegisterManager.GLOBAL_REGISTER_MANAGER);
-        insts.codeGenListInst(mainProgram, RegisterManager.GLOBAL_REGISTER_MANAGER);
-        mainProgram.addInstruction(new HALT());
-        
-        // checking stack size for stack overflow
-        
-        IMAProgram tstoCode = new IMAProgram();
-        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(tstoCode);
-        tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
-        tstoCode.addInstruction(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
-        
-        // structuring program
-        program.append(tstoCode);
-        program.append(mainProgram);
+        declVariables.codeGenDecl(program, RegisterManager.GLOBAL_REGISTER_MANAGER);
+        insts.codeGenListInst(program, RegisterManager.GLOBAL_REGISTER_MANAGER);
+        program.addInstruction(new HALT());
     }
     
     @Override

@@ -143,11 +143,13 @@ public class DeclClass extends AbstractDeclClass {
     public void createMethodTable(IMAProgram program) {
     	
     	String classString = className.getName().getName();
+    	
 
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
 				superClassName.getName().getName(), 
 				className.getClassDefinition().getNumberOfMethods());
+		
 		
 		// creating method table for the class
 		for (DeclMethod declMethod : methods.getList()) {
@@ -159,6 +161,7 @@ public class DeclClass extends AbstractDeclClass {
 		// generating code for the method table
 		program.addInstruction(new LEA(MethodTable.getClassAddr(superClassName.getName().getName()), Register.R0));
 		program.addInstruction(new STORE(Register.R0, MethodTable.getClassAddr(classString)));
+		
 		for (Label methodLabel : MethodTable.getMethods(classString)) {
 			program.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
 			program.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
@@ -194,7 +197,6 @@ public class DeclClass extends AbstractDeclClass {
 		}
 		
 		fields.codeGenProperInit(classInit, Register.R1, registerManager);
-		classInit.addInstruction(new RTS());
 		
 		/* coding registers save */
 		registerManager.saveGPRegisters(saveRegisters);

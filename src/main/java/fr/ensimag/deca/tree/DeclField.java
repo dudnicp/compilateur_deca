@@ -128,6 +128,7 @@ public class DeclField extends AbstractDeclField {
 	
 	@Override
 	protected void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+		registerManager.tryMaxRegisterIndex(Register.defaultRegisterIndex);
     	if (type.getType().isFloat()) {
     		program.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.getDefaultRegister()));
     		

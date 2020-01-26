@@ -22,6 +22,8 @@ import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.ERROR;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.WNL;
@@ -152,6 +154,11 @@ public class DeclMethod extends Tree {
 		registerManager.restoreGPRegisters(restoreRegistersCode);
 		
 		registerManager.codeTSTO(tstoCode);
+		tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
+		if (registerManager.getNLocalVariables() != 0) {
+			tstoCode.addInstruction(new ADDSP(registerManager.getNLocalVariables()));
+		}
+		
 		
 		program.append(startLabelCode);
 		program.append(tstoCode);

@@ -61,6 +61,7 @@ public class Program extends AbstractProgram {
     	IMAProgram mainCode = new IMAProgram();
     	IMAProgram errorsCode = new IMAProgram();
     	IMAProgram classMethodCode = new IMAProgram();
+    	IMAProgram tstoCode = new IMAProgram();
     	
     	createMethodTable(methodTableCode);
     	codeGenObjectEquals(classMethodCode);
@@ -68,7 +69,13 @@ public class Program extends AbstractProgram {
     	main.codeGenMain(mainCode);
     	codeGenErrors(errorsCode);
     	
-    	/* structuring program */
+        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(tstoCode);
+        tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
+        tstoCode.addInstruction(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
+        
+        
+        /* structuring program */
+        compiler.append(tstoCode);
     	compiler.append(methodTableCode);
     	compiler.append(mainCode);
     	compiler.append(errorsCode);
@@ -84,7 +91,7 @@ public class Program extends AbstractProgram {
     	
     	// generating code for the method table of the super class Object
     	program.addInstruction(new LOAD(new NullOperand(), Register.R0));
-    	program.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
+    	program.addInstruction(new STORE(Register.R0, MethodTable.getClassAddr("Object")));
     	program.addInstruction(new LOAD(new LabelOperand(objectEqualsLabel), Register.R0));
     	program.addInstruction(new STORE(Register.R0, RegisterManager.GLOBAL_REGISTER_MANAGER.getNewAddress()));
     	
