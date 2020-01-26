@@ -110,7 +110,11 @@ public class DeclMethod extends Tree {
 		type.decompile(s);
 		s.print(" ");
 		methodName.decompile(s);
-		s.print("(TODO decompile param) {}");
+		s.print("(");
+		listDeclParam.decompile(s);
+		s.println(") {");
+		methodBody.decompile(s);
+		s.println("}");
 	}
 
 	@Override

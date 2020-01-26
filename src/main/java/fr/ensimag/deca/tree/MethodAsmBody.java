@@ -19,10 +19,20 @@ public class MethodAsmBody extends AbstractMethodBody {
 	public MethodAsmBody(StringLiteral asm) {
 		this.asm = asm;
 	}
+
+	@Override
+	public void verifyClassMethodBody(DecacCompiler compiler, EnvironmentExp envExpParam, ClassDefinition currentClass,
+			Type returnType) throws ContextualError {
+		asm.verifyExpr(compiler, envExpParam, currentClass);
+		
+	}
+	
 	
 	@Override
 	public void decompile(IndentPrintStream s) {
-		// TODO Auto-generated method stub
+		s.print("asm(");
+		s.print(asm.decompile());
+		s.println(");");
 
 	}
 
@@ -38,12 +48,6 @@ public class MethodAsmBody extends AbstractMethodBody {
 
 	}
 
-	@Override
-	public void verifyClassMethodBody(DecacCompiler compiler, EnvironmentExp envExpParam, ClassDefinition currentClass,
-			Type returnType) throws ContextualError {
-		asm.verifyExpr(compiler, envExpParam, currentClass);
-		
-	}
 	
 	@Override
 	public void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName) {

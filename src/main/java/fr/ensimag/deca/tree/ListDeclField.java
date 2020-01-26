@@ -12,10 +12,6 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
 
 public class ListDeclField extends TreeList<AbstractDeclField> {
 
-	public ListDeclField() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void decompile(IndentPrintStream s) {
 		for (AbstractDeclField f: this.getList()) {

@@ -63,7 +63,7 @@ public class DeclField extends AbstractDeclField {
 				type.getLocation());
 		}
 		
-		// determine whether field is already defined in this class - in one of its parents - or not at all
+		// determine whether field is already defined in this class - or in one of its parents - or not at all
 		FieldDefinition incFieldDef;
 		if (currentClass.getMembers().get(fieldName.getName()) != null) {
 			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.toString(),
@@ -105,6 +105,7 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
+		s.print(visibility.toString() + " ");
 		type.decompile(s);
 		s.print(" ");
 		fieldName.decompile(s);
