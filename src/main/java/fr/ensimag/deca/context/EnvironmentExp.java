@@ -60,17 +60,17 @@ public class EnvironmentExp {
     		
     		s = this.createSymbol("Object");
     		ClassType objectClassType = new ClassType(s, Location.BUILTIN, null);
-    		EnvironmentExp members = objectClassType.getDefinition().getMembers();
-    		
+    		this.declare(s, objectClassType.getDefinition());
+
     		// method equals
+    		EnvironmentExp members = objectClassType.getDefinition().getMembers();
     		s = members.createSymbol("equals");
     		Type t = this.getDefinitionFromName("boolean").getType();
     		Signature sig = new Signature();
-    		sig.add(this.getDefinitionFromName("Object").getType());
+    		sig.add(objectClassType);
     		objectClassType.getDefinition().incNumberOfMethods();
     		members.declare(s, new MethodDefinition(t, Location.BUILTIN, sig, 
     				objectClassType.getDefinition().getNumberOfMethods()));
-    		this.declare(s, objectClassType.getDefinition());
     		
 		} catch (DoubleDefException e) { // this never happens
 			e.printStackTrace(); // since the map is empty
