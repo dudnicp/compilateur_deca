@@ -309,28 +309,5 @@ public class Identifier extends AbstractIdentifier {
 			program.addInstruction(new BEQ(Label.NULLOBJECT));
 		}
     }
-    
-    @Override
-    protected void codeCMP(IMAProgram program, int n) {
-    	if (getType().isFloat()) {
-    		program.addInstruction(new CMP(new ImmediateFloat(0.0f), Register.getR(n)));
-		} else if (getType().isClassOrNull()) {
-			program.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
-		} else {
-			program.addInstruction(new CMP(new ImmediateInteger(0), Register.getR(n)));
-		}
-    }
-    
-    @Override
-    protected void codeGenPrintInstruction(IMAProgram program) {
-    	Type type = getDefinition().getType();
-    	if (type.isInt() || type.isBoolean()) {
-			program.addInstruction(new WINT());
-		}
-    	else if (type.isFloat()) {
-			program.addInstruction(new WFLOAT());
-		}
-    }
-
 
 }

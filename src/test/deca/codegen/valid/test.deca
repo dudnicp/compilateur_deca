@@ -5,4 +5,7 @@ class Q {
 		}
 	}
 }
-
+{
+	Q q = new Q();
+	println(q.abs(-1.0));
+}
