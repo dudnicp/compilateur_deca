@@ -30,15 +30,15 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 	    	}
 	    }
 	 
-	 public void codeGenDefaultInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+	 public void codeGenDefaultInit(IMAProgram program, RegisterManager registerManager) {
 		for (AbstractDeclField field : getList()) {
-			field.codeGenDefaultInit(program, register, registerManager);
+			field.codeGenDefaultInit(program, registerManager);
 		}
 	 }
 	 
-	 public void codeGenProperInit(IMAProgram program, GPRegister register, RegisterManager registerManager) {
+	 public void codeGenProperInit(IMAProgram program, RegisterManager registerManager) {
 		for (AbstractDeclField field : getList()) {
-				field.codeGenProperInit(program, register, registerManager);
+				field.codeGenProperInit(program, registerManager);
 		}
 	}
 	 
