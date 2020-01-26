@@ -75,6 +75,7 @@ public class DeclField extends AbstractDeclField {
 			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
 					visibility, currentClass, previousFieldDef.getIndex());
 		} else {
+			currentClass.incNumberOfFields();
 			incFieldDef = new FieldDefinition(typeVerified, fieldName.getLocation(),
 					visibility, currentClass, currentClass.getNumberOfFields());
 		}
