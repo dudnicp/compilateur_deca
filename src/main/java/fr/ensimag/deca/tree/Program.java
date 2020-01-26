@@ -69,10 +69,7 @@ public class Program extends AbstractProgram {
     	main.codeGenMain(mainCode);
     	codeGenErrors(errorsCode);
     	
-        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTO(tstoCode);
-        tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
-        tstoCode.addInstruction(new ADDSP(RegisterManager.GLOBAL_REGISTER_MANAGER.getNLocalVariables()));
-        
+        RegisterManager.GLOBAL_REGISTER_MANAGER.codeTSTOandADDSP(tstoCode);
         
         /* structuring program */
         compiler.append(tstoCode);

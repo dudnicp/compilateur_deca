@@ -162,11 +162,7 @@ public class DeclMethod extends Tree {
 		registerManager.saveGPRegisters(saveRegisterCode);
 		registerManager.restoreGPRegisters(restoreRegistersCode);
 		
-		registerManager.codeTSTO(tstoCode);
-		tstoCode.addInstruction(new BOV(Label.STACKOVERFLOW));
-		if (registerManager.getNLocalVariables() != 0) {
-			tstoCode.addInstruction(new ADDSP(registerManager.getNLocalVariables()));
-		}
+		registerManager.codeTSTOandADDSP(tstoCode);
 		
 		
 		program.append(startLabelCode);
