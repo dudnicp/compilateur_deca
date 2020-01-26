@@ -143,6 +143,7 @@ public class DeclMethod extends Tree {
 		int argIndex = 3;
 		for (DeclParam arg : listDeclParam.getList()) {
 			arg.getParamName().getExpDefinition().setOperand(new RegisterOffset(-argIndex, Register.LB));
+			argIndex++;
 		}
 		
 		IMAProgram startLabelCode = new IMAProgram();

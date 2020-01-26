@@ -50,14 +50,10 @@ public class IfThenElse extends AbstractInst {
     	Label elseLabel = Label.newElseIfLabel();
     	Label endIfLabel = Label.newEndIfLabel();
     	condition.codeCond(program, false, elseLabel, registerManager);
-    	for (AbstractInst inst : thenBranch.getList()) {
-			inst.codeGenInst(program, registerManager);
-			program.addInstruction(new BRA(endIfLabel));
-		}
+    	thenBranch.codeGenListInst(program, registerManager);
+    	program.addInstruction(new BRA(endIfLabel));
     	program.addLabel(elseLabel);
-    	for (AbstractInst inst : elseBranch.getList()) {
-			inst.codeGenInst(program, registerManager);
-		}
+    	elseBranch.codeGenListInst(program, registerManager);
     	program.addLabel(endIfLabel);
     }
 
