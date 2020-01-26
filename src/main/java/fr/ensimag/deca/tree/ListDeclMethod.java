@@ -32,9 +32,9 @@ public class ListDeclMethod extends TreeList<DeclMethod>{
         }
     }
     
-    public void codeGen(IMAProgram program, String className) {
+    public void codeGen(IMAProgram program) {
     	for (DeclMethod method : getList()) {
-			method.codeGen(program, className);
+			method.codeGen(program);
 		}
     }
 

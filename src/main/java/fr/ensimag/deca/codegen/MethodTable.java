@@ -10,6 +10,26 @@ public abstract class MethodTable {
 	private static HashMap<String, Label[]> methodTable = new HashMap<String, Label[]>();
 	private static HashMap<String, DAddr> tablesAdress = new HashMap<String, DAddr>();
 	
+	private static String currentClass;
+	private static String currentMethod;
+	
+	
+	public static String getCurrentClass() {
+		return currentClass;
+	}
+	
+	public static String getCurrentMethod() {
+		return currentMethod;
+	}
+	
+	public static void setCurrentClass(String currentClass) {
+		MethodTable.currentClass = currentClass;
+	}
+	
+	public static void setCurrentMethod(String currentMethod) {
+		MethodTable.currentMethod = currentMethod;
+	}
+	
 	public static void addClass(String name, int nMethods) {
 		Validate.isTrue(nMethods >= 0);
 		methodTable.put(name, new Label[nMethods]);

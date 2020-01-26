@@ -39,5 +39,5 @@ public abstract class AbstractMethodBody extends Tree {
 
 	}
 
-	public abstract void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName);
+	public abstract void codeGen(IMAProgram program, RegisterManager registerManager);
 }

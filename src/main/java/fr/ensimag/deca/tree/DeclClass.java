@@ -151,6 +151,9 @@ public class DeclClass extends AbstractDeclClass {
     public void createMethodTable(IMAProgram program) {
     	
     	String classString = className.getName().getName();
+    	if (classString.contains("$")) {
+			throw new UnsupportedOperationException("Assembly code does not support $ character");
+		}
     	    	
     	// adding class to the table of methods, generating an address for the origin of the table
 		MethodTable.addClass(classString, 
@@ -225,9 +228,11 @@ public class DeclClass extends AbstractDeclClass {
     
     @Override
     protected void codeGenMethod(IMAProgram program) {
+    	MethodTable.setCurrentClass(className.getName().getName());
+    	
     	codeGenInit(program);
     	for (DeclMethod method : methods.getList()) {
-			method.codeGen(program, className.getName().getName());
+			method.codeGen(program);
 		}
     }
 }

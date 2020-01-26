@@ -51,8 +51,8 @@ public class MethodBody extends AbstractMethodBody {
 
 	
 	@Override
-	public void codeGen(IMAProgram program, RegisterManager registerManager, String className, String methodName) {
+	public void codeGen(IMAProgram program, RegisterManager registerManager) {
 		listDeclVar.codeGenDecl(program, registerManager);
-		listInst.codeGenListInstInMethod(program, registerManager, className, methodName);
+		listInst.codeGenListInstInMethod(program, registerManager);
 	}
 }

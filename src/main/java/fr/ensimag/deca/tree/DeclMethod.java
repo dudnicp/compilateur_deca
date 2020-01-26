@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
@@ -128,9 +129,14 @@ public class DeclMethod extends Tree {
 		listDeclParam.iterChildren(f);
 	}
 	
-	public void codeGen(IMAProgram program, String className) {
-//		System.out.println(Label.getMethodStartLabel(className, methodName.getName().getName()).toString());
+	public void codeGen(IMAProgram program) {
+		MethodTable.setCurrentMethod(methodName.getName().getName());
+		String methodString = MethodTable.getCurrentMethod();
+		String classString = MethodTable.getCurrentClass();
 		
+		if (methodString.contains("$")) {
+			throw new UnsupportedOperationException("Assembly code does not support $ character");
+		}
 		
 		RegisterManager registerManager = new RegisterManager(Register.LB);
 		
@@ -147,14 +153,14 @@ public class DeclMethod extends Tree {
 		IMAProgram endLabelCode = new IMAProgram();
 		IMAProgram restoreRegistersCode = new IMAProgram();
 		
-		startLabelCode.addLabel(Label.getMethodStartLabel(className, methodName.getName().getName()));
-		endLabelCode.addLabel(Label.getMethodEndLabel(className, methodName.getName().getName()));
+		startLabelCode.addLabel(Label.getMethodStartLabel(classString, methodString));
+		endLabelCode.addLabel(Label.getMethodEndLabel(classString, methodString));
 		
-		methodBody.codeGen(bodyCode, registerManager, className, methodName.getName().getName());
+		methodBody.codeGen(bodyCode, registerManager);
 		
 		if (!type.getDefinition().getType().isVoid()) {
 			returnErrorCode.addInstruction(new WSTR(new ImmediateString("Error : exiting function " + 
-							className + "." + methodName.getName().getName() + " without return instruction")));
+							classString + "." + methodString + " without return instruction")));
 			returnErrorCode.addInstruction(new WNL());
 			returnErrorCode.addInstruction(new ERROR());
 		}

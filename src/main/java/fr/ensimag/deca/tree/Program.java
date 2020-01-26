@@ -75,6 +75,7 @@ public class Program extends AbstractProgram {
         compiler.append(tstoCode);
     	compiler.append(methodTableCode);
     	compiler.append(mainCode);
+    	compiler.addInstruction(new HALT());;
     	compiler.append(errorsCode);
     	compiler.append(classMethodCode);
     }
