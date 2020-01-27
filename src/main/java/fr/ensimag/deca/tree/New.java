@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacMain;
 import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -64,7 +65,9 @@ public class New extends AbstractExpr {
 		registerManager.tryMaxRegisterIndex(n);
 		int d = newName.getClassDefinition().getNumberOfFields() + 1;
 		program.addInstruction(new NEW(new ImmediateInteger(d), Register.getR(n)));
-		program.addInstruction(new BOV(Label.HEAPOVERFLOW));
+		if (!DecacMain.COMPILER_OPTIONS.getNocheck()) {
+			program.addInstruction(new BOV(Label.HEAPOVERFLOW));
+		}
 		DAddr addr = MethodTable.getClassAddr(newName.getName().getName());
 		program.addInstruction(new LEA(addr, Register.R0));
 		program.addInstruction(new STORE(Register.R0, new RegisterOffset(0, Register.getR(n))));

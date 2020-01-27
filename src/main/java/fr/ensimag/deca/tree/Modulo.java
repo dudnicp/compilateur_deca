@@ -47,7 +47,7 @@ public class Modulo extends AbstractOpArith {
 	protected void mnemo(IMAProgram program, DVal op,
 			GPRegister register) {
 		program.addInstruction(new REM(op, register));
-		program.addInstruction(new BOV(Label.OVERFLOW));
+		program.addInstruction(new BOV(Label.DIVBYZERO));
 	}
 
 }
