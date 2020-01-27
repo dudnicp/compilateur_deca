@@ -12,7 +12,7 @@ class X {
 		return 1.1 + 2.2;
 	}
 	boolean c() {
-		return (1 < 2) && (2 >= 0)
+		return (1 < 2) && (2 >= 0);
 	}
 }
 {

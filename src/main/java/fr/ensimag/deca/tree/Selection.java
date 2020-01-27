@@ -17,8 +17,12 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 public class Selection extends AbstractLValue {
@@ -82,6 +86,8 @@ public class Selection extends AbstractLValue {
 	@Override
 	protected DAddr tempAddr(IMAProgram program, int n, RegisterManager registerManager) {
 		objectName.codeExpr(program, n, registerManager);
+		program.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
+		program.addInstruction(new BOV(Label.NULLOBJECT));
 		registerManager.tryMaxRegisterIndex(n);
 		return new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.getR(n));
 	}
@@ -90,6 +96,8 @@ public class Selection extends AbstractLValue {
 	@Override
 	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
 		objectName.codeExpr(program, n, registerManager);
+		program.addInstruction(new CMP(new NullOperand(), Register.getR(n)));
+		program.addInstruction(new BOV(Label.NULLOBJECT));
 		program.addInstruction(new LOAD(new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.getR(n)), Register.getR(n)));
 	}
 
