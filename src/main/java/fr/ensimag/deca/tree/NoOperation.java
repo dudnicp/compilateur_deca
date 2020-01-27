@@ -27,7 +27,7 @@ public class NoOperation extends AbstractInst {
 
     @Override
     protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
-        throw new UnsupportedOperationException("not yet implemented");
+    	// nothing to do
     }
 
     @Override
