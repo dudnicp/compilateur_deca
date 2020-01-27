@@ -21,7 +21,7 @@ public class This extends AbstractExpr {
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
 		if (currentClass == null) {
-			throw new ContextualError("This cannot be used in main (3.43)", this.getLocation());
+			throw new ContextualError("\"This\" cannot be used in main (3.43)", this.getLocation());
 		}
 		this.setType(currentClass.getType());
 		return currentClass.getType();

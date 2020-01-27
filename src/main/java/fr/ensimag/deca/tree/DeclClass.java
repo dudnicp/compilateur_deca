@@ -79,7 +79,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("Object");
             superClassName.setLocation(superClassDef.getLocation());
         } else if (compiler.getEnvTypes().getDefinitionFromName(superClassName.getName().toString()) != null) {
-        	throw new ContextualError(superClassName.getName() + " is a predefined type",
+        	throw new ContextualError("Cannot extends class " + superClassName.getName() + ", it is a predefined type",
         			superClassName.getLocation());
         } else if (envTypes.get(superClassName.getName()) == null) {
             throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
@@ -94,7 +94,7 @@ public class DeclClass extends AbstractDeclClass {
         // build the current class definition
         ClassType classType;
         if (compiler.getEnvTypes().getDefinitionFromName(className.getName().toString()) != null) {
-        	throw new ContextualError(className.getName() + " is a predefined type",
+        	throw new ContextualError("Cannot declare class " + className.getName() + ", it is a predefined type",
         			className.getLocation());
         }
     	try {
@@ -153,7 +153,7 @@ public class DeclClass extends AbstractDeclClass {
     	
     	String classString = className.getName().getName();
     	if (classString.indexOf('$') >= 0) {
-			throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+			throw new ContextualError("Assembly code does not support $ character in class name " + className.getName(), className.getLocation());
 		}
     	    	
     	// adding class to the table of methods, generating an address for the origin of the table
@@ -166,7 +166,7 @@ public class DeclClass extends AbstractDeclClass {
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
 			if (methodString.indexOf('$') >= 0) {
-				throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+				throw new ContextualError("Assembly code does not support $ character in method name " + methodString, className.getLocation());
 			}
 			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
 					declMethod.getMethodName().getMethodDefinition().getIndex()-1);

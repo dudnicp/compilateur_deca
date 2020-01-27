@@ -33,7 +33,6 @@ public class ListDeclParam extends TreeList<DeclParam> {
 	protected void prettyPrintChildren(PrintStream s, String prefix) {
 		for (DeclParam p: getList()) {
 			p.prettyPrintChildren(s, prefix);
-			s.print(", ");
 		}
 	}
 	

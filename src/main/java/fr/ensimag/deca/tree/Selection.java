@@ -36,7 +36,7 @@ public class Selection extends AbstractLValue {
 	public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
 			throws ContextualError {
 		Type cType = objectName.verifyExpr(compiler, localEnv, currentClass);
-		ClassType classType = cType.asClassType("not a class type", objectName.getLocation());
+		ClassType classType = cType.asClassType("Expression at " + objectName.getLocation() + "is not a class object, cannot use \".\"", objectName.getLocation());
 		if (classType.getDefinition().getMembers().getAny(fieldName.getName()) == null) {
 			throw new ContextualError("Field " + fieldName.getName() + " is not defined in class " + classType.getName(),
 					fieldName.getLocation());

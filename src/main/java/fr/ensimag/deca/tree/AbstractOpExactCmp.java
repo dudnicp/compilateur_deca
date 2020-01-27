@@ -33,9 +33,9 @@ public abstract class AbstractOpExactCmp extends AbstractOpCmp {
     			(type1.isBoolean() && type2.isBoolean()) ||
     			(type1.isClass() && type2.isNull()) ||
     			(type1.isNull() && type2.isClass())){
-    		// compatible types for exact comparaison operation
+    		// compatible types for exact comparison operation
     	} else {
-    		throw new ContextualError("Comparison operation \"" + this.getOperatorName() +  "\" is not supported for types "
+    		throw new ContextualError("Exact comparison operation \"" + this.getOperatorName() +  "\" is not supported for types "
     				+ this.getLeftOperand().getType() + " and " + this.getRightOperand().getType() + " (3.33)",
     				this.getLocation());
     	}
