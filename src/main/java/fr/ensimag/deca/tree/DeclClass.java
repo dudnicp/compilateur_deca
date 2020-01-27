@@ -153,7 +153,7 @@ public class DeclClass extends AbstractDeclClass {
     	
     	String classString = className.getName().getName();
     	if (classString.indexOf('$') >= 0) {
-			throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+			throw new ContextualError("Assembly code does not support $ character in class name " + className.getName(), className.getLocation());
 		}
     	    	
     	// adding class to the table of methods, generating an address for the origin of the table
@@ -166,7 +166,7 @@ public class DeclClass extends AbstractDeclClass {
 		for (DeclMethod declMethod : methods.getList()) {
 			String methodString = declMethod.getMethodName().getName().getName();
 			if (methodString.indexOf('$') >= 0) {
-				throw new ContextualError("Assembly code does not support $ character", className.getLocation());
+				throw new ContextualError("Assembly code does not support $ character in method name " + methodString, className.getLocation());
 			}
 			MethodTable.putMethod(classString, Label.getMethodStartLabel(classString, methodString), 
 					declMethod.getMethodName().getMethodDefinition().getIndex()-1);
