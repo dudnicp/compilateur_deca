@@ -92,7 +92,10 @@ STRING: '"' (STRING_CAR | '\\"' | '\\\\')* '"'
 		{setText(getText().substring(1, getText().length()-1));
 		 setText(getText().replaceAll("\\\\\"", "\""));
 		}; // remove quotes
-MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"';
+MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"'
+		{setText(getText().substring(1, getText().length()-1));
+		 setText(getText().replaceAll("\\\\\"", "\""));
+		}; // remove quotes
 
 // Comments
 COMMENT:
