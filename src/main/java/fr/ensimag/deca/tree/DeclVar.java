@@ -97,8 +97,11 @@ public class DeclVar extends AbstractDeclVar {
     protected void codeGenDeclVar(IMAProgram program, RegisterManager registerManager) {
     	DAddr addr = registerManager.getNewAddress();
     	varName.getVariableDefinition().setOperand(addr);
-    	initialization.codeExpr(program, Register.defaultRegisterIndex, registerManager);
-    	program.addInstruction(new STORE(Register.getDefaultRegister(), addr));
+    	if (type.getType().isClassOrNull()) {
+    		program.addInstruction(new LOAD(new NullOperand(), Register.getDefaultRegister()));
+    		program.addInstruction(new STORE(Register.getDefaultRegister(), addr));
+    	}
+    	initialization.codeExpr(program, registerManager, false, addr);
     }
     
 }

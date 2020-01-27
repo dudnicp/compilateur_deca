@@ -129,10 +129,8 @@ public class DeclField extends AbstractDeclField {
 	
 	@Override
 	protected void codeGenProperInit(IMAProgram program, RegisterManager registerManager) {
-    	initialization.codeExpr(program, Register.defaultRegisterIndex, registerManager);
-    	program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-    	program.addInstruction(new STORE(Register.getDefaultRegister(), 
-    			new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.R1)));
+    	initialization.codeExpr(program, registerManager, true, 
+    			new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.R1));
 	}
 	
 	@Override

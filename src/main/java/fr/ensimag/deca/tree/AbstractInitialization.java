@@ -29,7 +29,7 @@ public abstract class AbstractInitialization extends Tree {
             Type t, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
     
-    public void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    public void codeExpr(IMAProgram program, RegisterManager registerManager, boolean isField, DAddr addr) {
     	// empty by default
     }
 }

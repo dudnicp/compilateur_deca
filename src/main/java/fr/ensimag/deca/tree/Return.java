@@ -49,6 +49,7 @@ public class Return extends AbstractInst {
 
 	@Override
 	protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
+		program.addComment(this.decompile());
 		rvalue.codeExpr(program, Register.defaultRegisterIndex, registerManager);
 		program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
 		program.addInstruction(new BRA(Label.getMethodEndLabel(MethodTable.getCurrentClass(), MethodTable.getCurrentMethod())));

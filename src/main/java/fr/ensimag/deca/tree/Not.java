@@ -51,7 +51,7 @@ public class Not extends AbstractUnaryExpr {
     
     @Override
 	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
-    	getOperand().codeExpr(program, n, registerManager);
+    	getOperand().codeAssign(program, n, registerManager);
     	program.addInstruction(new OPP(Register.getR(n), Register.getR(n)));
     	program.addInstruction(new ADD(new ImmediateInteger(1), Register.getR(n)));
 	}
