@@ -30,7 +30,7 @@ public class Not extends AbstractUnaryExpr {
             ClassDefinition currentClass) throws ContextualError {
     	this.getOperand().verifyExpr(compiler, localEnv, currentClass);
     	if (!this.getOperand().getType().isBoolean()) {
-    		throw new ContextualError("Invalid type for operand " + this.getOperatorName() + " :" 
+    		throw new ContextualError("Invalid type for unary operation \"not\": " 
     				+ this.getOperand().getType() + " instead of boolean (3.37)",
     				this.getOperand().getLocation());
     	}

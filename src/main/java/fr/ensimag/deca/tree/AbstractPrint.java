@@ -44,7 +44,7 @@ public abstract class AbstractPrint extends AbstractInst {
         	// rule (3.30)
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
             if (!(type.isFloat() || type.isString() || type.isInt())) {
-                throw new ContextualError("Types of print arguments type must be String, int or float (3.31)", a.getLocation());
+                throw new ContextualError("Types of print arguments type must be String, int or float - not " + type.getName() + " (3.31)", a.getLocation());
         	}
         }
     }

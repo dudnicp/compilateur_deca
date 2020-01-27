@@ -231,7 +231,7 @@ public class Identifier extends AbstractIdentifier {
     		this.setType(type);
     	}
     	if (this.getType().isVoid()) {
-    		throw new ContextualError("Type cannot be of type void (3.17)",
+    		throw new ContextualError("Variable, parameter or field " + this.getName() + " cannot be of type void (2.5 - 2.9 - 3.17)",
     				this.getLocation());
     	} else {
     		return this.getDefinition().getType();

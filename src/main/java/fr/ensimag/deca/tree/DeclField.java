@@ -58,15 +58,11 @@ public class DeclField extends AbstractDeclField {
 			throws ContextualError {
 		// decorate type
 		Type typeVerified = type.verifyType(compiler);
-		if (typeVerified.isVoid()) {
-			throw new ContextualError("Field type cannot be void (2.5)",
-				type.getLocation());
-		}
 		
 		// determine whether field is already defined in this class - or in one of its parents - or not at all
 		FieldDefinition incFieldDef;
 		if (currentClass.getMembers().get(fieldName.getName()) != null) {
-			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in class " + currentClass.toString(),
+			throw new ContextualError("Field or method " + fieldName.getName() + " is already defined in this class",
 					fieldName.getLocation());
 		} else if (currentClass.getMembers().getAny(fieldName.getName()) != null) {
 			Definition previousDef = currentClass.getSuperClass().getMembers().getAny(fieldName.getName());
@@ -105,7 +101,7 @@ public class DeclField extends AbstractDeclField {
 
 	@Override
 	public void decompile(IndentPrintStream s) {
-		s.print(visibility.toString() + " ");
+		s.print(visibility.toString().equals("PROTECTED") ? "protected" : "");
 		type.decompile(s);
 		s.print(" ");
 		fieldName.decompile(s);

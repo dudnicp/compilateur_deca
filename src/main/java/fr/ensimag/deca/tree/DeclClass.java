@@ -79,7 +79,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassDef = (ClassDefinition)envTypes.getDefinitionFromName("Object");
             superClassName.setLocation(superClassDef.getLocation());
         } else if (compiler.getEnvTypes().getDefinitionFromName(superClassName.getName().toString()) != null) {
-        	throw new ContextualError(superClassName.getName() + " is a predefined type",
+        	throw new ContextualError("Cannot extends class " + superClassName.getName() + ", it is a predefined type",
         			superClassName.getLocation());
         } else if (envTypes.get(superClassName.getName()) == null) {
             throw new ContextualError("Superclass " + superClassName.getName() + " is not defined (1.3)",
@@ -94,7 +94,7 @@ public class DeclClass extends AbstractDeclClass {
         // build the current class definition
         ClassType classType;
         if (compiler.getEnvTypes().getDefinitionFromName(className.getName().toString()) != null) {
-        	throw new ContextualError(className.getName() + " is a predefined type",
+        	throw new ContextualError("Cannot declare class " + className.getName() + ", it is a predefined type",
         			className.getLocation());
         }
     	try {
