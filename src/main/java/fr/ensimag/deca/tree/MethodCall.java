@@ -80,6 +80,20 @@ public class MethodCall extends AbstractExpr {
     	arguments.verifySignature(compiler, localEnv, currentClass, sig2);
     	// verify that signatures match
     	if (!sig.equals(sig2)) {
+    		if (sig.size() == sig2.size()) {
+    			for (int i = 0; i < sig.size(); i++) {
+    				Type t = sig.paramNumber(i);
+    				Type t2 = sig2.paramNumber(i);
+    				if (t.isFloat() && t2.isInt() || 
+    						( t.isClass() && t2.isNull()) ||
+    						( t.isClass() && t2.isClass() && t2.asClassType("wont happen",
+    								this.getLocation()).isSubClassOf(t.asClassType("wont happen",
+    										this.getLocation())))) { // assign_compatible
+    					
+    				} else throw new ContextualError("Wrong signature for call of method " + methodName.getName() + " does not match its definition (3.71)"
+    	    				+ ", expected " + sig.toString() + ", got " + sig2.toString(), methodName.getLocation());
+    			}
+    		}
     		throw new ContextualError("Wrong signature for call of method " + methodName.getName() + " does not match its definition (3.71)"
     				+ ", expected " + sig.toString() + ", got " + sig2.toString(), methodName.getLocation());
     	}
