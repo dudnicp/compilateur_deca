@@ -1,0 +1,61 @@
+; start main program
+	TSTO #2
+	BOV stack_overflow
+	ADDSP #2
+	LOAD #null, R0
+	STORE R0, 1(GB)
+	LOAD code.Object.equals, R0
+	STORE R0, 2(GB)
+; Beginning of main instructions:
+; print(ln) /* conv float */2000000000 / 0x1.1eb852p-4
+	LOAD #2000000000, R2
+	FLOAT R2, R2
+	BOV impossible_conv_float
+	DIV #0x1.1eb852p-4, R2
+	BOV overflow
+	BOV div_by_zero
+	LOAD R2, R1
+	WFLOAT
+	WNL
+	HALT
+stack_overflow:
+	WSTR "Error: Stack overflow"
+	WNL
+	ERROR
+heap_overflow:
+	WSTR "Error: Impossible allocation : heap overflow"
+	WNL
+	ERROR
+div_by_zero:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR
+overflow:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+invalid_input:
+	WSTR "Error: Invalid input"
+	WNL
+	ERROR
+null_object:
+	WSTR "Error: Cannot acces null object"
+	WNL
+	ERROR
+impossible_conv_float:
+	WSTR "Error: Impossible converion to float"
+	WNL
+	ERROR
+init.Object:
+	RTS
+code.Object.equals:
+	TSTO #1
+	BOV stack_overflow
+	PUSH R2
+	LOAD -2(LB), R2
+	CMP -3(LB), R2
+	SEQ R1
+end.Object.equals:
+	POP R2
+	RTS
+; end main program
