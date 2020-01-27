@@ -13,39 +13,37 @@ import fr.ensimag.ima.pseudocode.Register;
  */
 public class DecacMain {
     private static Logger LOG = Logger.getLogger(DecacMain.class);
+    public static final CompilerOptions COMPILER_OPTIONS= new CompilerOptions();
     
     public static void main(String[] args) {
         // example log4j message.
         LOG.info("Decac compiler started");
         boolean error = false;
-        final CompilerOptions options = new CompilerOptions();
         try {
-            options.parseArgs(args);
+        	COMPILER_OPTIONS.parseArgs(args);
         } catch (CLIException e) {
             System.err.println("Error during option parsing:\n"
                     + e.getMessage());
-            options.displayUsage();
+            COMPILER_OPTIONS.displayUsage();
             System.exit(1);
         }
-        if (options.getPrintBanner()) {
+        if (COMPILER_OPTIONS.getPrintBanner()) {
         	// -b
             System.out.println("GL28");
         }
-        if (options.getNocheck()) {
+        if (COMPILER_OPTIONS.getNocheck()) {
         	// -n
-        	throw new UnsupportedOperationException("decac -n not yet implemented");
         }
-        if (options.getRegisters() != -1) {
-        	Register.setRMAX(options.getRegisters());
+        if (COMPILER_OPTIONS.getRegisters() >= 4 && COMPILER_OPTIONS.getRegisters() <= 16) {
+        	Register.setRMAX(COMPILER_OPTIONS.getRegisters() - 1);
         }
-        if (options.getDebug() != 0) {
+        if (COMPILER_OPTIONS.getDebug() != 0) {
         	// -d
-        	throw new UnsupportedOperationException("decac -d not yet implemented");
         }
-        if (options.getSourceFiles().isEmpty()) {
-            throw new UnsupportedOperationException("decac without argument not yet implemented");
+        if (COMPILER_OPTIONS.getSourceFiles().isEmpty()) {
+            throw new IllegalArgumentException("Missing source file(s) as arguments of decac command");
         }
-        if (options.getParallel()) {
+        if (COMPILER_OPTIONS.getParallel()) {
         	// -P
             // A FAIRE : instancier DecacCompiler pour chaque fichier à
             // compiler, et lancer l'exécution des méthodes compile() de chaque
@@ -53,8 +51,8 @@ public class DecacMain {
             // java.util.concurrent de la bibliothèque standard Java.
             throw new UnsupportedOperationException("Parallel build not yet implemented");
         } else {
-            for (File source : options.getSourceFiles()) {
-                DecacCompiler compiler = new DecacCompiler(options, source);
+            for (File source : COMPILER_OPTIONS.getSourceFiles()) {
+                DecacCompiler compiler = new DecacCompiler(COMPILER_OPTIONS, source);
                 if (compiler.compile()) {
                     error = true;
                 }

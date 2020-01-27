@@ -127,9 +127,8 @@ public class DeclMethod extends Tree {
 		methodName.decompile(s);
 		s.print("(");
 		listDeclParam.decompile(s);
-		s.println(") {");
+		s.println(")");
 		methodBody.decompile(s);
-		s.println("}");
 	}
 
 	@Override

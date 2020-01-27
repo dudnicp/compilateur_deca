@@ -10,3 +10,8 @@ class A{
         RTS
     ");
 }
+{
+    A p = new A();
+
+    p.x();
+}

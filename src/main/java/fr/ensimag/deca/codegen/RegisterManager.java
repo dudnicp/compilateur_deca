@@ -1,5 +1,6 @@
 package fr.ensimag.deca.codegen;
 
+import fr.ensimag.deca.DecacMain;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.IMAProgram;
@@ -106,7 +107,7 @@ public class RegisterManager {
 	
 	/* Coding TSTO */
 	public void codeTSTOandADDSP(IMAProgram program) {
-		if (nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams != 0) {
+		if (!DecacMain.COMPILER_OPTIONS.getNocheck() && (nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams != 0)) {
 			program.addInstruction(new TSTO(nUsedRegisters + nLocalVariables + maxNumberOfTemps + maxNumberOfMethodParams));
 			program.addInstruction(new BOV(Label.STACKOVERFLOW));
 		}

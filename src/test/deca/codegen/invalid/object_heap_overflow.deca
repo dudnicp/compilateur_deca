@@ -1,3 +1,7 @@
+// @result Error: Impossible allocation : heap overflow
+/*
+Testing for heap overflow
+*/
 class A {
 	int v0 = 128;
 	int v1 = 128;

@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacMain;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.IMAProgram;
@@ -33,7 +34,7 @@ public class Divide extends AbstractOpArith {
 		}
     	else if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
     		program.addInstruction(new DIV(op, register));
-        	if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
+        	if (!DecacMain.COMPILER_OPTIONS.getNocheck() && (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat())) {
         		program.addInstruction(new BOV(Label.OVERFLOW));
     		}
 		}
