@@ -9,7 +9,7 @@ class A{
     boolean x = true;
 }
 class C extends A{
-    boolean x; // x DOIT VALOIR TRUE
+  //  // x DOIT VALOIR TRUE
 }
 {
 
