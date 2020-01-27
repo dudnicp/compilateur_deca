@@ -21,6 +21,7 @@ import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.FLOAT;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
@@ -180,6 +181,9 @@ public abstract class AbstractExpr extends AbstractInst {
     	program.addComment("print(ln)x " + this.decompile());
     	codeGenInst(program, registerManager);
     	program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
+    	if (type.isInt()) {
+			program.addInstruction(new FLOAT(Register.R1, Register.R1));
+		}
     	program.addInstruction(new WFLOATX());
 	}
 

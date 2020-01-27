@@ -1,22 +1,63 @@
 ; start main program
-	TSTO #2
+	TSTO #11
 	BOV stack_overflow
-	ADDSP #2
+	ADDSP #7
 	LOAD #null, R0
 	STORE R0, 1(GB)
 	LOAD code.Object.equals, R0
 	STORE R0, 2(GB)
+	LEA 1(GB), R0
+	STORE R0, 3(GB)
+	LOAD code.Object.equals, R0
+	STORE R0, 4(GB)
 ; Beginning of main instructions:
-; print(ln) /* conv float */2000000000 / 0x1.1eb852p-4
-	LOAD #2000000000, R2
-	FLOAT R2, R2
-	BOV impossible_conv_float
-	DIV #0x1.1eb852p-4, R2
-	BOV overflow
-	BOV div_by_zero
-	LOAD R2, R1
-	WFLOAT
+; X a = new X();
+	LOAD #null, R2
+	STORE R2, 5(GB)
+	NEW #1, R2
+	BOV heap_overflow
+	LEA 3(GB), R0
+	STORE R0, 0(R2)
+	PUSH R2
+	BSR init.X
+	POP R2
+	STORE R2, 5(GB)
+; Object b = a;
+	LOAD #null, R2
+	STORE R2, 6(GB)
+	LOAD 5(GB), R2
+	STORE R2, 6(GB)
+; Object c = new X();
+	LOAD #null, R2
+	STORE R2, 7(GB)
+	NEW #1, R2
+	BOV heap_overflow
+	LEA 3(GB), R0
+	STORE R0, 0(R2)
+	PUSH R2
+	BSR init.X
+	POP R2
+	STORE R2, 7(GB)
+; if instruction
+	LOAD 5(GB), R2
+	ADDSP #2
+	STORE R2, 0(SP)
+	LOAD 6(GB), R2
+	STORE R2, -1(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 1(R2)
+	SUBSP #2
+	LOAD R1, R2
+	CMP #0, R2
+	BEQ else_0
+	WSTR "ok"
 	WNL
+	BRA end_if_0
+else_0:
+end_if_0:
 	HALT
 stack_overflow:
 	WSTR "Error: Stack overflow"
@@ -57,5 +98,7 @@ code.Object.equals:
 	SEQ R1
 end.Object.equals:
 	POP R2
+	RTS
+init.X:
 	RTS
 ; end main program
