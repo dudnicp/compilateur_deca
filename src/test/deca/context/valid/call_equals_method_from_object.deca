@@ -1,0 +1,10 @@
+/*
+    Description : Appel de la méthode equals en passant en paramètre un objet
+
+    Résultat : OK
+*/
+class A{}
+class B{
+    Object f = new Object();
+    boolean u = equals(f);
+}
