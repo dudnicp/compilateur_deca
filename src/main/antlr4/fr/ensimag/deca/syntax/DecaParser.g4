@@ -492,8 +492,11 @@ literal returns[AbstractExpr tree]
     | fd=FLOAT {
             try {
                 $tree = new FloatLiteral(Float.parseFloat($fd.text));
+                if (Float.parseFloat($fd.text) == 0 && !$fd.text.equals("0.0")){
+                    throw new Exception();
+                }
             } catch (Exception e) {
-		        throw new FloatTooBig(this, $ctx);
+		            throw new FloatTooBig(this, $ctx);
             }
         }
     | st=STRING {
