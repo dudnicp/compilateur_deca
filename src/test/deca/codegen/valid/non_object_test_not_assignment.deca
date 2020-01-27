@@ -1,7 +1,7 @@
 // @result ok
 // @result ok
 {
-	boolean x = !true;
+	boolean x = !(0 < 2);
 	boolean y = !false;
 	
 	if (x) {

@@ -79,8 +79,8 @@ public class MethodCall extends AbstractExpr {
     	arguments.verifySignature(compiler, localEnv, currentClass, sig2);
     	// verify that signatures match
     	if (!sig.equals(sig2)) {
-    		throw new ContextualError("Signature of called method " + methodName.getName() + " does not match its definition (3.71)",
-    				methodName.getLocation());
+    		throw new ContextualError("Signature of called method <" + methodName.getName() + "> does not match its definition (3.71)"
+    				+ ", expected signature " + sig.toString(), methodName.getLocation());
     	}
     	// returnType of the method called
     	this.setType(methodDef.getType());
@@ -117,13 +117,13 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	registerManager.tryMaxRegisterIndex(n);
+    	treeExpr.codeExpr(program, n, registerManager);
     	
     	// reserving place for method args
     	program.addInstruction(new ADDSP(arguments.size() + 1));
     	registerManager.incCurrentNumberOfMethodParams(arguments.size() + 1);
     	
     	// adding implicit argument to stack
-    	program.addInstruction(new LOAD(treeExpr.dval(), Register.getR(n)));
     	program.addInstruction(new STORE(Register.getR(n), new RegisterOffset(0, Register.SP)));
     	
     	// adding args to stack

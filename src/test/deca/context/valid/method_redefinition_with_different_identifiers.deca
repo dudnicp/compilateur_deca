@@ -3,7 +3,7 @@
 
     Résultat : OK
 */
-class A{
+class B{
     void x(int a, int b){}
 }
 class A extends B{

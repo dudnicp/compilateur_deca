@@ -166,6 +166,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param program
      */
     protected void codeGenPrint(IMAProgram program, RegisterManager registerManager) {
+    	program.addComment("print(ln) " + this.decompile());
     	codeGenInst(program, registerManager);
     	program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
     	if (type.isFloat()) {
@@ -176,6 +177,7 @@ public abstract class AbstractExpr extends AbstractInst {
     }
     
     protected void codeGenPrintHex(IMAProgram program, RegisterManager registerManager) {
+    	program.addComment("print(ln)x " + this.decompile());
     	codeGenInst(program, registerManager);
     	program.addInstruction(new LOAD(Register.getDefaultRegister(), Register.R1));
     	program.addInstruction(new WFLOATX());

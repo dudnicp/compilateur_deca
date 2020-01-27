@@ -40,6 +40,9 @@ public class While extends AbstractInst {
 
     @Override
     protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
+    	
+    	program.addComment("while instruction");
+    	
     	Label beginWhile = Label.newBeginWhileLabel();
     	Label whileCond = Label.newWhileCondLabel();
     	program.addInstruction(new BRA(whileCond));
