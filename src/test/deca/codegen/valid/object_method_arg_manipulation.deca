@@ -17,35 +17,35 @@ Testing for arguments manipulation and operations in class methods
 */
 class X {
 	void a(int arg1, int arg2) {
-		int a = arg1 + arg2;
-		int b;
+		int av = arg1 + arg2;
+		int bv;
 		println(arg1 + 1);
-		println(a);
-		b = arg1 * arg2;
-		println(b)
+		println(av);
+		bv = arg1 * arg2;
+		println(bv);
 		arg1 = 2;
 		println(arg1);
 	}
 	void b(float arg1, float arg2) {
-                float a = arg1 + arg2;
-                float b;
+                float av = arg1 + arg2;
+                float bv;
                 println(arg1 + 1.0);
-                println(a);
-                b = arg1 * arg2;
-                println(b)
+                println(av);
+                bv = arg1 * arg2;
+                println(bv);
 		arg1 = 2.2;
 		println(arg1);
         }
 	void c(int arg1, float arg2) {
-		float a = arg1 + arg2;
-                float b;
+		float av = arg1 + arg2;
+                float bv;
                 println(arg2 + 1);
-                b = arg1 * arg2;
-                println(b)
+                bv = arg1 * arg2;
+                println(bv);
 	}
 	void d(boolean arg1, boolean arg2) {
-		boolean a = arg1 && arg2;
-		boolean b;
+		boolean av = arg1 && arg2;
+		boolean bv;
 		if (arg1 && arg2) {
 			println("ko");
 		} else {
@@ -54,15 +54,16 @@ class X {
 		if (arg1 || arg2) {
 			println("ok");
 		}
-		b = arg1 || arg2;
-		if (a) {
+		bv = arg1 || arg2;
+		if (av) {
 			println("ko");
 		} else {
 			println("ok");
 		}
-		if (b) {
+		if (bv) {
 			println("ok");
 		}
+	}
 }
 {
 	X x = new X();
@@ -70,4 +71,4 @@ class X {
 	x.b(1.1, 2.0);
 	x.c(1, 1.1);
 	x.d(true, false);
-}float b;
+}

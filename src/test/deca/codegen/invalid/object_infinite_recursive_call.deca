@@ -1,3 +1,4 @@
+// @result Error: Stack overflow
 /*
     Description : Appel récursifs sans fin
 

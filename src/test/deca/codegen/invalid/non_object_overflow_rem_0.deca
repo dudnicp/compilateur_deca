@@ -1,4 +1,4 @@
-// @result Error: Overflow during arithmetic operation
+// @result Error: Division by zero
 /*
     Description : Test sur la gestion du modulo par 0
 

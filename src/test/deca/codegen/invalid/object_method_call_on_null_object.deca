@@ -1,3 +1,4 @@
+// @result Error: Cannot acces null object
 /*
     Description : Appel de méthode sur un objet null
 
