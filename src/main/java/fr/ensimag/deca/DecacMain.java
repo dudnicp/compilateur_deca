@@ -41,7 +41,7 @@ public class DecacMain {
         	// -d
         }
         if (COMPILER_OPTIONS.getSourceFiles().isEmpty()) {
-            throw new UnsupportedOperationException("decac without argument not yet implemented");
+            throw new IllegalArgumentException("Missing source file(s) as arguments of decac command");
         }
         if (COMPILER_OPTIONS.getParallel()) {
         	// -P
