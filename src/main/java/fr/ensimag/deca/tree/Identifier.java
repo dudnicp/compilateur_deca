@@ -304,10 +304,6 @@ public class Identifier extends AbstractIdentifier {
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	registerManager.tryMaxRegisterIndex(n);
     	program.addInstruction(new LOAD(tempAddr(program, n, registerManager), Register.getR(n)));
-    	if (getType().isClassOrNull()) {
-			codeCMP(program, n);
-			program.addInstruction(new BEQ(Label.NULLOBJECT));
-		}
     }
 
 }
