@@ -81,7 +81,7 @@ public class Selection extends AbstractLValue {
 	
 	@Override
 	protected DAddr tempAddr(IMAProgram program, int n, RegisterManager registerManager) {
-		program.addInstruction(new LOAD(objectName.dval(), Register.getR(n)));
+		objectName.codeExpr(program, n, registerManager);
 		registerManager.tryMaxRegisterIndex(n);
 		return new RegisterOffset(fieldName.getFieldDefinition().getIndex(), Register.getR(n));
 	}

@@ -117,13 +117,13 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	registerManager.tryMaxRegisterIndex(n);
+    	treeExpr.codeExpr(program, n, registerManager);
     	
     	// reserving place for method args
     	program.addInstruction(new ADDSP(arguments.size() + 1));
     	registerManager.incCurrentNumberOfMethodParams(arguments.size() + 1);
     	
     	// adding implicit argument to stack
-    	program.addInstruction(new LOAD(treeExpr.dval(), Register.getR(n)));
     	program.addInstruction(new STORE(Register.getR(n), new RegisterOffset(0, Register.SP)));
     	
     	// adding args to stack

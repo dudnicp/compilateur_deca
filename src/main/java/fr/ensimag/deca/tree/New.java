@@ -61,6 +61,7 @@ public class New extends AbstractExpr {
 	
 	@Override
 	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+		registerManager.tryMaxRegisterIndex(n);
 		int d = newName.getClassDefinition().getNumberOfFields() + 1;
 		program.addInstruction(new NEW(new ImmediateInteger(d), Register.getR(n)));
 		program.addInstruction(new BOV(Label.HEAPOVERFLOW));
