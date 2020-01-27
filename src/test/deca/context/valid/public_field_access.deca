@@ -4,7 +4,7 @@
     Résultat : OK
 */
 class A{
-    public int x;
+    int x;
 }
 {
     A u = new A();

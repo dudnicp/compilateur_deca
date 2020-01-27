@@ -44,11 +44,15 @@ public class Signature {
 
 	@Override
     public String toString() {
-    	String s = "Signaure:";
+		int size = args.size();
+		int index = 0;
+    	String s = "(";
     	for (Type t: args) {
-    		s = s + ", " + t.toString();
+    		String comma = size - 1 == index ? "" : ", ";
+    		s = s + t.toString() + comma;
+    		index++;
     	}
-    	return s;
+    	return s + ")";
     }
 
 }

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.MethodTable;
 import fr.ensimag.deca.codegen.RegisterManager;
@@ -64,7 +65,7 @@ public class Program extends AbstractProgram {
     	IMAProgram tstoCode = new IMAProgram();
     	
     	createMethodTable(methodTableCode);
-    	codeGenObjectEquals(classMethodCode);
+    	codeGenObject(classMethodCode);
     	classes.codeGenMethod(classMethodCode);
     	main.codeGenMain(mainCode);
     	codeGenErrors(errorsCode);
@@ -98,7 +99,10 @@ public class Program extends AbstractProgram {
 	}
     
     
-    protected void codeGenObjectEquals(IMAProgram program) {
+    protected void codeGenObject(IMAProgram program) {
+    	program.addLabel(Label.getInitLabel("Object"));
+    	program.addInstruction(new RTS());
+    	// codeGen for object.equals
     	program.addLabel(Label.getMethodStartLabel("Object", "equals"));
     	program.addInstruction(new TSTO(1));
     	program.addInstruction(new BOV(Label.STACKOVERFLOW));

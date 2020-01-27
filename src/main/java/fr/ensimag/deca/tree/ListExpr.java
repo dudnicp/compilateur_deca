@@ -43,9 +43,6 @@ public class ListExpr extends TreeList<AbstractExpr> {
     		ClassDefinition currentClass, Signature sig2) throws ContextualError {
     	for (AbstractExpr exp: this.getList()) {
     		exp.setType(exp.verifyExpr(compiler, localEnv, currentClass));
-    		if (exp.getType() == null) {
-    			throw new ContextualError("Null type arguments", exp.getLocation());
-    		}
     		sig2.add(exp.getType());
     	}
     }

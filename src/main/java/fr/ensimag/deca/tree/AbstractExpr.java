@@ -114,20 +114,20 @@ public abstract class AbstractExpr extends AbstractInst {
     		if (type2.isClassOrNull()) {
     			if (type2.isNull()) {}
     			else { // type.isClass()
-    				ClassType cType2 = type2.asClassType("this will never happen", this.getLocation());
-    				ClassType cExpectedType = expectedType.asClassType("this will never happen", this.getLocation());
+    				ClassType cType2 = type2.asClassType("not a classs type", this.getLocation());
+    				ClassType cExpectedType = expectedType.asClassType("not a class type", this.getLocation());
     				if (!cType2.isSubClassOf(cExpectedType)) {
     					throw new ContextualError("Class " + type2.getName() + " is not a subclass of "
     				+ expectedType.getName() + " (not assign_compatible)",
     							this.getLocation());
     				}
     			}
-    		} else throw new ContextualError("Incompatible types " + expectedType.getName() +  " and " + type2.getName(),
+    		} else throw new ContextualError("Expected class " + expectedType.getName() +  ", got type " + type2.getName(),
     				this.getLocation());
 
     	} else if (!type2.sameType(expectedType)) {
-    		throw new ContextualError("Rvalue is of type " + this.getType() + " and leftOperand is of type "
-    		+ expectedType + " (3.28)", this.getLocation());
+    		throw new ContextualError("Expected type " + expectedType.getName() + ", got type "
+    		+ type2.getName() + " (3.28)", this.getLocation());
     	}
     	return this;
     }
@@ -154,7 +154,7 @@ public abstract class AbstractExpr extends AbstractInst {
             ClassDefinition currentClass) throws ContextualError {
     	Type type = this.verifyExpr(compiler, localEnv, currentClass);
     	if (!type.isBoolean()) {
-    		throw new ContextualError("Condition must be of type boolean (3.29)",
+    		throw new ContextualError("Condition must be of type boolean , got type " + type.getName() + " (3.29)",
     				this.getLocation());
     	}
     	this.setType(compiler.getEnvTypes().getDefinitionFromName("boolean").getType());

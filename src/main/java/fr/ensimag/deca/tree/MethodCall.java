@@ -65,22 +65,23 @@ public class MethodCall extends AbstractExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     	
-    	ClassType objectType = treeExpr.verifyExpr(compiler, localEnv, currentClass).asClassType("not a classtype", treeExpr.getLocation());
+    	ClassType objectType = treeExpr.verifyExpr(compiler, localEnv, currentClass).asClassType("Expression at " + treeExpr.getLocation()
+    		 + " is not a class object, cannot do a method call", treeExpr.getLocation());
     	Definition def = objectType.getDefinition().getMembers().getAny(methodName.getName());
     	objectType.getDefinition().getMembers().toString();
     	if (def == null) {
     		throw new ContextualError("Method " + methodName.getName() + " is not defined in class " + objectType.getName(),
     				methodName.getLocation());
     	}
-    	MethodDefinition methodDef = def.asMethodDefinition("not a method defintion", this.getLocation());
+    	MethodDefinition methodDef = def.asMethodDefinition(methodName.getName() + " is not a method, cannot do a method call", this.getLocation());
     	// verify that the object's class is the same as the method's class
     	Signature sig = methodDef.getSignature();
     	Signature sig2 = new Signature();
     	arguments.verifySignature(compiler, localEnv, currentClass, sig2);
     	// verify that signatures match
     	if (!sig.equals(sig2)) {
-    		throw new ContextualError("Signature of called method " + methodName.getName() + " does not match its definition (3.71)",
-    				methodName.getLocation());
+    		throw new ContextualError("Wrong signature for call of method " + methodName.getName() + " does not match its definition (3.71)"
+    				+ ", expected " + sig.toString() + ", got " + sig2.toString(), methodName.getLocation());
     	}
     	// returnType of the method called
     	this.setType(methodDef.getType());
