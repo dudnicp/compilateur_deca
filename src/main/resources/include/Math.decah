@@ -1,8 +1,10 @@
 // Grenoble INP - Ensimag projet GL -*- mode: java -*-
 // Library for class Math of Deca, coded in Deca
+
 /* This file contains the best method we've found  for
    each specified function, we've used other methods but
-   they are less effective */
+   they are less effective, check the documentation to
+   see them                                              */
 
 class Math {
 
@@ -14,18 +16,21 @@ class Math {
 	float pi4 = 0.7853982f;
 	float zMach = 1.1920929E-7;
 
+    /* stops the program */
+    void _throwError() asm("HALT");
+
 	/* Not asked but will be useful later */
 	float _sqrt(float f) {
         int i;
         float x;
 		if (f < 0) {
-			println("illegal parameter for sqrt, parameter must be positive, returning -1");
-			return -1.0;
+			println("illegal parameter for sqrt, parameter must be positive, exiting...");
+            _throwError();
 		} else {
 			i = 0;
 			x = 0.1f;
-			// the number of iterations must be determined
-			while (i < 50) {
+			// check the documentation to understand the '15'
+			while (i < 15) {
 				x = (0.5f) * (x + (f / x));
 				i = i + 1;
 			}
@@ -37,25 +42,39 @@ class Math {
 	float _moduloF(float f, float p) {
 		/* returns f mod p i.e. the only number x that is between 0 & p
 		   such that f = k * p + x with k an integer */
+
 		if (f < 0) {
-			f = -f;
+            f = -f;
 		}
-		while(f >= p) {
+
+        while(f >= p) {
 			f = f - p;
 		}
 		return f;
 	}
 
-	float _sinPI4(float f) {
-		// computes the sinus function between 0 & PI / 4
-		return (f - f * f * f / 6 + f * f * f * f * f / 120 - f * f * f * f * f * f * f / 5040);
-	}
+    float _sinPI4(float f) {
 
-	float _cosPI4(float f) {
-		// computes the cosinus function between 0 & PI / 4
-		return (1 - f * f / 2 + f * f * f * f / 24 - f * f * f * f * f * f / 720
-				+ f * f * f * f * f * f * f * f / 40320);
-	}
+    // computes the sinus function between 0 & PI / 4
+    float a = -1.0/5040;
+    float b = 1.0/120;
+    float c = -1.0/6;
+    float d = 1.0;
+
+    return ((((a*f*f+b)*f*f+c)*f*f)+d)*f;
+  }
+
+
+float _cosPI4(float f) {
+
+    // computes the cosinus function between 0 & PI / 4
+    float a = 1.0/40320;
+    float b = -1.0/720;
+    float c = 1.0/24;
+    float d = -1.0/2;
+
+    return ((((a*f*f+b)*f*f+c)*f*f)+d)*f*f+1;
+  }
 
 	float _sinPI2(float f) {
 		// computes the sinus function between 0 & PI / 2
@@ -78,13 +97,15 @@ class Math {
 	float sin(float f) {
 		// computes the sinus of a float
 		float sign = 1.0;
+
+
 		if (f < 0) {
 			f = -f;
 			sign = -1 * sign;
 		}
+
 		// f = f % 2*pi
 		f = _moduloF(f, _2pi);
-
 		// now f is < 2*pi
 		if (f > pi) {
 			f = f - pi;
@@ -120,6 +141,7 @@ class Math {
 		} else {
 			// it is probably possible use a smaller integer instead of 10
 			while (i < 10) {
+                // this way we do not have to compute cosinus twice
 				sinValue = sin(outp);
 				cosValue = cos(outp);
 				outp = outp + cosValue * (cosValue * f - sinValue);
@@ -133,7 +155,8 @@ class Math {
 		/* computes the asin using the formula
 		   asin(f) = atan(f / sqrt(1 - f²))    */
 		if (f < -1 || f > 1) {
-			println("illegal parameter : asin can only becomputed for numbers within (-1, 1)");
+			println("illegal parameter : asin can only be computed for numbers within (-1, 1), exiting...");
+            _throwError();
 		} else if (f == -1) {
 			return -pi2;
 		} else if (f == 1) {
@@ -165,4 +188,3 @@ class Math {
 		return tmp * zMach;
 	}
 }
-
