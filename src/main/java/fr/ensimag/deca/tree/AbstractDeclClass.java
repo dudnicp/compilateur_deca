@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 
 /**
  * Class declaration.
@@ -31,5 +32,9 @@ public abstract class AbstractDeclClass extends Tree {
      */
     protected abstract void verifyClassBody(DecacCompiler compiler)
             throws ContextualError;
-
+    
+    
+    protected abstract void codeGenMethod(IMAProgram program);
+    
+    protected abstract void createMethodTable(IMAProgram program) throws ContextualError;
 }

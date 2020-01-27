@@ -1,9 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.SNE;
@@ -25,22 +28,20 @@ public class NotEquals extends AbstractOpExactCmp {
         return "!=";
     }
 
-
+    
     @Override
-	protected void mnemo(DecacCompiler compiler, DVal op,
-			GPRegister register) {
-		super.mnemo(compiler, op, register);
-		compiler.addInstruction(new SNE(register));
+	protected void codeBranch(IMAProgram program, boolean b, Label label) {
+		if (b) {
+			program.addInstruction(new BNE(label));
+		}
+		else {
+			program.addInstruction(new BEQ(label));
+		}
 	}
     
     @Override
-	protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
-		super.codeCondExpr(compiler, b, label, n);
-		if (b) {
-			compiler.addInstruction(new BNE(label));
-		}
-		else {
-			compiler.addInstruction(new BEQ(label));
-		}
+	protected void codeAssign(IMAProgram program, int n, RegisterManager registerManager) {
+    	codeExpr(program, n, registerManager);
+    	program.addInstruction(new SNE(Register.getR(n)));    	
 	}
 }

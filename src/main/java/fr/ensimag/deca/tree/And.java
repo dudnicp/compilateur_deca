@@ -1,7 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.CodeTSTO;
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -27,38 +28,39 @@ public class And extends AbstractOpBool {
     }
 
     @Override
-	protected void codeCondExpr(DecacCompiler compiler, boolean b, Label label, int n) {
+	protected void codeCondExpr(IMAProgram program, boolean b, Label label, int n, RegisterManager registerManager) {
     	if (b) {
     		Label endLabel = Label.newEndAndLabel();
-			getLeftOperand().codeCondExpr(compiler, false, endLabel, n);
-			getRightOperand().codeCondExpr(compiler, true, label, n);
-			compiler.addLabel(endLabel);
+			getLeftOperand().codeCondExpr(program, false, endLabel, n, registerManager);
+			getRightOperand().codeCondExpr(program, true, label, n, registerManager);
+			program.addLabel(endLabel);
 		} else {
-			getLeftOperand().codeCondExpr(compiler, false, label, n);
-			getRightOperand().codeCondExpr(compiler, false, label, n);
+			getLeftOperand().codeCondExpr(program, false, label, n, registerManager);
+			getRightOperand().codeCondExpr(program, false, label, n, registerManager);
 		}
 	}
     
     @Override
-	protected void codeExpr(DecacCompiler compiler, int n) {
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	Label endLabelAux = Label.newEndAndLabel();
     	Label endLabel = Label.newEndAndLabel();
-    	compiler.addInstruction(new LOAD(new ImmediateInteger(0), Register.getR(n)));
+    	program.addInstruction(new LOAD(new ImmediateInteger(0), Register.getR(n)));
     	if (n < Register.getRMAX()) {
-    		getLeftOperand().codeCondExpr(compiler, false, endLabel, n+1);			
+    		getLeftOperand().codeCondExpr(program, false, endLabel, n+1, registerManager);			
 		}
     	else {
-    		compiler.addInstruction(new PUSH(Register.getR(n)));
-    		getLeftOperand().codeCondExpr(compiler, false, endLabelAux, n);
+    		program.addInstruction(new PUSH(Register.getR(n)));
+    		registerManager.incCurrentNumberOfTemps();
+    		getLeftOperand().codeCondExpr(program, false, endLabelAux, n, registerManager);
 		}
-    	getRightOperand().codeExpr(compiler, n);
-    	compiler.addInstruction(new BRA(endLabel));
+    	getRightOperand().codeExpr(program, n, registerManager);
+    	program.addInstruction(new BRA(endLabel));
     	if (n >= Register.getRMAX()) {
-    		compiler.addLabel(endLabelAux);
-        	compiler.addInstruction(new POP(Register.getR(n)));	
-        	CodeTSTO.decCurrentStackSize();
+    		program.addLabel(endLabelAux);
+    		program.addInstruction(new POP(Register.getR(n)));	
+        	registerManager.decCurrentNumberOfTemps();
 		}
-    	compiler.addLabel(endLabel);
+    	program.addLabel(endLabel);
 	}
 
 }

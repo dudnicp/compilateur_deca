@@ -38,5 +38,5 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     	this.setType(this.getLeftOperand().getType());
     	return this.getType();
     }
-
+    
 }

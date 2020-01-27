@@ -8,14 +8,15 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -23,8 +24,15 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -159,7 +167,18 @@ public class Identifier extends AbstractIdentifier {
                             + " is not a Exp identifier, you can't call getExpDefinition on it");
         }
     }
-
+    
+	@Override
+	public ParamDefinition getParamDefinition() {
+	  try {
+            return (ParamDefinition) definition;
+        } catch (ClassCastException e) {
+            throw new DecacInternalError(
+                    "Identifier "
+                            + getName()
+                            + " is not a Param identifier, you can't call getParamDefinition on it");
+        }
+    }
     @Override
     public void setDefinition(Definition definition) {
         this.definition = definition;
@@ -180,14 +199,16 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-    	if (localEnv.get(this.getName()) == null) {
+    	if (localEnv.getAny(this.getName()) == null) {
     		throw new ContextualError("Undefined identifier " + this.getName() + " (0.1)",
     				this.getLocation());
     	} else {
-    		Type definedType = localEnv.get(this.getName()).getType();
-    		this.setDefinition(localEnv.get(this.getName()));
-    		this.setType(definedType);
-    		return definedType;
+    		this.setDefinition(localEnv.getAny(this.getName()));
+    		if (this.getDefinition().isMethod()) {
+    			throw new ContextualError(this.getName() + " is a method, please use a method call",
+    					this.getLocation());}
+    		this.setType(this.getDefinition().getType());
+    		return this.getDefinition().getType();
     	}
     }
 
@@ -198,8 +219,9 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
     	// Rule (3.17)
-    	EnvironmentType envTypes = compiler.getEnvTypes();
-    	Definition def = envTypes.getDefinitionFromName(this.getName().toString());
+    	EnvironmentExp envTypes = compiler.getEnvTypes();
+    	Definition def = envTypes.getDefinitionFromName(this.getName().toString()); // predefined types
+    	if (def == null) def = envTypes.get(this.getName()); // classes type
     	if (def == null) {
     		throw new ContextualError("Type " + this.getName() + " is not defined (0.2)",
     				this.getLocation());
@@ -212,7 +234,7 @@ public class Identifier extends AbstractIdentifier {
     		throw new ContextualError("Type cannot be of type void (3.17)",
     				this.getLocation());
     	} else {
-    		return this.getType();
+    		return this.getDefinition().getType();
     	}
     }
     
@@ -257,26 +279,35 @@ public class Identifier extends AbstractIdentifier {
     }
     
     protected DAddr daddr() {
-    	if (definition.isExpression()) {
-			return getExpDefinition().getOperand();
+    	if (getDefinition().isField()) {
+			return null;
 		}
-    	return null;
+    	else {
+    		return getExpDefinition().getOperand();
+		}
 	}
     
-    
     @Override
-    protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(this.dval(), Register.getR(n)));
-    }
-    
-    @Override
-    protected void codeGenPrintInstruction(DecacCompiler compiler) {
-    	Type type = definition.getType();
-    	if (type.isInt() || type.isBoolean()) {
-			compiler.addInstruction(new WINT());
+    protected DAddr tempAddr(IMAProgram program, int n, RegisterManager registerManager) {
+    	if (getDefinition().isField()) {
+    		program.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.getR(n)));
+    		registerManager.tryMaxRegisterIndex(n);
+			return new RegisterOffset(getFieldDefinition().getIndex(), Register.getR(n));
 		}
-    	else if (type.isFloat()) {
-			compiler.addInstruction(new WFLOAT());
+    	else {
+    		return getExpDefinition().getOperand();
 		}
     }
+    
+    
+    @Override
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	program.addInstruction(new LOAD(tempAddr(program, n, registerManager), Register.getR(n)));
+    	if (getType().isClassOrNull()) {
+			codeCMP(program, n);
+			program.addInstruction(new BEQ(Label.NULLOBJECT));
+		}
+    }
+
 }

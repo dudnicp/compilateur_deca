@@ -3,12 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import org.apache.log4j.Logger;
 
@@ -54,8 +50,12 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     }
     
     @Override
-    protected void mnemo(DecacCompiler compiler, DVal op, GPRegister register) {
-    	compiler.addInstruction(new CMP(op, register));
+    protected void mnemo(IMAProgram program, DVal op, GPRegister register) {
+    	program.addInstruction(new CMP(op, register));
     }
     
+    @Override
+    protected void codeCMP(IMAProgram program, int n) {
+    	// empty : the comparaison in a comparaison operation is already done in the mnemo fucntion, used by codeExpr
+    }
 }

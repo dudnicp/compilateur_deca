@@ -3,14 +3,23 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.CodeTSTO;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -36,6 +45,7 @@ public class DeclVar extends AbstractDeclVar {
         this.initialization = initialization;
     }
 
+    
     @Override
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
@@ -44,14 +54,17 @@ public class DeclVar extends AbstractDeclVar {
     	Type typeVerified = type.verifyType(compiler);
        	varName.setType(typeVerified);
     	varName.setDefinition(new VariableDefinition(typeVerified, varName.getLocation()));
-    	try {
-    		// ajout de la variable dans l'environnement;
-			localEnv.declare(varName.getName(), varName.getExpDefinition());
-		} catch (fr.ensimag.deca.context.Environment.DoubleDefException e1) {
-			throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
-					localEnv.get(varName.getName()).getLocation() + " (3.17)",
+    	if (localEnv.getAny(varName.getName()) != null) {
+    		throw new ContextualError("Variable " + varName.getName() + " is already declared at " +
+					localEnv.getAny(varName.getName()).getLocation() + " (3.17)",
 					varName.getLocation());
-		}
+    	} else {
+    		try {
+				localEnv.declare(varName.getName(), varName.getExpDefinition());
+			} catch (DoubleDefException e) {
+				e.printStackTrace();
+			}
+    	}
     	initialization.verifyInitialization(compiler, typeVerified, localEnv, currentClass);
     }
 
@@ -81,11 +94,14 @@ public class DeclVar extends AbstractDeclVar {
     }
     
     @Override
-    protected void codeGenDecl(DecacCompiler compiler) {
-    	DAddr addr = Register.getNewAddr();
+    protected void codeGenDeclVar(IMAProgram program, RegisterManager registerManager) {
+    	DAddr addr = registerManager.getNewAddress();
     	varName.getVariableDefinition().setOperand(addr);
-    	CodeTSTO.incLocalVariables();
-    	initialization.codeExpr(compiler, Register.defaultRegisterIndex, addr);
+    	if (type.getType().isClassOrNull()) {
+    		program.addInstruction(new LOAD(new NullOperand(), Register.getDefaultRegister()));
+    		program.addInstruction(new STORE(Register.getDefaultRegister(), addr));
+    	}
+    	initialization.codeExpr(program, registerManager, false, addr);
     }
     
 }

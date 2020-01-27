@@ -2,11 +2,13 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
@@ -42,13 +44,13 @@ public class StringLiteral extends AbstractStringLiteral {
     }
     
     @Override
-    protected void codeExpr(DecacCompiler compiler, int n) {
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
     	// pass, nothing to code
     }
 
     @Override
-    protected void codeGenPrintInstruction(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR(new ImmediateString(value)));
+    protected void codeGenPrint(IMAProgram program, RegisterManager registerManager) {
+        program.addInstruction(new WSTR(new ImmediateString(value)));
     }
 
     @Override

@@ -60,6 +60,11 @@ LEQ: '<=';
 AND: '&&';
 OR: '||';
 
+// Include
+fragment FILENAME: (LETTER | DIGIT  | '.' | '-' | '_')+;
+INCLUDE: '#include' (' ')* '"' FILENAME '"' {
+    doInclude(getText());
+    };
 
 // Identifiers
 fragment LETTER: 'a'..'z' | 'A'..'Z';
@@ -94,6 +99,7 @@ COMMENT:
     '//' ~('\n'|'\r')* { skip(); }
 	| '/*' .*? '*/' { skip();};
 
+
 // Separators
 WS  :   ( ' '
         | '\t'
@@ -101,3 +107,4 @@ WS  :   ( ' '
         | '\n'
         ) {skip();}
     ;
+
