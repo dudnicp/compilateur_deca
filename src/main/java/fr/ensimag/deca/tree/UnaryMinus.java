@@ -1,9 +1,11 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.OPP;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -24,8 +26,7 @@ public class UnaryMinus extends AbstractUnaryExpr {
     	this.getOperand().verifyExpr(compiler, localEnv, currentClass);
     	if (!(this.getOperand().getType().isInt() ||
     			this.getOperand().getType().isFloat())) {
-    		throw new ContextualError("Invalid type for operand " + this.getOperatorName() + ": " 
-    				+ this.getOperand().getType() + " instead of int or float",
+    		throw new ContextualError("Invalid type for operand \"-\": " + this.getOperand().getType() + " instead of int or float",
     				this.getOperand().getLocation());
     	}
     	this.setType(this.getOperand().getType());
@@ -38,7 +39,8 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
     
     @Override
-	protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new OPP(getOperand().dval(), Register.getR(n)));
+	protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	getOperand().codeExpr(program, n, registerManager);
+    	program.addInstruction(new OPP(Register.getR(n), Register.getR(n)));
 	}
 }

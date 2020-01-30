@@ -2,10 +2,13 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -41,21 +44,21 @@ public abstract class AbstractPrint extends AbstractInst {
         	// rule (3.30)
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
             if (!(type.isFloat() || type.isString() || type.isInt())) {
-                throw new ContextualError("Types of print arguments type must be String, int or float (3.31)", a.getLocation());
+                throw new ContextualError("Types of print arguments type must be String, int or float - not " + type.getName() + " (3.31)", a.getLocation());
         	}
         }
     }
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
     	if (printHex) {
             for (AbstractExpr a : getArguments().getList()) {
-                a.codeGenPrintHex(compiler);
+                a.codeGenPrintHex(program, registerManager);
             }
 		}
     	else {
     		for (AbstractExpr a : getArguments().getList()) {
-                a.codeGenPrint(compiler);
+                a.codeGenPrint(program, registerManager);
             }
 		}
     }

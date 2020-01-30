@@ -5,10 +5,12 @@ import fr.ensimag.deca.context.Type;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 
 /**
  * 
@@ -35,12 +37,16 @@ public class ListInst extends TreeList<AbstractInst> {
         	i.verifyInst(compiler, localEnv, currentClass, returnType);
         }
     }
+    
+    public void codeGenListInstInMethod(IMAProgram program, RegisterManager registerManager) {
+		for (AbstractInst i : getList()) {
+			i.codeGenInst(program, registerManager);
+		}
+	}
 
-    public void codeGenListInst(DecacCompiler compiler) {
+    public void codeGenListInst(IMAProgram program, RegisterManager registerManager) {
         for (AbstractInst i : getList()) {
-//        	String commentLine = i.decompile();
-//        	compiler.addComment(commentLine);
-            i.codeGenInst(compiler);
+            i.codeGenInst(program, registerManager);
         }
     }
 

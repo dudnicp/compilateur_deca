@@ -23,5 +23,36 @@ public class Signature {
     public int size() {
         return args.size();
     }
+    
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Signature other = (Signature) obj;
+		if (args == null) {
+			if (other.args != null)
+				return false;
+		} else if (!args.equals(other.args))
+			return false;
+		return true;
+	}
+
+	@Override
+    public String toString() {
+		int size = args.size();
+		int index = 0;
+    	String s = "(";
+    	for (Type t: args) {
+    		String comma = size - 1 == index ? "" : ", ";
+    		s = s + t.toString() + comma;
+    		index++;
+    	}
+    	return s + ")";
+    }
 
 }

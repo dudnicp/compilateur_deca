@@ -64,8 +64,8 @@ public class CompilerOptions {
 
     public void parseArgs(String[] args) throws CLIException {
     	int argCounter = 0;
-        for (String arg : args) {
-        	switch (arg) {
+        while (argCounter < args.length) {
+        	switch (args[argCounter]) {
         	case "-b":
         		printBanner = true;
         		break;
@@ -79,7 +79,7 @@ public class CompilerOptions {
         		nocheck = true;
         		break;
         	case "-r":
-        		registers = Integer.parseInt(args[argCounter + 1]);
+        		registers = Integer.parseInt(args[++argCounter]);
         		break;
         	case "-d":
         		debug++;
@@ -88,13 +88,13 @@ public class CompilerOptions {
         		parallel = true;
         		break;
         	default:
-        		if (arg.endsWith(".deca")) {
-        			sourceFiles.add(new File(arg));
+        		if (args[argCounter].endsWith(".deca")) {
+        			sourceFiles.add(new File(args[argCounter]));
         		} else {
-        			throw new CLIException("invalid argument" + arg);
+        			throw new CLIException("invalid argument" + args[argCounter]);
         		}
-        	argCounter++;
         	}
+        	argCounter++;
         }
         
         if (parse && verification) {

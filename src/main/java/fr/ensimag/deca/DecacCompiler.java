@@ -1,8 +1,7 @@
 package fr.ensimag.deca;
 
-import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.syntax.DecaLexer;
-import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -42,9 +41,9 @@ import org.apache.log4j.Logger;
 public class DecacCompiler {
     private static final Logger LOG = Logger.getLogger(DecacCompiler.class);
     
-	private EnvironmentType envTypes = new EnvironmentType(null);
+	private EnvironmentExp envTypes = new EnvironmentExp();
 	    
-    public EnvironmentType getEnvTypes() {
+    public EnvironmentExp getEnvTypes() {
         return envTypes;
     }
     
@@ -117,6 +116,10 @@ public class DecacCompiler {
      */
     public void addInstruction(Instruction instruction, String comment) {
         program.addInstruction(instruction, comment);
+    }
+    
+    public void append(IMAProgram program) {
+    	this.program.append(program);
     }
     
     /**

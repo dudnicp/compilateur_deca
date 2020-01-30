@@ -2,10 +2,12 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 
@@ -37,16 +39,19 @@ public class While extends AbstractInst {
     }
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(IMAProgram program, RegisterManager registerManager) {
+    	
+    	program.addComment("while instruction");
+    	
     	Label beginWhile = Label.newBeginWhileLabel();
     	Label whileCond = Label.newWhileCondLabel();
-    	compiler.addInstruction(new BRA(whileCond));
-    	compiler.addLabel(beginWhile);
+    	program.addInstruction(new BRA(whileCond));
+    	program.addLabel(beginWhile);
     	for (AbstractInst inst : body.getList()) {
-			inst.codeGenInst(compiler);
+			inst.codeGenInst(program, registerManager);
 		}
-    	compiler.addLabel(whileCond);
-    	condition.codeCond(compiler, true, beginWhile);
+    	program.addLabel(whileCond);
+    	condition.codeCond(program, true, beginWhile, registerManager);
     }
 
     @Override

@@ -60,6 +60,11 @@ LEQ: '<=';
 AND: '&&';
 OR: '||';
 
+// Include
+fragment FILENAME: (LETTER | DIGIT  | '.' | '-' | '_')+;
+INCLUDE: '#include' (' ')* '"' FILENAME '"' {
+    doInclude(getText());
+    };
 
 // Identifiers
 fragment LETTER: 'a'..'z' | 'A'..'Z';
@@ -87,12 +92,16 @@ STRING: '"' (STRING_CAR | '\\"' | '\\\\')* '"'
 		{setText(getText().substring(1, getText().length()-1));
 		 setText(getText().replaceAll("\\\\\"", "\""));
 		}; // remove quotes
-MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"';
+MULTI_LINE_STRING: '"' (STRING_CAR | '\n' | '\\"' | '\\\\')* '"'
+		{setText(getText().substring(1, getText().length()-1));
+		 setText(getText().replaceAll("\\\\\"", "\""));
+		}; // remove quotes
 
 // Comments
 COMMENT:
     '//' ~('\n'|'\r')* { skip(); }
 	| '/*' .*? '*/' { skip();};
+
 
 // Separators
 WS  :   ( ' '
@@ -101,3 +110,4 @@ WS  :   ( ' '
         | '\n'
         ) {skip();}
     ;
+

@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -9,10 +10,13 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
@@ -69,14 +73,15 @@ public class BooleanLiteral extends AbstractExpr {
     }
     
     @Override
-    protected void codeExpr(DecacCompiler compiler, int n) {
-    	compiler.addInstruction(new LOAD(dval(), Register.getR(n)));
+    protected void codeExpr(IMAProgram program, int n, RegisterManager registerManager) {
+    	registerManager.tryMaxRegisterIndex(n);
+    	program.addInstruction(new LOAD(dval(), Register.getR(n)));
     }
     
     @Override
-    protected void codeCond(DecacCompiler compiler, boolean b, Label label) {
+    protected void codeCondExpr(IMAProgram program, boolean b, Label label, int n, RegisterManager registerManager) {
     	if ((value && b) || (!value && !b)) {
-			compiler.addInstruction(new BRA(label));
+    		program.addInstruction(new BRA(label));
 		}
     }
 
