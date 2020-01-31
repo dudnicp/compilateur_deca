@@ -1,5 +1,6 @@
 // @result ok
 // @result ok
+// @result ok
 /*
 Testing superclass Object method equals with and without redef
 */
