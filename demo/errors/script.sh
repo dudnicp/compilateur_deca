@@ -2,6 +2,6 @@
 
 for FILE in "$@"
 do
-    echo "$FILE"
+    cat "$FILE"
     decac "$FILE"
 done
