@@ -34,7 +34,7 @@ public class DecacMain {
         if (COMPILER_OPTIONS.getNocheck()) {
         	// -n
         }
-        if (COMPILER_OPTIONS.getRegisters() >= 4 && COMPILER_OPTIONS.getRegisters() <= 16) {
+        if (COMPILER_OPTIONS.getRegisters() >= 3 && COMPILER_OPTIONS.getRegisters() <= 16) {
         	Register.setRMAX(COMPILER_OPTIONS.getRegisters() - 1);
         }
         if (COMPILER_OPTIONS.getDebug() != 0) {
