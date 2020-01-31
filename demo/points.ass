@@ -1,0 +1,290 @@
+; start main program
+	TSTO #17
+	BOV stack_overflow
+	ADDSP #12
+	LOAD #null, R0
+	STORE R0, 1(GB)
+	LOAD code.Object.equals, R0
+	STORE R0, 2(GB)
+	LEA 1(GB), R0
+	STORE R0, 3(GB)
+	LOAD code.Object.equals, R0
+	STORE R0, 4(GB)
+	LOAD code.Point2D.diag, R0
+	STORE R0, 5(GB)
+	LOAD code.Point2D.display, R0
+	STORE R0, 6(GB)
+	LEA 3(GB), R0
+	STORE R0, 7(GB)
+	LOAD code.Object.equals, R0
+	STORE R0, 8(GB)
+	LOAD code.Point3D.diag, R0
+	STORE R0, 9(GB)
+	LOAD code.Point3D.display, R0
+	STORE R0, 10(GB)
+; Beginning of main instructions:
+; Point2D p1 = new Point2D();
+	LOAD #null, R2
+	STORE R2, 11(GB)
+	NEW #3, R2
+	BOV heap_overflow
+	LEA 3(GB), R0
+	STORE R0, 0(R2)
+	PUSH R2
+	BSR init.Point2D
+	POP R2
+	STORE R2, 11(GB)
+; Point3D p2 = new Point3D();
+	LOAD #null, R2
+	STORE R2, 12(GB)
+	NEW #4, R2
+	BOV heap_overflow
+	LEA 7(GB), R0
+	STORE R0, 0(R2)
+	PUSH R2
+	BSR init.Point3D
+	POP R2
+	STORE R2, 12(GB)
+	WSTR "p1 a les coordonnees : "
+	LOAD 11(GB), R2
+	ADDSP #1
+	STORE R2, 0(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 3(R2)
+	SUBSP #1
+	LOAD R1, R2
+	WSTR "p2 a les coordonnees : "
+	LOAD 12(GB), R2
+	ADDSP #1
+	STORE R2, 0(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 3(R2)
+	SUBSP #1
+	LOAD R1, R2
+	LOAD 11(GB), R2
+	ADDSP #2
+	STORE R2, 0(SP)
+	LOAD #2, R2
+	STORE R2, -1(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 2(R2)
+	SUBSP #2
+	LOAD R1, R2
+	LOAD 12(GB), R2
+	ADDSP #3
+	STORE R2, 0(SP)
+	LOAD #3, R2
+	STORE R2, -1(SP)
+	LOAD #1, R2
+	STORE R2, -2(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 2(R2)
+	SUBSP #3
+	LOAD R1, R2
+	WSTR "p1 a les coordonnees : "
+	LOAD 11(GB), R2
+	ADDSP #1
+	STORE R2, 0(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 3(R2)
+	SUBSP #1
+	LOAD R1, R2
+	WSTR "p2 a les coordonnees : "
+	LOAD 12(GB), R2
+	ADDSP #1
+	STORE R2, 0(SP)
+	LOAD 0(SP), R2
+	CMP #null, R2
+	BEQ null_object
+	LOAD 0(R2), R2
+	BSR 3(R2)
+	SUBSP #1
+	LOAD R1, R2
+	HALT
+stack_overflow:
+	WSTR "Error: Stack overflow"
+	WNL
+	ERROR
+heap_overflow:
+	WSTR "Error: Impossible allocation : heap overflow"
+	WNL
+	ERROR
+div_by_zero:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR
+overflow:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+invalid_input:
+	WSTR "Error: Invalid input"
+	WNL
+	ERROR
+null_object:
+	WSTR "Error: Cannot acces null object"
+	WNL
+	ERROR
+impossible_conv_float:
+	WSTR "Error: Impossible converion to float"
+	WNL
+	ERROR
+init.Object:
+	RTS
+code.Object.equals:
+	TSTO #1
+	BOV stack_overflow
+	PUSH R2
+	LOAD -2(LB), R2
+	CMP -3(LB), R2
+	SEQ R1
+end.Object.equals:
+	POP R2
+	RTS
+init.Point2D:
+	TSTO #1
+	BOV stack_overflow
+	PUSH R2
+	LOAD #0, R2
+	LOAD -2(LB), R1
+	STORE R2, 1(R1)
+	LOAD #0, R2
+	LOAD -2(LB), R1
+	STORE R2, 2(R1)
+	POP R2
+	RTS
+code.Point2D.diag:
+	TSTO #2
+	BOV stack_overflow
+	PUSH R3
+	PUSH R2
+; x = x + d
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -2(LB), R3
+	LOAD 1(R3), R3
+	ADD -3(LB), R3
+	LOAD -2(LB), R2
+	STORE R3, 1(R2)
+; y = y + d
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD -2(LB), R3
+	LOAD 2(R3), R3
+	ADD -3(LB), R3
+	LOAD -2(LB), R2
+	STORE R3, 2(R2)
+end.Point2D.diag:
+	POP R2
+	POP R3
+	RTS
+code.Point2D.display:
+	TSTO #1
+	BOV stack_overflow
+	PUSH R2
+	WSTR "("
+; print(ln) x
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD R2, R1
+	WINT
+	WSTR ", "
+; print(ln) y
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD R2, R1
+	WINT
+	WSTR ")"
+	WNL
+end.Point2D.display:
+	POP R2
+	RTS
+init.Point3D:
+	TSTO #4
+	BOV stack_overflow
+	PUSH R2
+	LOAD #0, R2
+	LOAD -2(LB), R1
+	STORE R2, 3(R1)
+	LOAD -2(LB), R1
+	PUSH R1
+	BSR init.Point2D
+	SUBSP #1
+	POP R2
+	RTS
+code.Point3D.diag:
+	TSTO #2
+	BOV stack_overflow
+	PUSH R3
+	PUSH R2
+; x = x + d
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -2(LB), R3
+	LOAD 1(R3), R3
+	ADD -3(LB), R3
+	LOAD -2(LB), R2
+	STORE R3, 1(R2)
+; y = y + d
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD -2(LB), R3
+	LOAD 2(R3), R3
+	ADD -3(LB), R3
+	LOAD -2(LB), R2
+	STORE R3, 2(R2)
+; z = z + d
+	LOAD -2(LB), R2
+	LOAD 3(R2), R2
+	LOAD -2(LB), R3
+	LOAD 3(R3), R3
+	ADD -3(LB), R3
+	LOAD -2(LB), R2
+	STORE R3, 3(R2)
+end.Point3D.diag:
+	POP R2
+	POP R3
+	RTS
+code.Point3D.display:
+	TSTO #1
+	BOV stack_overflow
+	PUSH R2
+	WSTR "("
+; print(ln) x
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD R2, R1
+	WINT
+	WSTR ", "
+; print(ln) y
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD R2, R1
+	WINT
+	WSTR ", "
+; print(ln) z
+	LOAD -2(LB), R2
+	LOAD 3(R2), R2
+	LOAD R2, R1
+	WINT
+	WSTR ")"
+	WNL
+end.Point3D.display:
+	POP R2
+	RTS
+; end main program
